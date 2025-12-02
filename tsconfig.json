@@ -30,6 +30,6 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts",
     "src/app/components/form/loginForm.jsx"
-  ],
+, "src/components/lista/registroClinico.jsx"  ],
   "exclude": ["node_modules"]
 }

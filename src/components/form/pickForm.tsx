@@ -1,8 +1,11 @@
 "use client";
 import { useState } from "react";
+//Componentes
+import RegistraitionForm from "@/src/components/form/registroForm";
+import FormularyFromFormPage from "@/src/components/form/loginForm";
+
+//Hooks
 import { formSelection } from "@/src/hook/formSelection";
-import RegistraitionForm from "./registroForm";
-import FormularyFromFormPage from "./loginForm";
 
 export default function FormSwitcher() {
   const [selected, setSelected] = useState(false);

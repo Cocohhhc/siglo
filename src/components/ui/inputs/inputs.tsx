@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 
 type formProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  variant?: "primary" | "secundary" | "error";
+  variant?: "primary" | "secundary" | "error" | "history";
   value?: string;
   name?: string;
   type?: string;
@@ -10,7 +10,7 @@ type formProps = React.InputHTMLAttributes<HTMLInputElement> & {
   placeholder?: string;
 };
 
-export default function inputLogin({
+export default function InputLogin({
   variant = "primary",
   value,
   type,
@@ -26,9 +26,12 @@ export default function inputLogin({
 
     secundary:
       "bg-cyan-50 rounded-lg px-10 py-3 text-ls ring-2 ring-green-500 focus:outline-none focus:ring-1 focus:ring-green-400 ",
-    
+
     error:
-      "bg-red-100 rounded-lg px-10 py-3 text-ls ring-2 ring-pink-600 focus:outline-none focus:ring-1 focus:ring-pink-800 ",  
+      "bg-red-100 rounded-lg px-10 py-3 text-ls ring-2 ring-pink-600 focus:outline-none focus:ring-1 focus:ring-pink-800 ",
+
+    history:
+      "bg-zinc-100 rounded-lg px-2 text-ls ring-2 ring-zinc-300 focus:outline-none focus:ring-1 focus:ring-black ",
   };
 
   return (

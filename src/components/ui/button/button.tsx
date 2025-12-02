@@ -1,10 +1,13 @@
+"use client";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 
 type buttonProps = {
-  variant?: "primary" | "secundary";
+  variant?: "primary" | "secundary" | "history" | "accept" | "decline";
   value?: string;
   type?: string;
   className?: string;
+  onClick?: () => void;
 };
 
 export default function Button({
@@ -12,6 +15,7 @@ export default function Button({
   type,
   variant = "primary",
   className,
+  onClick,
 }: buttonProps) {
   const styles = {
     primary:
@@ -19,7 +23,20 @@ export default function Button({
 
     secundary:
       "bg-cyan-50 rounded-lg px-5 py-3 text-ls [focus:outline-none border-2 border-green-500 ",
+
+    history:
+      "bg-gray-100 rounded-lg px-5 py-3 text-lg shadow-md hover:bg-gray-300 focus:bg-gray-300 ",
+
+    accept:
+      "bg-green-200 rounded-lg px-5 py-3 text-lg shadow-md hover:bg-green-100 focus:bg-green-300 ",
+
+    decline:
+      "bg-pink-200 rounded-lg px-5 py-3 text-lg shadow-md hover:bg-pink-300 focus:bg-pink-400 ",
   };
 
-  return <button className={clsx(styles[variant], className)}>{value}</button>;
+  return (
+    <button onClick={onClick} className={clsx(styles[variant], className)}>
+      {value}
+    </button>
+  );
 }
