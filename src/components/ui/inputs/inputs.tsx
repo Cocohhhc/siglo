@@ -31,7 +31,7 @@ export default function InputLogin({
       "bg-red-100 rounded-lg px-10 py-3 text-ls ring-2 ring-pink-600 focus:outline-none focus:ring-1 focus:ring-pink-800 ",
 
     history:
-      "bg-zinc-100 rounded-lg px-2 text-ls ring-2 ring-zinc-300 focus:outline-none focus:ring-1 focus:ring-black ",
+      "bg-zinc-100 rounded-lg p-2 text-ls ring-2 ring-zinc-300 focus:outline-none focus:ring-1 focus:ring-black ",
   };
 
   return (
