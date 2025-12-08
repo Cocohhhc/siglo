@@ -25,7 +25,7 @@ export default function Button({
       "bg-cyan-50 rounded-lg px-5 py-3 text-ls [focus:outline-none border-2 border-green-500 ",
 
     history:
-      "bg-gray-100 rounded-lg px-5 py-3 text-lg shadow-md hover:bg-gray-300 focus:bg-gray-300 ",
+      "border-b-emerald-600 border-b-3 px-5 py-3 text-lg text-emerald-600 hover:bg-gray-300 focus:bg-gray-300 ",
 
     accept:
       "bg-green-200 rounded-lg px-5 py-3 text-lg shadow-md hover:bg-green-100 focus:bg-green-300 ",

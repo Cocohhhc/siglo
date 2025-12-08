@@ -61,7 +61,6 @@ export default function FormularyFromFormPage({ onSelect }) {
             style={{
               maxWidth: "100%",
               height: "auto",
-              margin: "25% 0% 0% 0%",
             }}
           />
         </div>
