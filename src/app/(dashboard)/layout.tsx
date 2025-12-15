@@ -1,10 +1,9 @@
 // /app/dashboard/layout.js
 import { ReactNode } from "react";
-import { FormDataProvider } from "@/src/context/AppContext"
 
 //Components
-import NavHome from "@/src/components/homeComponents/navHome/nav";
-import AsideHomePage from "@/src/components/homeComponents/asideHome/aside";
+import NavHome from "@/src/components/templateComponents/navHome/nav";
+import AsideHomePage from "@/src/components/templateComponents/asideHome/aside";
 import { LuLamp } from "react-icons/lu";
 
 type Props = {
@@ -13,7 +12,6 @@ type Props = {
 
 export default function DashboardLayout({ children, }: Props) {
     return (
-        <FormDataProvider>
             <div className="min-h-screen sm:grid md:flex">
                 <section className="sm:w-full md:w-[14%]">
                     <NavHome />
@@ -24,6 +22,5 @@ export default function DashboardLayout({ children, }: Props) {
                     {children}
                 </main>
             </div>
-        </FormDataProvider>
     )
 }

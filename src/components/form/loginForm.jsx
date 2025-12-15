@@ -21,11 +21,22 @@ export default function FormularyFromFormPage({ onSelect }) {
   return (
     <div
       className="
-     flex flex-col items-center justify-between
-    gap-6 py-12 px-6 
-    rounded-lg bg-green-100/80 
+     flex flex-col items-center justify-center
+    gap-6 py-12 
     "
     >
+      <article className="grid place-items-center">
+        <div className="z-10 inset-1 max-w-[50%] pointer-events-none">
+          <Image
+            alt="Siglo21 logo"
+            src={siglo21Img}
+            style={{
+              maxWidth: "auto",
+              height: "auto",
+            }}
+          />
+        </div>
+      </article>
       <InputLogin
         name="userName"
         type="text"
@@ -50,19 +61,6 @@ export default function FormularyFromFormPage({ onSelect }) {
           <button type="button" onClick={onSelect}>
             Registro
           </button>
-        </div>
-      </article>
-
-      <article>
-        <div className="z-10 absolute inset-1 pointer-events-none">
-          <Image
-            alt="Siglo21 logo"
-            src={siglo21Img}
-            style={{
-              maxWidth: "100%",
-              height: "auto",
-            }}
-          />
         </div>
       </article>
     </div>

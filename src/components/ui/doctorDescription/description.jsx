@@ -1,8 +1,9 @@
 // import { useState } from "react"
-export default function Description({ value }) {
+export default function Description({ description, value }) {
     return (
-        <div className="relative">
-            <h1 className="z-10  border-b-emerald-600 border-b-2">{value}</h1>
+        <div className="text-(length:--p)">
+            <p className="text-gray-300">{description}</p>
+            <p className="">{value}</p>
         </div>
     )
 }

@@ -10,9 +10,9 @@ export default function Home() {
     <div className="">
       <main className="bg-gray-50 min-h-screen flex items-center justify-center-safe ">
         <section className="min-h-screen flex flex-col items-center justify-center relative">
-          <form className="z-1">
+          <section className="z-1">
             <FormSwitcher />
-          </form>
+          </section>
         </section>
 
         <div className="pointer-events-none ">

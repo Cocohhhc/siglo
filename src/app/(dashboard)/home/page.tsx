@@ -1,10 +1,10 @@
 "use client"
 //Imports
 import { useState } from "react";
-
+import { usePageName } from "@/src/hook/usePageName";
 //Componentes
-import HistoriaClinico from "@/src/components/ui/historiaClinico/historia";
-import RegistroClinico from "@/src/components/homeComponents/lista/registroClinico";
+import HistoriaClinico from "@/src/components/homeComponents/historiaClinico/historia";
+import RegistroClinico from "@/src/components/ui/lista/registroClinico";
 import FormularyHomePage from "@/src/components/form/pacienteFormulario"
 
 export default function HomePage() {
@@ -13,7 +13,7 @@ export default function HomePage() {
   const [thirdValue, setThirdValue] = useState("Numero de Cedula");
   const [fourtValue, setFourtValue] = useState("Año De Nacimeinto");
   const [fiveValue, setSFiveValue] = useState("Edad");
-
+  const pageName = usePageName();
 
 
   return (
@@ -25,10 +25,10 @@ export default function HomePage() {
 
         <section className="flex flex-col me-8 mt-4">
           <article className="w-full mb-5">
-            <RegistroClinico />
+            <RegistroClinico value={pageName}/>
           </article>
 
-          <article className="bg-gray-100/80 p-3 rounded-md w-full h-auto border-2 border-zinc-200  ">
+          <article className=" p-3 rounded-md w-full h-auto card  ">
             <HistoriaClinico
               name={value}
               lastName={secondValue}

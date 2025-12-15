@@ -1,2 +1,59 @@
 @import "tailwindcss";
 
+
+:root{
+--color-50: #EBF9F5;
+--color-100: #C8EEE2;
+--color-200: #A5E3CF;
+--color-300: #82D9BC;
+--color-400: #5FCEA9;
+--color-500: #3CC396;
+--color-600: #35AE85;
+--color-700: #267D60;
+--color-800: #1C5A45;
+--color-900: #11372A;
+--color-950: #06140F;
+
+--shadow-card:
+  0 8px 20px rgba(0, 0, 0, 0.08),
+  0 4px 10px rgba(0, 0, 0, 0.05);
+
+
+/* Sizes */
+--p: .9rem;
+--h1: 100px;
+--h2: 3rem;
+}
+
+body{
+    background-color: var(--color-50);
+}
+
+@layer components{
+    .card{
+        box-shadow: var(--shadow-card);
+      
+        padding: 12px;
+    }
+
+    .aside__links{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 6px;
+        gap: 14px;
+    }
+
+    .aside__links__active{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 6px;
+        gap: 14px;
+        
+        border-top-right-radius: 12px;
+        border-bottom-left-radius: 12px;
+        background-color: var(--color-600);
+        color: var(--color-50);
+    }
+}

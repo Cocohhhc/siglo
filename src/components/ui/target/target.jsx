@@ -1,10 +1,13 @@
+import clsx from "clsx";
+
+
 export default function Target({ value }) {
     if (typeof value === "string") {
         return (
             <div className="">
                 <div className="
-                bg-[#00FFFF] shadow-zinc-200 shadow-2xl rounded-[6%]
-                py-2 px-6 text-[60%]
+                bg-(--color-500) rounded-[6%]
+                text-(--p) py-2 px-4
                 ">
                     <p>{value}</p>
                 </div>
