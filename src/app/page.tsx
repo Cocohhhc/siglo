@@ -1,19 +1,19 @@
 //Components
 import FormSwitcher from "@/src/components/form/pickForm";
+import { getData } from "@/src/app/api/routes/route";
 
 //Imagenes
 import Image from "next/image";
 
-export default function Home() {
+
+export default async function  Home() {
 
   return (
     <div className="">
       <main className="bg-gray-50 min-h-screen flex items-center justify-center-safe ">
-        <section className="min-h-screen flex flex-col items-center justify-center relative">
-          <section className="z-1">
+          <section className="z-1 min-h-screen flex flex-col items-center justify-center relative">
             <FormSwitcher />
           </section>
-        </section>
 
         <div className="pointer-events-none ">
           <Image

@@ -1,66 +1,69 @@
 import { CgProfile } from "react-icons/cg";
-import { useFormSession } from "@/src/hook/useFormData"
+import { useFormSession } from "@/src/hook/useFormData";
+
+//Icons
+import { RiIdCardFill } from "react-icons/ri";
+import { TbMedicalCrossFilled } from "react-icons/tb";
+
+
 
 
 //Components
-import Description from "@/src/components/ui/doctorDescription/description"
-import Target from "@/src/components/ui/target/target"
+import Description from "@/src/components/ui/doctorDescription/description";
+import Target from "@/src/components/ui/target/target";
+import Division from "@/src/components/ui/division/division"
 
 export default function Account() {
   const { data } = useFormSession();
   console.log(data)
 
-  if (!data) return <p>No hay datos</p>;
+  if (!data) return <div className="grid place-items-center-safe text-2xl font-bold text-rose-600"><p>❌ El usuario no ha ingresado datos ❌</p></div>;
 
   return (
-    <div className="p-4 gap-6 w-full flex place-items-start items-center">
-      <section className="grid place-items-center gap-3 items-center h-full w-[30%] card">
-        <CgProfile className="w-[6vw] h-auto" />
-        <article className="flex gap-2">
-          <Target value="Doctor" />
-          <Target value="Cliente" />
-        </article>
-      </section>
-
-      <section className="">
-        <article>
-          <ul className="
-          grid grid-cols-3 
-          py-8 ps-10  gap-12 card
+    <div className="">
+      <section className="p-4 w-full gap-8 grid items-center">
+        <section className="flex gap-4 items-center card">
+          <CgProfile className="w-[6vw] h-auto" />
+          <article className="flex gap-2">
+            <Target value="Doctor" />
+            <Target value="Cliente" />
+          </article>
+        </section>
+        <section className="">
+          <article className="
+          flex flex-row items-center justify-around max-md:grid gap-6
+          p-8  card relative     
           rounded-[2%] 
           ">
-            <li>
+            <div className="grid gap-2">
               <Description value={data.name} description="Nombre"/>
-            </li>
-
-            <li>
               <Description value={data.lastName} description="Apellido"/>
-            </li>
-
-            <li>
               <Description value={data.cardId} description="Cedula"/>
-            </li>
+            </div>
 
-            <li>
+              <div className="flex items-center justify-center bg-linear-(--hr-gradient) rotate-90 h-1 w-[10%] max-md:hidden">
+                <TbMedicalCrossFilled className="text-(--color-600)"/>
+              </div>
+
+            <div className="grid gap-2">
               <Description value={data.password} description="Contraseña"/>
-            </li>
-
-            <li>
               <Description value={data.email} description="Correo Electronico"/>
-            </li>
-
-            <li>
               <Description value={data.departament} description="Cargo"/>
-            </li>
+            </div>
 
-            <li>
+              
+              <div className="flex items-center justify-center bg-linear-(--hr-gradient)  w-[10%] rotate-90  h-1 max-md:hidden">
+                <TbMedicalCrossFilled className="text-(--color-600)"/>
+              </div>
+
+            <div className="">
               <div className="flex flex-row gap-4">
                 <Description value="Departamento" description="Departamento"/>
                 <Description value="Departamento" description="Departamento"/>
               </div>
-            </li>
-          </ul>
-        </article>
+            </div>
+          </article>
+        </section>
       </section>
     </div>
   );

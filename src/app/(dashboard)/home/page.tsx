@@ -12,23 +12,18 @@ export default function HomePage() {
   const [secondValue, setSecondValue] = useState("Apellido");
   const [thirdValue, setThirdValue] = useState("Numero de Cedula");
   const [fourtValue, setFourtValue] = useState("Año De Nacimeinto");
-  const [fiveValue, setSFiveValue] = useState("Edad");
+  const [fiveValue, setFiveValue] = useState("Edad"); 
   const pageName = usePageName();
 
 
   return (
 
-    <main className="flex flex-col">
-
-      <section className="flex flex-row w-full h-full justify-between gap-5">
-
-
-        <section className="flex flex-col me-8 mt-4">
+        <section className="flex flex-col mt-4">
           <article className="w-full mb-5">
             <RegistroClinico value={pageName}/>
           </article>
 
-          <article className=" p-3 rounded-md w-full h-auto card  ">
+          <article className="sha p-3 rounded-md w-full h-auto ">
             <HistoriaClinico
               name={value}
               lastName={secondValue}
@@ -44,11 +39,9 @@ export default function HomePage() {
               setSecondValue={setSecondValue}
               setThirdValue={setThirdValue}
               setFourtValue={setFourtValue}
-              setSFiveValue={setSFiveValue}
+              setFifthValue={setFiveValue}
             />
           </article>
         </section>
-      </section>
-    </main>
   );
 }

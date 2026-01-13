@@ -1,27 +1,35 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 // hook
 import { useFormSession } from "@/src/hook/useFormData";
 
-// componentes
+// componentes 
 import siglo21Img from "@/public/logo-centro-medico-docente-siglo-21.1d027d8.webp";
 import { validForm } from "@/src/hook/formValid";
 import InputLogin from "@/src/components/ui/inputs/inputs";
 import Button from "@/src/components/ui/button/button";
+import DropDowm from "@/src/components/ui/dropDown/dropDown"
 
-export default function RegistraitionForm({ onSelect }) {
+export default function RegistraitionForm({ onSelect, passwordValue }) {
   const [userName, setUserName] = useState("");
   const [userLastName, setUserLastName] = useState("");
   const [userCardId, setUserCardId] = useState("");
   const [userGmail, setUserGmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userDepartament, setUserDepartament] = useState("");
+  const router = useRouter()
 
   const { saveData, clearData } = useFormSession();
 
-  // 🔹 Limpia sesión SOLO al entrar al form
+  // const handleClick = (e) => {
+  //   e.preventDefault
+
+  //   router.replace("/home")
+  // }
+
   useEffect(() => {
     clearData();
   }, []);
@@ -29,7 +37,7 @@ export default function RegistraitionForm({ onSelect }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const data = {
+     const data = {
       name: userName,
       lastName: userLastName,
       email: userGmail,
@@ -39,6 +47,10 @@ export default function RegistraitionForm({ onSelect }) {
     };
 
     saveData(data);
+
+   
+    !saveData ?  null : router.replace("/home")
+    
   };
 
   return (
@@ -50,7 +62,7 @@ export default function RegistraitionForm({ onSelect }) {
         </article>
 
       <form onSubmit={handleSubmit} className="flex flex-wrap justify-center p-12 gap-6">
-        <section className="grid grid-cols-2 gap-6">
+        <article className="grid grid-cols-2 gap-6">
           <InputLogin
             name="userName"
             type="text"
@@ -88,23 +100,15 @@ export default function RegistraitionForm({ onSelect }) {
             type="password"
             variant={validForm(userPassword, "password")}
             placeholder="Contraseña"
-            onChange={(e) => setUserPassword(e.target.value)}
+            onChange={(e) => {setUserPassword(e.target.value), passwordValue(e.target.value) }}
           />
 
-          <InputLogin
-            name="departamentId"
-            type="text"
-            variant={validForm(userDepartament, "departament")}
-            placeholder="Ingrese Departamento"
-            onChange={(e) => setUserDepartament(e.target.value)}
-          />
-        </section>
+        <DropDowm />
+        </article>
 
         <article className="flex gap-x-5 items-center">
           <Button type="submit" variant="primary" value="Entrar" />
-          <button type="button" onClick={onSelect}>
-            Iniciar Sesion
-          </button>
+          <Button type="button" variant="secundary" value="Login" onClick={onSelect}/>
         </article>
 
       </form>

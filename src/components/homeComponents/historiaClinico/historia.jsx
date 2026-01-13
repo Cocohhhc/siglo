@@ -1,7 +1,9 @@
 "use client";
-import { getName } from "@/src/api/auth/auth";
+import { getName } from "@/src/app/api/routes/route";
 import { useState } from "react";
 
+//Icons
+import { CgProfile } from "react-icons/cg";
 
 //Componentes
 // import { settingUserSession } from "@/src/api/auth/auth";
@@ -16,6 +18,8 @@ import { formSelection } from "@/src/hook/formSelection";
 
 export default function HistoriaClinico({name, lastName, cardId, birthday, age}) {
   const [buttonCheking, setButtonCheking] = useState(false);
+  const arr = [name, lastName, cardId, birthday, age]
+  
 
   const handleChange = () => {
     const status = formSelection();
@@ -26,13 +30,18 @@ export default function HistoriaClinico({name, lastName, cardId, birthday, age})
   const decline = <HiOutlineXMark />;
 
   return (
+    <section>
+      <h1 className="text-3xl mb-2">Ficha</h1>
     <div
-      className=" flex flex-row flex-wrap m-4 px-4 text-[1.1rem] font-normal items-center-safe justify-between rounded-lg 
+      className=" flex flex-row flex-wrap p-4 text-[1.1rem] font-normal items-center-safe justify-between rounded-lg card 
+      max-md:grid place-items-center 
     "
     >
       <section className="">
-        <h1 className="mb-4 text-2xl font-medium">Ficha</h1>
-        <ul className="grid grid-cols-3 gap-x-10">
+        <ul className="flex flex-wrap items-center gap-x-10">
+          <li>
+            <CgProfile className="text-6xl"/>
+          </li>
           <li>
             <h2>{name}</h2>
           </li>
@@ -55,8 +64,8 @@ export default function HistoriaClinico({name, lastName, cardId, birthday, age})
         </ul>
       </section>
 
-      <section className="flex flex-row gap-4 items-center-safe">
-        <div className="">
+      <section className="flex flex-row gap-4 items-center-safe max-md:w-full">
+        <div className="max-md:w-full">
           {!buttonCheking ? (
             <Button variant="decline" value={decline} onClick={handleChange} />
           ) : (
@@ -65,5 +74,6 @@ export default function HistoriaClinico({name, lastName, cardId, birthday, age})
         </div>
       </section>
     </div>
+    </section>
   );
 }

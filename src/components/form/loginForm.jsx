@@ -13,10 +13,12 @@ import { validForm } from "@/src/hook/formValid";
 import siglo21Img from "@/public/logo-centro-medico-docente-siglo-21.1d027d8.webp";
 
 
-export default function FormularyFromFormPage({ onSelect }) {
+export default function FormularyFromFormPage({ onSelect, passwordValue }) {
   //States para los inputs
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const [gettingPasswordValue, lookingForValue] = useState("")
+ 
 
   return (
     <div
@@ -50,7 +52,7 @@ export default function FormularyFromFormPage({ onSelect }) {
         type="password"
         variant={validForm(userPassword, "password")}
         placeholder="Contraseña"
-        onChange={(e) => setUserPassword(e.target.value)}
+        onChange={(e) => {setUserPassword(e.target.value), passwordValue(e.target.value)}}
       />
 
       <article className="gap-x-5 flex flex-row items-center-safe">
@@ -58,9 +60,9 @@ export default function FormularyFromFormPage({ onSelect }) {
           <Button className="" type="submit" variant="primary" value="Entrar" />
         </div>
         <div className="">
-          <button type="button" onClick={onSelect}>
+          <Button value="Registro" variant="secundary" type="button" onClick={onSelect}>
             Registro
-          </button>
+          </Button>
         </div>
       </article>
     </div>
