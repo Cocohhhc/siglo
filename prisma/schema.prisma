@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model departament {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  registro  registro[]
+}
+
+model pacientes {
+  id                  Int        @id @default(autoincrement())
+  name                String
+  lastName            String
+  IdNumber            String     @unique
+  fecha_de_nacimiento String
+  Edad                Int
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  entregas            entrega[]
+  registros           registro[]
+}
+
+model registro {
+  id              Int         @id @default(autoincrement())
+  paciente_id     Int
+  departamento_id Int
+  secuencia       Int         @default(autoincrement())
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  departamento    departament @relation(fields: [departamento_id], references: [id])
+  paciente        pacientes   @relation(fields: [paciente_id], references: [id])
+  entregas        entrega[]
+}
+
+model entrega {
+  id          Int        @id @default(autoincrement())
+  emisor_id   Int // user_id del staff que envía (microservicio login)
+  receptor_id Int // user_id del staff que recibe (microservicio login)
+  paciente_id Int? // opcional si la entrega es asociada a un paciente
+  registro_id Int // registro_id
+  estado      String     @default("pendiente") // pendiente, recibido, no_recibido
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  registro    registro   @relation(fields: [registro_id], references: [id])
+  paciente    pacientes? @relation(fields: [paciente_id], references: [id])
+}
