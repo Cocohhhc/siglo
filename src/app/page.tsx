@@ -1,11 +1,10 @@
-//Components
+//Componentes
 import FormSwitcher from "@/src/components/form/pickForm";
-import { getData } from "@/src/app/api/routes/route";
 
 //Imagenes
 import Image from "next/image";
 
-
+// Pagina Login y Registro
 export default async function  Home() {
 
   return (

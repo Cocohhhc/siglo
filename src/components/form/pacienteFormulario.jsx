@@ -1,8 +1,9 @@
 'use client'
 //Import
 import { getData } from "@/src/app/api/routes/route"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormSession } from "@/src/hook/useFormData";
+import { showValue } from "@/src/hook/formValid";
 
 
 ///Componentes
@@ -10,16 +11,13 @@ import InputLogin from "@/src/components/ui/inputs/inputs";
 import Button from "@/src/components/ui/button/button"
 import { register } from "@/src/app/api/routes/route"
 
-
-
 export default function formularyPacient({  
   setValue, setSecondValue, setThirdValue, setFourtValue, setFifthValue }) {
       const [userName, setUserName] = useState("");
       const [userLastName, setUserLastName] = useState("");
       const [IdNumber, setIdNumber] = useState("");
       const [Birth, dataOfBirth] = useState("");
-      const [age, setAge] = useState("");
-    
+      const [age, setAge] = useState("");    
 
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -32,8 +30,9 @@ export default function formularyPacient({
         age: Number(age),
       }
 
-      // register(data)
+      register(data);
     }
+
 
   return (
     <section
@@ -47,7 +46,7 @@ export default function formularyPacient({
     </article>
     
         <form onSubmit={handleSubmit} className="flex flex-row flex-wrap gap-5 p-12 card">
-            <InputLogin variant="history" placeholder="Nombre"  name="pacienteName" onChange={(e) => {setUserName(e.target.value), setValue(e.target.value)}}/>
+            <InputLogin variant="history" placeholder="Nombre" name="pacienteName" onChange={(e) => {setUserName(e.target.value), setValue(e.target.value)}}/>
 
             <InputLogin variant="history" placeholder="Apellido"  name="pacientLastName"  onChange={(e) => {setUserLastName(e.target.value), setSecondValue(e.target.value)}}/>
 

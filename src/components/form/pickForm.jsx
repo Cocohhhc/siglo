@@ -12,15 +12,16 @@ import FormularyFromFormPage from "@/src/components/form/loginForm";
 //Hooks
 import { formSelection } from "@/src/hook/formSelection";
 
-
+// Componente que alterna entre el formulario de login y registro
 export default function FormSwitcher() {
   const [selected, setSelected] = useState(false);
-  const [getValue, setValuePassword] = useState("")
+  const [getValue, setValuePassword] = useState("");
 
 
+  
   const handleClick = () => {
     const result = formSelection();
-    setSelected(result); // <- Aquí React SI se actualiza
+    setSelected(result);
   };
 
   return (

@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 
 type formProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  variant?: "primary" | "secundary" | "error" | "history";
+  variant?: "primary" | "error" | "success" | "history";
   value?: string;
   name?: string;
   type?: string;
@@ -24,11 +24,11 @@ export default function InputLogin({
     primary:
       "bg-cyan-50 rounded-lg px-10 py-3 text-ls [focus:outline-none focus:ring-2 focus:ring-green-300 ",
 
-    secundary:
-      "bg-cyan-50 rounded-lg px-10 py-3 text-ls ring-2 ring-green-500 focus:outline-none focus:ring-1 focus:ring-green-400 ",
-
     error:
       "bg-red-100 rounded-lg px-10 py-3 text-ls ring-2 ring-pink-600 focus:outline-none focus:ring-1 focus:ring-pink-800 ",
+
+    success:
+      "bg-green-100 rounded-lg px-10 py-3 text-ls ring-2 ring-green-600 focus:outline-none focus:ring-1 focus:ring-green-800 ",
 
     history:
       "p-2 text-ls ring-2 ring-zinc-300 focus:outline-none focus:ring-1 focus:ring-black ",
@@ -42,6 +42,7 @@ export default function InputLogin({
       name={name}
       {...props}
       placeholder={placeholder}
+      maxLength={30}
       className={clsx(styles[variant], className)}
       required
     />

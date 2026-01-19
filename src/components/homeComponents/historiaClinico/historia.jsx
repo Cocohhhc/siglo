@@ -16,14 +16,10 @@ import { HiOutlineXMark } from "react-icons/hi2";
 import { formSelection } from "@/src/hook/formSelection";
 
 
-export default function HistoriaClinico({name, lastName, cardId, birthday, age}) {
-  const [buttonCheking, setButtonCheking] = useState(false);
-  const arr = [name, lastName, cardId, birthday, age]
-  
+export default function HistoriaClinico({name, lastName, cardId, birthday, age, reset}) {  
 
   const handleChange = () => {
-    const status = formSelection();
-    setButtonCheking(status);
+    return reset(true);
   };
 
   const check = <IoMdCheckmark />;
@@ -66,11 +62,7 @@ export default function HistoriaClinico({name, lastName, cardId, birthday, age})
 
       <section className="flex flex-row gap-4 items-center-safe max-md:w-full">
         <div className="max-md:w-full">
-          {!buttonCheking ? (
-            <Button variant="decline" value={decline} onClick={handleChange} />
-          ) : (
-            <Button variant="accept" value={check} onClick={handleChange} />
-          )}
+          <Button variant="decline" value={decline} onClick={handleChange} />
         </div>
       </section>
     </div>

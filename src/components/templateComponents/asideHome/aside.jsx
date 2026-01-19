@@ -15,7 +15,7 @@ import { FaPerson } from "react-icons/fa6";
 export default function AsideHomePage() {
   const pathName = usePathname();
   return (
-    <aside className="p-4 w-full h-full">
+    <aside className="p-4 w-full h-screen card">
       <ul className="flex flex-col gap-3 text-[1.3rem]">                    
         <li className={pathName === "/home" ? "aside__links__active"  :  "aside__links" }>
           <FaPersonCirclePlus />

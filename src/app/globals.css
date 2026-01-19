@@ -39,11 +39,10 @@ body{
 @layer components{
     .card{
         box-shadow: var(--shadow-card);
-      
         padding: 12px;
     }
 
-    .aside__links{
+    .aside__links{      
         display: flex;
         flex-direction: row;
         align-items: center;

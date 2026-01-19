@@ -13,8 +13,25 @@ export default function HomePage() {
   const [thirdValue, setThirdValue] = useState("Numero de Cedula");
   const [fourtValue, setFourtValue] = useState("Año De Nacimeinto");
   const [fiveValue, setFiveValue] = useState("Edad"); 
+  const [resetButton, setResetButton] = useState(false);
   const pageName = usePageName();
 
+  const resetValues = () => {
+     if (!value ||
+      !secondValue ||
+      !thirdValue ||
+      !fourtValue ||
+      !fiveValue || resetButton) {
+      setValue("Nombre")
+      setSecondValue("Apellido")
+      setThirdValue("Numero de Cedula")
+      setFourtValue("Año De Nacimeinto")
+      setFiveValue("Edad");
+      setResetButton(false);
+    };
+  };
+  resetValues();
+  // if(resetButton) buttonReset();
 
   return (
 
@@ -30,6 +47,7 @@ export default function HomePage() {
               cardId={thirdValue}
               birthday={fourtValue}
               age={fiveValue}
+              reset={setResetButton}
             />
           </article>
           <hr className="my-12 text-gray-400" />
