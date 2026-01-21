@@ -24,12 +24,6 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
 
   const { saveData, clearData } = useFormSession();
 
-  // const handleClick = (e) => {
-  //   e.preventDefault
-
-  //   router.replace("/home")
-  // }
-
   useEffect(() => {
     clearData();
   }, []);
