@@ -12,9 +12,8 @@ export default function PageList() {
     const pageName = usePageName()
     return (
         <main>
-        <div className="flex">
-             <RegistroClinico value={pageName}/> 
-        </div>
+        <RegistroClinico value={pageName}/> 
+        {/* Muestra la informacion del registro del perfil */}
         <Account />
         </main>
     )

@@ -14,6 +14,9 @@
 --color-900: #11372A;
 --color-950: #06140F;
 
+/* Text */
+--text-primary: #7e928b;
+
 /*Gradient*/
 --hr-gradient: to right,
     transparent,
@@ -34,8 +37,9 @@
 
 body{
     background-color: var(--color-50);
+    font-family: 'Times New Roman', Times, serif;
 }
-
+/* Aqui agregas estilo de componentes repetidos */
 @layer components{
     .card{
         box-shadow: var(--shadow-card);
