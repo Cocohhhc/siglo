@@ -13,8 +13,8 @@ type Props = {
 export default function DashboardLayout({ children, }: Props) {
     return (
             <div className=" sm:grid md:flex">
-                <section className="sm:w-full flex flex-col block md:w-[14%]">
-                    {/* <NavHome /> */}
+                <section className="sm:w-full md:w-[14%]">
+                    <NavHome />
                     <AsideHomePage />
                 </section>
 

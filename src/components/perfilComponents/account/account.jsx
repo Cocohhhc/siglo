@@ -22,7 +22,6 @@ export default function Account() {
   return (
     <div className="">
       <section className="p-4 w-full gap-8 grid items-center">
-        {/* Departamento y Cargo del perfil */}
         <section className="flex gap-4 items-center card">
           <CgProfile className="w-[6vw] h-auto" />
           <article className="flex gap-2">
@@ -30,7 +29,6 @@ export default function Account() {
             <Target value="Cliente" />
           </article>
         </section>
-        {/* Información del perfil */}
         <section className="">
           <article className="
           flex flex-row items-center justify-around max-md:grid gap-6
