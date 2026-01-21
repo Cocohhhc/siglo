@@ -9,7 +9,7 @@ export class RegistroController {
   //============================================
   //               CREATE REGISTRO
   //============================================
-  @Post()
+  @Post('/create')
   create(@Body() createRegistroDto: CreateRegistroDto): Promise<registro> {
     return this.registroService.create(createRegistroDto);
   }

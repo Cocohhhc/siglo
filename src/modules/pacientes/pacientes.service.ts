@@ -25,7 +25,7 @@ export class PacientesService {
 
     const verifiUser = await this.prisma.pacientes.findUnique({
       where: {
-        IdNumber: createPacienteDto.IdNumber,
+        idNumber: createPacienteDto.IdNumber,
       },
     });
     if (verifiUser) {
@@ -44,9 +44,9 @@ export class PacientesService {
       data: {
         name: name,
         lastName: lastName,
-        IdNumber: IdNumber,
-        fecha_de_nacimiento: fecha_de_nacimiento,
-        Edad: edad,
+        idNumber: IdNumber,
+        fechaDeNacimiento: fecha_de_nacimiento,
+        edad: edad,
       },
     });
 
@@ -102,7 +102,7 @@ export class PacientesService {
     try {
       const paciente = await this.prisma.pacientes.update({
         where: {
-          IdNumber: updatePacienteDto.IdNumber,
+          idNumber: updatePacienteDto.IdNumber,
         },
         data: updatePacienteDto,
       });
