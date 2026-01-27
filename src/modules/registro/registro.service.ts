@@ -41,6 +41,14 @@ export class RegistroService {
         },
       },
     });
+
+    await this.prisma.entrega.create({
+      data: {
+        emisor_id: 1,
+        receptor_id: 2,
+        registro_id: registro.id,
+      },
+    });
     return registro;
   }
 
