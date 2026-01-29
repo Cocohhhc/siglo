@@ -4,12 +4,19 @@ import { EntregaService } from './entrega.service';
 @Controller('entrega')
 export class EntregaController {
   constructor(private readonly entregaService: EntregaService) {}
-  //find all entrega
-  @Get()
-  findAll() {
-    return this.entregaService.findAll();
+  //find all entrega by user id
+  @Get(':userId')
+  findAll(@Param('userId') userId: number) {
+    return this.entregaService.findAll(userId);
   }
-  //find one entrega
+
+  //find all entrega enviadas por el usuario
+  @Get(':userId')
+  findAllEnviadas(@Param('userId') userId: number) {
+    return this.entregaService.findAllEnviados(userId);
+  }
+
+  //find one entrega by id
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.entregaService.findOne(+id);

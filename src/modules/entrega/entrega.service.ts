@@ -7,10 +7,25 @@ export class EntregaService {
   //===================================
   //           traer todas las entregas
   //====================================
-  findAll() {
-    return this.prisma.entrega.findMany();
+  findAll(userId: number) {
+    return this.prisma.entrega.findMany({
+      where: {
+        receptor_id: userId,
+      },
+    });
   }
 
+  //=========================================
+  // trae entregass enviadas por el usuarios
+  //=========================================
+
+  findAllEnviados(userId: number) {
+    return this.prisma.entrega.findMany({
+      where: {
+        emisor_id: userId,
+      },
+    });
+  }
   //==================================================
   //                     trae una entrega
   //=================================================
