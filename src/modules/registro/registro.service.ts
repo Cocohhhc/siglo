@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateRegistroDto } from './dto/create-registro.dto';
 import { PrismaService } from 'src/databases/prisma.service';
-import { registro, pacientes, departament } from '@prisma/client';
+import { registro, departament, pacientes } from '@prisma/client';
 @Injectable()
 export class RegistroService {
   constructor(private readonly prisma: PrismaService) {}

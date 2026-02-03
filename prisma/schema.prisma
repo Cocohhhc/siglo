@@ -8,11 +8,14 @@ datasource db {
 }
 
 model users {
-  id           Int          @id @default(autoincrement())
-  name         String       @unique
-  departamento departamento @default(pediatria)
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  id             Int         @id @default(autoincrement())
+  name           String      @unique
+  departamentoId Int
+  departamento   departament @relation(fields: [departamentoId], references: [id])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  entregas entrega[]
 }
 
 model departament {
@@ -20,6 +23,7 @@ model departament {
   name      String     @unique
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  users     users[]
   registro  registro[]
 }
 
@@ -40,7 +44,6 @@ model registro {
   id              Int         @id @default(autoincrement())
   paciente_id     Int
   departamento_id Int
-  secuencia       Int         @default(autoincrement())
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
   departamento    departament @relation(fields: [departamento_id], references: [id])
@@ -60,17 +63,12 @@ model entrega {
 
   pacientes   pacientes? @relation(fields: [pacientesId], references: [id])
   pacientesId Int?
+  users       users?     @relation(fields: [usersId], references: [id])
+  usersId     Int?
 }
 
 enum estado {
   pendiente
   recibido
   no_recibido
-}
-
-enum departamento {
-  pediatria
-  traumatologia
-  dermatologia
-  oncologia
 }
