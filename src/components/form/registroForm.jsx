@@ -8,7 +8,7 @@ import { useFormSession } from "@/src/hook/useFormData";
 
 // componentes 
 import siglo21Img from "@/public/logo-centro-medico-docente-siglo-21.1d027d8.webp";
-import { validForm } from "@/src/hook/formValid";
+import { showValue, validateData } from "@/src/hook/formValid";
 import InputLogin from "@/src/components/ui/inputs/inputs";
 import Button from "@/src/components/ui/button/button";
 import DropDowm from "@/src/components/ui/dropDown/dropDown"
@@ -23,12 +23,6 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
   const router = useRouter()
 
   const { saveData, clearData } = useFormSession();
-
-  // const handleClick = (e) => {
-  //   e.preventDefault
-
-  //   router.replace("/home")
-  // }
 
   useEffect(() => {
     clearData();
@@ -45,12 +39,15 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
       cardId: userCardId,
       departament: userDepartament,
     };
-
-    saveData(data);
-
-   
-    !saveData ?  null : router.replace("/home")
     
+    saveData(data);
+    
+    if (validateData(data)) {
+      router.replace("/home");
+    }else{
+      alert("Por favor, complete correctamente todos los campos del formulario.");
+    }
+    // !saveData ?  null : router.replace("/home");
   };
 
   return (
@@ -66,7 +63,7 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
           <InputLogin
             name="userName"
             type="text"
-            variant={validForm(userName, "string")}
+            variant={showValue(userName, "string")}
             placeholder="Nombre"
             onChange={(e) => setUserName(e.target.value)}
           />
@@ -74,7 +71,7 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
           <InputLogin
             name="userLastName"
             type="text"
-            variant={validForm(userLastName, "string")}
+            variant={showValue(userLastName, "string")}
             placeholder="Apellido"
             onChange={(e) => setUserLastName(e.target.value)}
           />
@@ -82,7 +79,7 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
           <InputLogin
             name="userCardId"
             type="text"
-            variant={validForm(userCardId, "number")}
+            variant={showValue(userCardId, "number")}
             placeholder="Cedula"
             onChange={(e) => setUserCardId(e.target.value)}
           />
@@ -90,7 +87,7 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
           <InputLogin
             name="userGmail"
             type="email"
-            variant={validForm(userGmail, "email")}
+            variant={showValue(userGmail, "email")}
             placeholder="Correo Electronico"
             onChange={(e) => setUserGmail(e.target.value)}
           />
@@ -98,12 +95,12 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
           <InputLogin
             name="userPassword"
             type="password"
-            variant={validForm(userPassword, "password")}
+            variant={showValue(userPassword, "password")}
             placeholder="Contraseña"
             onChange={(e) => {setUserPassword(e.target.value), passwordValue(e.target.value) }}
           />
 
-        <DropDowm />
+        <DropDowm setUserDepartament={setUserDepartament} />
         </article>
 
         <article className="flex gap-x-5 items-center">

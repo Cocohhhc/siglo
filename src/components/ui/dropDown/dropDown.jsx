@@ -1,8 +1,17 @@
+import {useState} from "react"
 
-export default function DropDowm ({}) {
-    function setValue(){
-        return console.log("El valor")
+export default function DropDowm ({
+    setUserDepartament
+}) {
+    const [departament, setDepartament] = useState("")
+
+    function setValue(e){
+        // console.log(e.target.value);
+        setDepartament(e.target.value);
+        setUserDepartament(e.target.value);
     }
+    
+
     return (
     <section>
         <select name="departament" id="departament-selection" className=" 
@@ -10,11 +19,11 @@ export default function DropDowm ({}) {
         w-full rounded-lg py-2 px-4
         text-ls
         "
+        value={departament}
+        onChange={setValue}
         >
             <option className="hover:bg-green-100">Departamento</option>
-            <option onClickCapture={setValue} value="mercedes">Mercedes</option>
-            <option value="tesla">Tesla</option>
-            <option value="volvo">Volvo</option>
+            <option value="Medico">Medico</option>
         </select>   
     </section>
 

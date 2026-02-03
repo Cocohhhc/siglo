@@ -7,7 +7,7 @@ import InputLogin from "@/src/components/ui/inputs/inputs";
 import Button from "@/src/components/ui/button/button";
 
 //Hooks
-import { validForm } from "@/src/hook/formValid";
+import { showValue } from "@/src/hook/formValid";
 
 //Imagenes
 import siglo21Img from "@/public/logo-centro-medico-docente-siglo-21.1d027d8.webp";
@@ -42,7 +42,7 @@ export default function FormularyFromFormPage({ onSelect, passwordValue }) {
       <InputLogin
         name="userName"
         type="text"
-        variant={validForm(userName, "string")}
+        variant={showValue(userName, "string")}
         placeholder="Nombre"
         onChange={(e) => setUserName(e.target.value)}
       />
@@ -50,7 +50,7 @@ export default function FormularyFromFormPage({ onSelect, passwordValue }) {
       <InputLogin
         name="userPassword"
         type="password"
-        variant={validForm(userPassword, "password")}
+        variant={showValue(userPassword, "password")}
         placeholder="Contraseña"
         onChange={(e) => {setUserPassword(e.target.value), passwordValue(e.target.value)}}
       />

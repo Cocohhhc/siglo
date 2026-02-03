@@ -1,33 +1,50 @@
-// Validación de formularios
-export const validForm = (value, type) => {
-  const val = value.trim();
+const patterns = {
+    string: /^[A-Za-z0-9 ]{3,20}$/,
+    email: /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/,
+    password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/,
+};
 
-  const patterns = {
-    string: /^[A-Za-z0-9]+$/,
-    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
-  };
+
+// Validación de formularios
+export const showValue = (value, type) => {
 
   // Caso vacío
-  if (val === "") return "primary";
-
-  switch (type) {
+  if (value === "") return "primary";
+  const choice = () => {
+    switch (type) {
     case "email":
-      return patterns.email.test(val) ? "secundary" : "error";
+      return patterns.email.test(value) ? "success" : "error";
 
     case "password":
-      return patterns.password.test(val) ? "secundary" : "error";
+      return patterns.password.test(value) ? "success" : "error";
 
     case "string":
-      return patterns.string.test(val) ? "secundary" : "error";
+      return patterns.string.test(value) ? "success" : "error";
 
     case "number":
-      return /^[0-9]{1,11}$/.test(val) ? "secundary" : "error";
+      return /^[0-9]{1,11}$/.test(value) ? "success" : "error";
 
     case "departament":
-      return val === "Medico" ? "secundary" : "error";
-
+      return value === "Medico" ? "success" : "error";
     default:
       return "error";
   }
 };
+  return choice();
+};
+
+export const validateData = (data) => {
+  const { name, lastName, email, password, cardId, departament } = data;
+
+  if (
+    showValue(name, "string") === "success" &&
+    showValue(lastName, "string") === "success" &&
+    showValue(email, "email") === "success" &&
+    showValue(password, "password") === "success" &&
+    showValue(cardId, "number") === "success" &&
+    showValue(departament, "departament") === "success"
+  ) {
+    return true;
+  }
+  return false;
+}

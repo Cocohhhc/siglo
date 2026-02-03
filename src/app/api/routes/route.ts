@@ -1,80 +1,96 @@
 "use server";
-
+//---------------------
+// Interface 
+//---------------------
 interface PacientData {
   name: string;
   lastName: string;
   cardId: string;
   dataOfBirth: string;
   age: number;
-  
-  // gmail: string;
-  // password: string;
-  // departamentId: string;
+};
+
+// //----------------------
+// // Error handeling Class
+// //----------------------
+// export class ApiRequestError extends Error {
+//   statusCode?: number;
+//   errors?: Record<string, string>;
+
+//   constructor(message: string, statusCode?: number, errors?: Record<string, string>) {
+//     super(message);
+//     this.name = "ApiRequestError";
+//     this.statusCode = statusCode;
+//     this.errors = errors;
+//   }
+// }
+
+async function handleResponse(res: Response) {
+  const contentType = res.headers.get("content-type");
+
+  let data = null;
+  if (contentType?.includes("application/json")) {
+    data = await res.json();
+  }
+
+  if (!res.ok) {
+    const message = data?.message || `Error ${res.status}`;
+    throw new Error(message);
+  }
+
+  return data;
 }
 
 
-// Datos de paciente
+//-----------------------
+// Registro del Paciente
+//-----------------------
 export async function register(data: PacientData): Promise<void> {
-  console.log(data)
-  const res = await fetch("http://10.70.1.192:3000/pacientes", {
+
+  try{
+    const res = await fetch("http://10.70.1.192:3000/pacientes/create", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-
-  if (!res.ok) {
-    throw new Error("Error al iniciar sesión");
+  return await handleResponse(res);
   }
-}
+  catch (error: any){ 
+    console.error("Error en register:", error.message);
+    throw error; 
+  }
+};
 
-// export async function list() {
+//-----------------------
+//Getting all pacient
+//-----------------------
+export async function list() {
+  try{
+    const res = await fetch("http://10.70.1.192:3000/pacientes/all", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+    });
+    return await handleResponse(res);
+  }catch(error: any){
+    console.error('Error del Backend:', error.message);
+    throw error;
+  };
+};
 
-//         const res = await fetch("https://dogapi.dog/api/v2/breeds", {
-//             method: "GET",
-//             headers: { "Content-Type": "application/json" },
-//         });
-//         if (!res.ok) {
-//             throw new Error("Error al obtener datos del paciente");
-//         }
-
-//         const data = await res.json();
-//         return data;
+// //Sendding id 
+// export async function seddingId(id: string) {
+//   try{
+//     const res = await fetch(`http://10.70.1.192:3000/pacientes/profile/${id}`, {
+//         method: "GET",
+//         headers: { "Content-Type": "application/json" },
+//         // body: JSON.stringify(id),
+//     })
+//     const data = await res.json();
+//     console.log(data);
+//     // return await handleResponse(res);
+//   }catch(error: any){
+//     console.error('Error al enviar', error.message);
+//     throw error;
+//   }
 // };
-
-import { NextResponse } from "next/server";
-import { data } from "../../lib/data";
-//This function handles GET requests to the /api/products endpoint
-export async function GET() {
-  return NextResponse.json({ 
-    data
-  });
-}
-
-
-
-//Obtienes los datos del formulario
-
-// export async function getData(formData: FormData): Promise<void> {
-//   const usertName = (formData.get("userName") ?? "").toString().trim();
-//   const userLastName = (formData.get("userLastName") ?? "").toString().trim();
-//   const userCardId = (formData.get("userCardId") ?? "").toString().trim();
-//   const userGmail = (formData.get("userGmail") ?? "").toString().trim();
-//   const userPassword = (formData.get("userPassword") ?? "").toString().trim();
-//   const departamentId = (formData.get("departamentId") ?? "").toString().trim();
-
-//   const values = {
-//     usertName,
-//     userLastName,
-//     userCardId,
-//     userGmail,
-//     userPassword,
-//     departamentId
-//   };
-
-//   console.log(values)
-//   // LOGIN
-//   // await loginAction({
-//   //   gmail: userGmail,
-//   //   password: userPassword,
-//   // });
-// }
+// seddingId();
