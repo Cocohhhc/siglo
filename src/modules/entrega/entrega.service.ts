@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/databases/prisma.service';
+import { estado, entrega } from '@prisma/client';
 
 @Injectable()
 export class EntregaService {
@@ -7,34 +8,74 @@ export class EntregaService {
   //===================================
   //           traer todas las entregas
   //====================================
-  findAll(userId: number) {
-    return this.prisma.entrega.findMany({
+  async findAll(userId: number): Promise<entrega[]> {
+    const user = await this.prisma.users.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    const entregas = await this.prisma.entrega.findMany({
       where: {
         receptor_id: userId,
       },
+      include: {
+        pacientes: true,
+        registro: {
+          include: {
+            departamento: true,
+          },
+        },
+      },
     });
+    if (!entregas) {
+      throw new NotFoundException('Entregas no encontradas');
+    }
+    return entregas;
   }
 
   //=========================================
   // trae entregass enviadas por el usuarios
   //=========================================
 
-  findAllEnviados(userId: number) {
+  findAllEnviados(userId: number): Promise<entrega[]> {
     return this.prisma.entrega.findMany({
       where: {
         emisor_id: userId,
+      },
+      include: {
+        pacientes: true,
+        registro: {
+          include: {
+            departamento: true,
+          },
+        },
       },
     });
   }
   //==================================================
   //                     trae una entrega
   //=================================================
-  findOne(id: number) {
-    return this.prisma.entrega.findUnique({
+  async findOne(id: number): Promise<entrega> {
+    const entrega = await this.prisma.entrega.findUnique({
       where: {
         id,
       },
+      include: {
+        pacientes: true,
+        registro: {
+          include: {
+            departamento: true,
+          },
+        },
+      },
     });
+    if (!entrega) {
+      throw new NotFoundException('Entrega no encontrada');
+    }
+    return entrega;
   }
 
   //==================================================
@@ -47,7 +88,7 @@ export class EntregaService {
         id,
       },
       data: {
-        estado: 'no_recibido',
+        estado: estado.no_recibido,
       },
     });
   }
@@ -62,7 +103,7 @@ export class EntregaService {
         id,
       },
       data: {
-        estado: 'recibido',
+        estado: estado.recibido,
       },
     });
   }
