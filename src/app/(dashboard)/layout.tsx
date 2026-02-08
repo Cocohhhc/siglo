@@ -12,13 +12,12 @@ type Props = {
 
 export default function DashboardLayout({ children, }: Props) {
     return (
-            <div className=" sm:grid md:flex">
-                <section className="sm:w-full flex flex-col block md:w-[14%]">
-                    {/* <NavHome /> */}
+            <div className=" w-full min-[1024px]:flex items-center justify-center">
+                <section className="">
                     <AsideHomePage />
                 </section>
 
-                <main className="w-[80%] p-6 ms-10">
+                <main className="px-6 min-[1024px]:w-[70%] min-[1024px]:mt-10 min-[1024px]:ml-20 ">
                     {children}
                 </main>
             </div>

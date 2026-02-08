@@ -25,7 +25,7 @@ export const showValue = (value, type) => {
       return /^[0-9]{1,11}$/.test(value) ? "success" : "error";
 
     case "departament":
-      return value === "Medico" ? "success" : "error";
+      return value === "1" ? "success" : "error";
     default:
       return "error";
   }
@@ -44,7 +44,7 @@ export const validateData = (data) => {
     showValue(cardId, "number") === "success" &&
     showValue(departament, "departament") === "success"
   ) {
-    return true;
+    return data;
   }
   return false;
 }

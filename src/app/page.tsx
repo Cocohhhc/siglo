@@ -1,20 +1,39 @@
+"use client";
+import { useState } from "react";
+
 //Componentes
 import FormSwitcher from "@/src/components/form/pickForm";
 
 //Imagenes
 import Image from "next/image";
+import doctor from "@/public/imagenDoctorLoginPage.png";
+import doctorClosingEyes from "@/public/doctorClosingEyes.png";
 
 // Pagina Login y Registro
-export default async function  Home() {
+export default function  Home() {
+  const [passwordValue, setPasswordValue] = useState(false);
 
   return (
     <div className="">
-      <main className="bg-gray-50 min-h-screen flex items-center justify-center-safe ">
-          <section className="z-1 min-h-screen flex flex-col items-center justify-center relative">
-            <FormSwitcher />
+      <main className="">
+        
+          <section className="flex items-center h-screen">
+            <article className="w-1/2 h-full bg-[var(--color-900)]/88 flex items-center justify-center">
+            {
+              passwordValue ? (
+                <Image alt="Doctor" src={doctorClosingEyes} style={{ width: "100%", height: "auto" }}/>
+              ) : (
+                <Image alt="Doctor" src={doctor} style={{ width: "100%", height: "auto" }}/>
+              )
+            }
+            </article>
+
+            <article className="w-1/2 h-full bg-[var(--color-50)] flex items-center justify-center">
+              <FormSwitcher passwordValue={setPasswordValue} />
+            </article>
           </section>
 
-        <div className="pointer-events-none ">
+        <section className="pointer-events-none">
           <Image
             width={1000}
             height={1000}
@@ -29,9 +48,10 @@ export default async function  Home() {
               height: "100%",
               top: 0,
               left: 0,
+              zIndex: -1,
             }}
           />
-        </div>
+        </section>
       </main>
     </div>
   );

@@ -19,6 +19,8 @@ export default function RegistroClinico({value}) {
       return <FaListCheck />;
     case "Perfil":
       return <RiIdCardFill />;
+    case "Entrega":
+      return <FaListCheck />;
     default:
       return null;
   }
@@ -47,7 +49,7 @@ export default function RegistroClinico({value}) {
       
     </article>
       <div className="">
-        <Button onClick={logOut} type="button" value="🔄" variant="history" />
+        <Button width="full" size="md" onClick={logOut} type="button" value="🔄" variant="history" />
       </div>
     </section>
   );

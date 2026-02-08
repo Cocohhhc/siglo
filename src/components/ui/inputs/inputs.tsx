@@ -22,7 +22,7 @@ export default function InputLogin({
 }: formProps) {
   const styles = {
     primary:
-      "bg-cyan-50 rounded-lg px-10 py-3 text-ls [focus:outline-none focus:ring-2 focus:ring-green-300 ",
+      "bg-cyan-50 rounded-lg px-10 py-3 text-ls border-[1px] border-green-900 [focus:outline-none focus:ring-2 focus:ring-green-300 ",
 
     error:
       "bg-red-100 rounded-lg px-10 py-3 text-ls ring-2 ring-pink-600 focus:outline-none focus:ring-1 focus:ring-pink-800 ",

@@ -23,7 +23,7 @@ export default function DropDowm ({
         onChange={setValue}
         >
             <option className="hover:bg-green-100">Departamento</option>
-            <option value="Medico">Medico</option>
+            <option value="1">Medico</option>
         </select>   
     </section>
 
