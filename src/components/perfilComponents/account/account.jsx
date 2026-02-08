@@ -5,9 +5,6 @@ import { useFormSession } from "@/src/hook/useFormData";
 import { RiIdCardFill } from "react-icons/ri";
 import { TbMedicalCrossFilled } from "react-icons/tb";
 
-
-
-
 //Components
 import Description from "@/src/components/ui/doctorDescription/description";
 import Target from "@/src/components/ui/target/target";
@@ -15,19 +12,23 @@ import Division from "@/src/components/ui/division/division"
 
 export default function Account() {
   const { data } = useFormSession();
-  console.log(data)
-
-  if (!data) return <div className="grid place-items-center-safe text-2xl font-bold text-rose-600"><p>❌ El usuario no ha ingresado datos ❌</p></div>;
 
   return (
     <div className="">
-      <section className="p-4 w-full gap-8 grid items-center">
+      {
+        !data ? (
+          <div className="grid place-items-center-safe text-2xl font-bold text-rose-600">
+            <p>Cargando perfil...</p>
+            <p>Por favor espere un momento...</p>
+          </div>
+        ) : (
+          <section className="p-4 w-full gap-8 grid items-center">
         {/* Departamento y Cargo del perfil */}
         <section className="flex gap-4 items-center card">
           <CgProfile className="w-[6vw] h-auto" />
           <article className="flex gap-2">
-            <Target value="Doctor" />
-            <Target value="Cliente" />
+            <Target size="lg" position="left" variant="primary" value="Doctor" />
+            <Target size="lg" position="left" variant="primary" value="Cliente" />
           </article>
         </section>
         {/* Información del perfil */}
@@ -67,6 +68,8 @@ export default function Account() {
           </article>
         </section>
       </section>
+        )
+      }
     </div>
   );
 }

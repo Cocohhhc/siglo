@@ -16,13 +16,19 @@ import DropDowm from "@/src/components/ui/dropDown/dropDown"
 export default function RegistraitionForm({ onSelect, passwordValue }) {
   const [userName, setUserName] = useState("");
   const [userLastName, setUserLastName] = useState("");
-  const [userCardId, setUserCardId] = useState("");
+  const [userCardId, setUserCardId] = useState(""); 
   const [userGmail, setUserGmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userDepartament, setUserDepartament] = useState("");
   const router = useRouter()
 
-  const { saveData, clearData } = useFormSession();
+  const [steps, setSteps] = useState({
+    step1: false,
+    step2: false,
+    step3: false,
+  });
+
+  const { data, saveData, clearData } = useFormSession();
 
   useEffect(() => {
     clearData();
@@ -39,7 +45,6 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
       cardId: userCardId,
       departament: userDepartament,
     };
-    
     saveData(data);
     
     if (validateData(data)) {
@@ -47,7 +52,6 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
     }else{
       alert("Por favor, complete correctamente todos los campos del formulario.");
     }
-    // !saveData ?  null : router.replace("/home");
   };
 
   return (
@@ -58,57 +62,77 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
           </div>
         </article>
 
-      <form onSubmit={handleSubmit} className="flex flex-wrap justify-center p-12 gap-6">
-        <article className="grid grid-cols-2 gap-6">
-          <InputLogin
-            name="userName"
-            type="text"
-            variant={showValue(userName, "string")}
-            placeholder="Nombre"
-            onChange={(e) => setUserName(e.target.value)}
-          />
+    <form onSubmit={handleSubmit} className="flex flex-wrap justify-center p-12 gap-6">
+      <article className="">
+        
+          
+            <article className={`flex flex-wrap gap-2 justify-center items-center ${!steps.step1 ? "" : "hidden"}`}>   
+              <InputLogin
+                name="userName"
+                type="text"
+                variant={showValue(userName, "string")}
+                placeholder="Nombre"
+                onChange={(e) => setUserName(e.target.value)}
+              />
 
-          <InputLogin
-            name="userLastName"
-            type="text"
-            variant={showValue(userLastName, "string")}
-            placeholder="Apellido"
-            onChange={(e) => setUserLastName(e.target.value)}
-          />
+              <InputLogin
+                name="userLastName"
+                type="text"
+                variant={showValue(userLastName, "string")}
+                placeholder="Apellido"
+                onChange={(e) => setUserLastName(e.target.value)}
+              />
+              
+              <DropDowm setUserDepartament={setUserDepartament} />
+            </article>
+            
+              <article className={`flex flex-wrap gap-2 justify-center items-center ${steps.step1 ? "" : "hidden"}`}>
+                <InputLogin
+                  name="userCardId"
+                  type="text"
+                  variant={showValue(userCardId, "number")}
+                  placeholder="Cedula"
+                  onChange={(e) => setUserCardId(e.target.value)}
+                />
 
-          <InputLogin
-            name="userCardId"
-            type="text"
-            variant={showValue(userCardId, "number")}
-            placeholder="Cedula"
-            onChange={(e) => setUserCardId(e.target.value)}
-          />
+                <InputLogin
+                  name="userGmail"
+                  type="email"
+                  variant={showValue(userGmail, "email")}
+                  placeholder="Correo Electronico"
+                  onChange={(e) => setUserGmail(e.target.value)}
+                />
 
-          <InputLogin
-            name="userGmail"
-            type="email"
-            variant={showValue(userGmail, "email")}
-            placeholder="Correo Electronico"
-            onChange={(e) => setUserGmail(e.target.value)}
-          />
-
-          <InputLogin
-            name="userPassword"
-            type="password"
-            variant={showValue(userPassword, "password")}
-            placeholder="Contraseña"
-            onChange={(e) => {setUserPassword(e.target.value), passwordValue(e.target.value) }}
-          />
-
-        <DropDowm setUserDepartament={setUserDepartament} />
+                <InputLogin
+                  name="userPassword"
+                  type="password"
+                  variant={showValue(userPassword, "password")}
+                  placeholder="Contraseña"
+                  onChange={(e) => {setUserPassword(e.target.value), passwordValue(e.target.value) }}
+                />
+                
+                
+          </article>
         </article>
 
-        <article className="flex gap-x-5 items-center">
-          <Button type="submit" variant="primary" value="Entrar" />
-          <Button type="button" variant="secundary" value="Login" onClick={onSelect}/>
+        <article className="flex flex-col gap-2 w-full justify-center items-center">
+          <Button width="md" type="submit" variant="primary" value="Entrar" />
+          <Button width="md" type="button" variant="secundary" value="Login" onClick={onSelect}/>
         </article>
 
       </form>
+      <div className="flex gap-x-5 items-center">
+        {
+          !steps.step1 ? (
+            <Button width="full" size="md" type="button" variant="secundary" value="Siguiente" onClick={() => setSteps({ ...steps, step1: true })}/>
+          ) : (
+            <>
+            <Button width="full" size="md" type="button" variant="secundary" value="Anterior" onClick={() => setSteps({ ...steps, step1: false })}/>
+            <Button width="full" size="md" type="button" variant="secundary" value="Siguiente" onClick={() => setSteps({ ...steps, step1: true })}/>
+            </>
+          )
+        }
+      </div>
     </section>
   );
 }

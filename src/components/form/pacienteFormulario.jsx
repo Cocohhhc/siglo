@@ -1,80 +1,35 @@
 'use client'
 //Import
-import { getData } from "@/src/app/api/routes/route"
-import { useEffect, useState } from "react";
-import { useFormSession } from "@/src/hook/useFormData";
-import { showValue } from "@/src/hook/formValid";
-
 
 ///Componentes
-import InputLogin from "@/src/components/ui/inputs/inputs";
 import Button from "@/src/components/ui/button/button"
-import { register } from "@/src/app/api/routes/route"
-
 // Este componente maneja el formulario de registro de pacientes,   //
 // paso los datos al estado global para mostrarlos en la home page //
-export default function formularyPacient({  
-  setValue, 
-  setSecondValue, 
-  setThirdValue, 
-  setFourtValue, 
-  setFifthValue 
+export default function FormularyPacient({
+    onSubmit,
+    value,
+    children,
+    onCancel,
 }) {
-
-  const [userName, setUserName] = useState("");
-  const [userLastName, setUserLastName] = useState("");
-  const [IdNumber, setIdNumber] = useState("");
-  const [Birth, dataOfBirth] = useState("");
-  const [age, setAge] = useState("");  
-      
-    
-// Envia datos del formulario al backend
-  const handleSubmit = (e) => {
-    e.preventDefault();
-      
-    const data = {
-      name: userName,
-      lastName: userLastName,
-      date_of_birth: Birth,
-      IdNumber: IdNumber,
-      age: Number(age),
-    }
-
-    for (const paciente in data) {
-      if(data[paciente] === "" || data[paciente] === 0) {
-        alert(`Por favor complete el campo de ${paciente}`);
-        return;
-      }else{
-        register(data);
-      }
-    }
-  };
-
   return (
     <section
-      className="
-        flex flex-col items-center justify-between
-        gap-6 px-6  
-      "> 
-    <article className="text-2xl w-full">
-        <h2>Inserte Datos De Paciente</h2>
-    </article>
-
-    {/* Formulario de registro de paciente */}
-    <form onSubmit={handleSubmit} className="flex flex-row flex-wrap gap-5 p-12 card">
-      <InputLogin variant="history" placeholder="Nombre" name="pacienteName" onChange={(e) => {setUserName(e.target.value), setValue(e.target.value)}}/>
-
-      <InputLogin variant="history" placeholder="Apellido"  name="pacientLastName"  onChange={(e) => {setUserLastName(e.target.value), setSecondValue(e.target.value)}}/>
-
-      <InputLogin variant="history" placeholder="Cedula"  name="pacientId" onChange={(e) => {setIdNumber(e.target.value), setThirdValue(e.target.value)}}/>
-
-      <InputLogin variant="history" type="datetime-local" placeholder="Fecha de nacimiento"  name="dataOfBirth" onChange={(e) => {dataOfBirth(e.target.value), setFourtValue(e.target.value)}}/>
-
-      <InputLogin variant="history" placeholder="Edad" type="number"  name="yearsOld" onChange={(e) => {setAge(e.target.value), setFifthValue(e.target.value)}}/>
-
-      <Button type="submit" variant="primary" value="Guardar"/>
-                    
-      </form>       
+      className="flex flex-col items-center justify-between gap-6 px-6 ">
+      {/* Formulario de registro de paciente */}
+      <form onSubmit={onSubmit} className="flex flex-row flex-wrap gap-5 p-12 card bg-(--color-50)">
+        <article className="text-2xl w-full">
+          <h2>Inserte Datos De Paciente</h2>
+        </article>
+        {children}
+        {
+          value === "Actualizar" ?
+          <>
+          <Button type="submit" variant="primary" value={value} />
+          <Button type="button" variant="decline" size="small" width="md" value="Cancelar" onClick={onCancel}/>
+          </>
+          :
+          <Button type="submit" variant="primary" value={value} />
+        }
+      </form>
     </section>
   );
 }

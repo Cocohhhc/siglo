@@ -55,15 +55,9 @@ export default function FormularyFromFormPage({ onSelect, passwordValue }) {
         onChange={(e) => {setUserPassword(e.target.value), passwordValue(e.target.value)}}
       />
 
-      <article className="gap-x-5 flex flex-row items-center-safe">
-        <div className="">
-          <Button className="" type="submit" variant="primary" value="Entrar" />
-        </div>
-        <div className="">
-          <Button value="Registro" variant="secundary" type="button" onClick={onSelect}>
-            Registro
-          </Button>
-        </div>
+      <article className="gap-2 flex flex-col w-full justify-center items-center">
+        <Button width="md" type="submit" variant="primary" value="Entrar" />
+        <Button width="md" type="button" value="Registro" variant="secundary" onClick={onSelect}/>
       </article>
     </div>
   );
