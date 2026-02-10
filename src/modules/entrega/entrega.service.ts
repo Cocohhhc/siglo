@@ -4,7 +4,7 @@ import { estado, entrega } from '@prisma/client';
 
 @Injectable()
 export class EntregaService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
   //======================================
   //           traer todas las entregas
   //======================================
@@ -20,20 +20,17 @@ export class EntregaService {
     const entregas = await this.prisma.entrega.findMany({
       where: {
         receptor_id: userId,
+        estado: estado.pendiente,
       },
       include: {
         pacientes: true,
         registro: {
           include: {
             departamento: true,
-
           },
-
         },
         emisor: true,
         receptor: true,
-
-
       },
     });
     if (!entregas) {
@@ -82,6 +79,52 @@ export class EntregaService {
       throw new NotFoundException('Entrega no encontrada');
     }
     return entrega;
+  }
+
+  //==================================================
+  //                     trae entregas aceptadas
+  //==================================================
+
+  findAceptados(userId: number): Promise<entrega[]> {
+    return this.prisma.entrega.findMany({
+      where: {
+        receptor_id: userId,
+        estado: estado.recibido,
+      },
+      include: {
+        pacientes: true,
+        registro: {
+          include: {
+            departamento: true,
+          },
+        },
+        emisor: true,
+        receptor: true,
+      },
+    });
+  }
+
+  //==================================================
+  //                     trae entregas rechazadas
+  //==================================================
+
+  findRechazados(userId: number): Promise<entrega[]> {
+    return this.prisma.entrega.findMany({
+      where: {
+        receptor_id: userId,
+        estado: estado.no_recibido,
+      },
+      include: {
+        pacientes: true,
+        registro: {
+          include: {
+            departamento: true,
+          },
+        },
+        emisor: true,
+        receptor: true,
+      },
+    });
   }
 
   //==================================================

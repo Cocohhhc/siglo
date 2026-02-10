@@ -3,11 +3,11 @@ import { EntregaService } from './entrega.service';
 
 @Controller('entrega')
 export class EntregaController {
-  constructor(private readonly entregaService: EntregaService) { }
+  constructor(private readonly entregaService: EntregaService) {}
   //find all entrega by user id
   @Get('/recibidas/:userId')
   findAll(@Param('userId') userId: string) {
-    console.log(userId)
+    console.log(userId);
     return this.entregaService.findAll(+userId);
   }
 
@@ -18,11 +18,23 @@ export class EntregaController {
     return this.entregaService.findAllEnviados(+userId);
   }
 
+  //find all entrega aceptadas por el usuario
+  @Get('/aceptadas/:userId')
+  findAceptados(@Param('userId') userId: string) {
+    return this.entregaService.findAceptados(+userId);
+  }
+
+  //find all entrega rechazadas por el usuario
+  @Get('/rechazadas/:userId')
+  findRechazados(@Param('userId') userId: string) {
+    return this.entregaService.findRechazados(+userId);
+  }
+
   //find one entrega by id
   @Get('findOne/:id')
   findOne(@Param('id') id: string) {
     return this.entregaService.findOne(+id);
-  } 
+  }
 
   //rechazar entrega
   @Post('/rechazar/:id')
