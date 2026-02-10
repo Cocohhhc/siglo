@@ -3,24 +3,26 @@ import { EntregaService } from './entrega.service';
 
 @Controller('entrega')
 export class EntregaController {
-  constructor(private readonly entregaService: EntregaService) {}
+  constructor(private readonly entregaService: EntregaService) { }
   //find all entrega by user id
   @Get('/recibidas/:userId')
-  findAll(@Param('userId') userId: number) {
-    return this.entregaService.findAll(userId);
+  findAll(@Param('userId') userId: string) {
+    console.log(userId)
+    return this.entregaService.findAll(+userId);
   }
 
   //find all entrega enviadas por el usuario
   @Get('/enviadas/:userId')
-  findAllEnviadas(@Param('userId') userId: number) {
-    return this.entregaService.findAllEnviados(userId);
+  findAllEnviadas(@Param('userId') userId: string) {
+    console.log(userId);
+    return this.entregaService.findAllEnviados(+userId);
   }
 
   //find one entrega by id
   @Get('findOne/:id')
   findOne(@Param('id') id: string) {
     return this.entregaService.findOne(+id);
-  }
+  } 
 
   //rechazar entrega
   @Post('/rechazar/:id')

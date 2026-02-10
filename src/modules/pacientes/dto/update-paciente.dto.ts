@@ -20,4 +20,5 @@ export class UpdatePacienteDto {
   @IsNumber()
   @IsNotEmpty()
   Edad?: number;
+  
 }

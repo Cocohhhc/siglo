@@ -3,13 +3,13 @@ import { CreatePacienteDto } from './dto/create-paciente.dto';
 import { PrismaService } from 'src/databases/prisma.service';
 import { UpdatePacienteDto } from './dto/update-paciente.dto';
 import { ValidarCedulaService } from 'src/common/validarCedula.service';
-import { pacientes } from '@prisma/client';
+import { pacientes } from '@prisma/client/edge';
 @Injectable()
 export class PacientesService {
   constructor(
     private prisma: PrismaService,
     private validarCedulaService: ValidarCedulaService,
-  ) {}
+  ) { }
   //============================================
   //               CREATE PACIENTE
   //============================================
@@ -100,11 +100,17 @@ export class PacientesService {
     updatePacienteDto: UpdatePacienteDto,
   ): Promise<{ message: string; paciente: pacientes }> {
     try {
+      const { IdNumber, name, lastName, fecha_de_nacimiento, Edad } = updatePacienteDto;
       const paciente = await this.prisma.pacientes.update({
         where: {
-          idNumber: updatePacienteDto.IdNumber,
+          idNumber: IdNumber
         },
-        data: updatePacienteDto,
+        data: {
+          name,
+          lastName,
+          fechaDeNacimiento: fecha_de_nacimiento,
+          edad: Edad,
+        },
       });
       if (!paciente) {
         throw new BadRequestException('Paciente no encontrado');

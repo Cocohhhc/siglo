@@ -48,6 +48,7 @@ export class PacientesController {
   async update(
     @Body() updatePacienteDto: UpdatePacienteDto,
   ): Promise<{ message: string; paciente: pacientes }> {
+    console.log('Updating paciente with data:', updatePacienteDto);
     const Paciente = await this.pacientesService.update(updatePacienteDto);
     return Paciente;
   }

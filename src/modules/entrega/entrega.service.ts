@@ -4,10 +4,10 @@ import { estado, entrega } from '@prisma/client';
 
 @Injectable()
 export class EntregaService {
-  constructor(private readonly prisma: PrismaService) {}
-  //===================================
+  constructor(private readonly prisma: PrismaService) { }
+  //======================================
   //           traer todas las entregas
-  //====================================
+  //======================================
   async findAll(userId: number): Promise<entrega[]> {
     const user = await this.prisma.users.findUnique({
       where: {
@@ -26,8 +26,14 @@ export class EntregaService {
         registro: {
           include: {
             departamento: true,
+
           },
+
         },
+        emisor: true,
+        receptor: true,
+
+
       },
     });
     if (!entregas) {

@@ -1,12 +1,16 @@
 import { Module } from '@nestjs/common';
 import { RegistroModule } from './modules/registro/registro.module';
 import { PacientesModule } from './modules/pacientes/pacientes.module';
+import { DepartamentoModule } from './modules/departamento/departamento.module';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { EntregaModule } from './modules/entrega/entrega.module';
 @Module({
   imports: [
     RegistroModule,
     PacientesModule,
+    DepartamentoModule,
+    EntregaModule,
     ThrottlerModule.forRootAsync({
       useFactory: () => ({
         throttlers: [
@@ -26,4 +30,4 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }
