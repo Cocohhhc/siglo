@@ -16,10 +16,18 @@ import Button from "@/src/components/ui/button/button";
 import { IoMdCheckmark } from "react-icons/io";
 
 
-export default function HistoriaClinico({ data, onClick }) {
+export default function HistoriaClinico({ onClick }) {
 
   const check = <IoMdCheckmark />;
   const decline = <FaTrash />;
+
+  const [data, setData] = useState({
+    name: "",
+    lastName: "",
+    IdNumber: "",
+    fechaDeNacimiento: "",
+    age: "",
+  });
 
   return (
     <section>
@@ -39,27 +47,27 @@ export default function HistoriaClinico({ data, onClick }) {
             </li>
             <li className="flex items-center gap-2"> 
               <MdDriveFileRenameOutline />
-              <h2>{data.name ? data.name : "Nombre"}</h2>
+              <h2>{"Nombre"}</h2>
             </li>
 
             <li className="flex items-center gap-2">
               <MdDriveFileRenameOutline />
-              <h2>{data.lastName ? data.lastName : "Apellido"}</h2>
+              <h2>{"Apellido"}</h2>
             </li>
 
             <li className="flex items-center gap-2">
               <FaRegAddressCard />
-              <h2>{data.IdNumber ? data.IdNumber : "Cedula"}</h2>
+              <h2>{"Cedula"}</h2>
             </li>
 
             <li className="flex items-center gap-2">
               <BsCalendar2Date />
-              <h2>{data.fechaDeNacimiento ? data.fechaDeNacimiento: "Fecha de nacimiento"}</h2>
+              <h2>{"Fecha de nacimiento"}</h2>
             </li>
 
             <li className="flex items-center gap-2">
               <BsCalendar2Date />
-              <h2>{data.age ? data.age : "Edad"}</h2>
+              <h2>{"Edad"}</h2>
             </li>
           </ul>
         </section>

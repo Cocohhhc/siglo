@@ -1,8 +1,6 @@
 "use client"
 //Imports
-import { useState } from "react";
 import { usePageName } from "@/src/hook/usePageName";
-import { showValue } from "@/src/hook/formValid";
 import { authServices } from "@/src/services/auth.services";
 
 //Componentes
@@ -17,8 +15,7 @@ export default function HomePage() {
    // Envia datos del formulario al backend
   const handleSubmit = (e, data) => {
     e.preventDefault();
-    console.log(data);
-    // register(data);
+    register(data);
   };
   return (
 
@@ -29,7 +26,6 @@ export default function HomePage() {
           {/* Muestro los datos dinamicamente al ingresar datos en el input */}
           <article className="sha p-3 rounded-md w-full h-auto ">
             <HistoriaClinico
-              data={data}
               onClick={() => resetValues()}
             />
           </article>
@@ -37,7 +33,6 @@ export default function HomePage() {
           {/* Formulario de registro de paciente */}
           <article className="">
            <FormHome 
-            setData={setData}
             handleSubmit={handleSubmit}
            />
           </article>

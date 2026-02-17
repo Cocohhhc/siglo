@@ -7,7 +7,7 @@ import InputLogin from "../ui/inputs/inputs"
 // Hook
 import { showValue } from "@/src/hook/formValid";
 
-export default function FormHome({handleSubmit, setData}) {
+export default function FormHome({handleSubmit}) {
     const [name, setName] = useState("");
     const [lastName, setLastName] = useState("");
     const [cardId, setCardId] = useState("");
@@ -21,15 +21,10 @@ export default function FormHome({handleSubmit, setData}) {
       date_of_birth: birth,
       age: age,
     }
-
-    useEffect(() => {
-      setData(data);
-    }, [name, lastName, cardId, birth, age]);
-
       
     return (
         <>
-         <FormularyHomePage onSubmit={(e) => handleSubmit(data, e)} value="Guardar" variant="primary" text="Inserte Datos De Paciente" description="Ingresa los datos del paciente">
+         <FormularyHomePage onSubmit={(e) => !data ? alert("Debes llenar todos los campos") : handleSubmit(e, data)} value="Guardar" variant="primary" text="Inserte Datos De Paciente" description="Ingresa los datos del paciente">
             <div className="flex flex-col gap-2">
               <label htmlFor="pacienteName">Nombre</label>
               <InputLogin width="md" size="sm" variant={showValue(name, "string")} placeholder="Nombre" name="pacienteName" value={name} onChange={(e) => { setName(e.target.value)}} />
