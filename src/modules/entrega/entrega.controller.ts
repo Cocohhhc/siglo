@@ -7,14 +7,12 @@ export class EntregaController {
   //find all entrega by user id
   @Get('/recibidas/:userId')
   findAll(@Param('userId') userId: string) {
-    console.log(userId);
     return this.entregaService.findAll(+userId);
   }
 
   //find all entrega enviadas por el usuario
   @Get('/enviadas/:userId')
   findAllEnviadas(@Param('userId') userId: string) {
-    console.log(userId);
     return this.entregaService.findAllEnviados(+userId);
   }
 
