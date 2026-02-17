@@ -17,26 +17,29 @@ export class EntregaService {
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
     }
-    const entregas = await this.prisma.entrega.findMany({
+    const entregas = await this.prisma.users.findFirst({
       where: {
-        receptor_id: userId,
-        estado: estado.pendiente,
+        id: userId,
       },
       include: {
-        pacientes: true,
-        registro: {
+        entregas: {
           include: {
-            departamento: true,
+            pacientes: true,
+            emisor: true,
+            receptor: true,
+            registro: {
+              include: {
+                departamento: true,
+              },
+            },
           },
-        },
-        emisor: true,
-        receptor: true,
+        }
       },
     });
     if (!entregas) {
       throw new NotFoundException('Entregas no encontradas');
     }
-    return entregas;
+    return entregas.entregas;
   }
 
   //=========================================
