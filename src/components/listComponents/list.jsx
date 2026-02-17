@@ -1,7 +1,5 @@
-"use client";
 import { FaUser } from "react-icons/fa";
 import Button from "@/src/components/ui/button/button";
-import { useState } from "react";
 
 export default function List({
     info,

@@ -21,13 +21,13 @@ export default function Entrega() {
     const [enviadas, setEnviadas] = useState(false);
 
     const { entregaList, entregaEnviadas, entregaAceptar, entregaRechazar, entregaById } = entregaServices();
-    console.log("info", info)
+    
     // Trae todas las entregas
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const result = await entregaList("3");
-                const resultEnviadas = await entregaEnviadas("1");
+                const result = await entregaList("4");
+                const resultEnviadas = await entregaEnviadas("3");
                 setInfo(result);
                 setInfoEnviadas(resultEnviadas);
             } catch (error) {

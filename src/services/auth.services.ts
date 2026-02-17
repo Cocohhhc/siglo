@@ -59,12 +59,4 @@ async function list() {
   return { register, list, updatePaciente, createRegister, getRegistro };
 }
 
-// -----------------------
-//Getting all emisor 
-// -----------------------
-async function listEmisor() {
-    const res = await apiRoute("emisor/all", {
-      method: "GET",
-    });
-    return res;
-};
+

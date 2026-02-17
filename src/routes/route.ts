@@ -47,7 +47,7 @@ export const apiRoute = async (
   options?: RequestInit
 ) => {
   try {
-    const response = await fetch(`https://deep-keys-yawn.loca.lt/${route}`, {
+    const response = await fetch(`http://localhost:3001/${route}`, {
       headers: { 
         "Content-Type": "application/json", 
         "Accept": "application/json" 

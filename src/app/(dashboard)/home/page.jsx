@@ -7,8 +7,10 @@ import { authServices } from "@/src/services/auth.services";
 import HistoriaClinico from "@/src/components/homeComponents/historiaClinico/historia";
 import RegistroClinico from "@/src/components/ui/lista/registroClinico";
 import FormHome from "@/src/components/homeComponents/formHome";
+import { useState } from "react";
 
 export default function HomePage() {
+  const [data, setData] = useState({});
   const { register } = authServices();
   const pageName = usePageName();
 
@@ -16,6 +18,11 @@ export default function HomePage() {
   const handleSubmit = (e, data) => {
     e.preventDefault();
     register(data);
+    resetValues();
+  };
+
+  const resetValues = () => {
+    setData({});
   };
   return (
 
@@ -27,6 +34,7 @@ export default function HomePage() {
           <article className="sha p-3 rounded-md w-full h-auto ">
             <HistoriaClinico
               onClick={() => resetValues()}
+              data={data}
             />
           </article>
           <hr className="my-12 text-gray-400" />

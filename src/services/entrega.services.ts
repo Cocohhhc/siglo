@@ -7,7 +7,7 @@ export const entregaServices = () => {
     // Listar entregas
     //----------------------
     async function entregaList(userId: string) {
-        const res = await apiRoute(`${url}/recibidas/${"4"}`, {
+        const res = await apiRoute(`${url}/recibidas/${userId}`, {
             method: "GET"
         });
         return res;

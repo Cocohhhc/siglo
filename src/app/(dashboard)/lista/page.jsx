@@ -6,12 +6,14 @@ import { useFormSession } from "@/src/hook/useFormData";
 
 // Services
 import { authServices } from "@/src/services/auth.services";
+import { userServices } from "@/src/services/user.services";
 
 // Components
 import InputLogin from "@/src/components/ui/inputs/inputs";
 import RegistroClinico from "@/src/components/ui/lista/registroClinico";
 import List from "@/src/components/listComponents/list";
 import FormList from "@/src/components/listComponents/formList";
+import UsersMenu from "@/src/components/listComponents/usersMenu";  
 import NotFound from "@/src/components/ui/notFound/notFound";
 
 export default function ListaPage() {
@@ -20,13 +22,20 @@ export default function ListaPage() {
   const [info, setInfo] = useState([]);
   const [emisor, setEmisor] = useState([]);
   const [getEmisor, setGetEmisor] = useState(false);
+  const [emisorMenu, setEmisorMenu] = useState(false);
   const [originalData, setOriginalData] = useState([]);
   const [formData, setFormData] = useState({});
   const [update, setUpdate] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const { list, updatePaciente, createRegister, listEmisor } = authServices();
-  const { data } = useFormSession();
+  const { list, updatePaciente, createRegister } = authServices();
+  const { userList } = userServices();
+  const { data } = useFormSession();  
+  // const [infoRegister, setInfoRegister] = useState({
+  //   paciente_id: Number(),
+  //   receptor_id: Number(receptor_id),
+  //   emisor_id: Number(data.id),
+  // });
   //----------------------
   // Obtener datos
   //----------------------
@@ -46,23 +55,21 @@ export default function ListaPage() {
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const result = await listEmisor();
-  //       setEmisor(result);
-  //     } catch (error) {
-  //       console.error("Error al cargar datos:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  useEffect(() => {
+    if(!getEmisor) return;
+    const fetchData = async () => {
+      try {
+        const result = await userList();
+        setEmisor(result);
+      } catch (error) {
+        console.error("Error al cargar datos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [getEmisor]);
 
-  //   if(getEmisor){
-  //     fetchData();
-  //   }
-  // }, [getEmisor]);
-  
   //----------------------
   // Actualizar datos
   //----------------------
@@ -85,19 +92,22 @@ export default function ListaPage() {
   //----------------------
   // Crear registro
   //----------------------
-  const onCreateRegister = (id) => {
-    const info = {
-      paciente_id: Number(id),
-      receptor_id: Number(4),
-      emisor_id: Number(3),
-    }
-    createRegister(info);
-    setUpdate(false);
+  const onCreateRegister = (receptor_id) => {
+    
+    // createRegister(info);
+    // setUpdate(false);
   };
 
-  // const onGetEmisor = () => {
-  //   setGetEmisor(true);
-  // }
+  const onGetEmisor = (id) => {
+    setGetEmisor(true);
+    setEmisorMenu(true);
+
+    const info = {
+      emisor_id: data.id,
+      paciente_id: id,
+    };
+    console.log(id)
+  }
   
   //----------------------
   // Renderizar
@@ -132,7 +142,7 @@ export default function ListaPage() {
       info.length > 0 ? info.map(info => {
         return(
           <div className="mt-6" key={info.id}>
-            <List info={info} buttonCreate={onCreateRegister} buttonUpdate={() => {setUpdate(true)}}/>
+            <List info={info} buttonCreate={onGetEmisor} buttonUpdate={() => {setUpdate(true)}}/>
           </div>
         )
       }) : <NotFound message="No se encontraron resultados" />}
@@ -150,6 +160,23 @@ export default function ListaPage() {
         </div>
         </>
         }
+
+        <section>
+          {
+            emisorMenu && (
+              <>
+              <div onClick={() => {setEmisorMenu(false)}} className="w-full h-screen z-0 top-0 left-0 absolute bg-(--color-900)/50"></div>
+              <div className="
+                flex flex-col items-center justify-center w-[50vw] h-[80vh] 
+                gap-4 absolute top-1/2 left-1/2 transform -translate-x-1/2 
+                -translate-y-1/2 z-50 bg-white
+              ">
+                <UsersMenu users={emisor} onSelect={(id) => onCreateRegister(id)} />
+              </div>
+              </>
+            )
+          }
+        </section>
       </section>
     </section>
   );
