@@ -1,15 +1,14 @@
 import { apiRoute } from "@/src/routes/route";
 
+const url = "entrega";
 
 export const entregaServices = () => {
-
     //----------------------
-    // Crear entrega
+    // Listar entregas
     //----------------------
-    async function create(data: any) {
-        const res = await apiRoute("entrega/create", {
-            method: "POST",
-            body: JSON.stringify(data)
+    async function entregaList(userId: string) {
+        const res = await apiRoute(`${url}/recibidas/${"4"}`, {
+            method: "GET"
         });
         return res;
     };
@@ -17,8 +16,8 @@ export const entregaServices = () => {
     //----------------------
     // Listar entregas
     //----------------------
-    async function entregaList(userId: string) {
-        const res = await apiRoute(`entrega/recibidas/${userId}`, {
+    async function entregaEnviadas(userId: string) {
+        const res = await apiRoute(`${url}/enviadas/${userId}`, {
             method: "GET"
         });
         return res;
@@ -27,8 +26,8 @@ export const entregaServices = () => {
     //----------------------
     // Obtener entrega por id
     //----------------------
-    async function entregaById(id: any) {
-        const res = await apiRoute(`entrega/${id}`, {
+    async function entregaById(id: string) {
+        const res = await apiRoute(`${url}/findOne/${id}`, {
             method: "GET"
         });
         return res;
@@ -38,7 +37,7 @@ export const entregaServices = () => {
     // Aceptar entrega
     //----------------------
     async function entregaAceptar(id: string) {
-        const res = await apiRoute(`entrega/aceptar/${id}`, {
+        const res = await apiRoute(`${url}/aceptar/${id}`, {
             method: "POST"
         });
         return res;
@@ -48,11 +47,11 @@ export const entregaServices = () => {
     // Rechazar entrega
     //----------------------
     async function entregaRechazar(id: string) {
-        const res = await apiRoute(`entrega/rechazar/${id}`, {
+        const res = await apiRoute(`${url}/rechazar/${id}`, {
             method: "POST"
         });
         return res;
     };
 
-    return { create, entregaList, entregaById, entregaAceptar, entregaRechazar };
+    return { entregaList, entregaEnviadas, entregaById, entregaAceptar, entregaRechazar };
 }

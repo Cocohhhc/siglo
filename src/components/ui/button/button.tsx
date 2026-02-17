@@ -34,6 +34,9 @@ export default function Button({
     history:
       `border-b-emerald-600 border-b-3 ${widthStyles[width]} ${sizeStyles[size]} text-emerald-600 hover:bg-gray-300 focus:bg-gray-300`,
 
+    disabled:
+      `bg-(--color-500)/50 shadow-2xl text-(--color-50) rounded-xl ${widthStyles[width]} ${sizeStyles[size]}`,
+
     accept:
       `bg-green-200 rounded-lg ${widthStyles[width]} ${sizeStyles[size]} w-full shadow-md grid place-items-center hover:bg-green-100 focus:bg-green-300`,
 

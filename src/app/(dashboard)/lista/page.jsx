@@ -11,24 +11,21 @@ import { authServices } from "@/src/services/auth.services";
 import InputLogin from "@/src/components/ui/inputs/inputs";
 import RegistroClinico from "@/src/components/ui/lista/registroClinico";
 import List from "@/src/components/listComponents/list";
-import Button from "@/src/components/ui/button/button";
-import FormularyPacient from "@/src/components/form/pacienteFormulario";
+import FormList from "@/src/components/listComponents/formList";
+import NotFound from "@/src/components/ui/notFound/notFound";
 
 export default function ListaPage() {
   const pathName = usePageName();
 
   const [info, setInfo] = useState([]);
+  const [emisor, setEmisor] = useState([]);
+  const [getEmisor, setGetEmisor] = useState(false);
   const [originalData, setOriginalData] = useState([]);
+  const [formData, setFormData] = useState({});
   const [update, setUpdate] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const [name, setName] = useState("Nombre" || "");
-  const [lastName, setLastName] = useState("Apellido" || "");
-  const [idNumber, setIdNumber] = useState("Cedula" || "");
-  const [fechaDeNacimiento, setFechaDeNacimiento] = useState("Fecha de nacimiento" || "");
-  const [edad, setEdad] = useState("Edad" || "");
-
-  const { list, updatePaciente, createRegister, getRegistro } = authServices();
+  const { list, updatePaciente, createRegister, listEmisor } = authServices();
   const { data } = useFormSession();
   //----------------------
   // Obtener datos
@@ -37,8 +34,6 @@ export default function ListaPage() {
     const fetchData = async () => {
       try {
         const result = await list();
-        const getRes = await getRegistro("1");
-        console.log(getRes);
         setInfo(result);
         setOriginalData(result);
       } catch (error) {
@@ -50,20 +45,29 @@ export default function ListaPage() {
 
     fetchData();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const result = await listEmisor();
+  //       setEmisor(result);
+  //     } catch (error) {
+  //       console.error("Error al cargar datos:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   if(getEmisor){
+  //     fetchData();
+  //   }
+  // }, [getEmisor]);
   
   //----------------------
   // Actualizar datos
   //----------------------
-  const onUpdate = (e) => {
-    e.preventDefault();
-    const data = {
-      name: name,
-      lastName: lastName,
-      IdNumber: idNumber,
-      fecha_de_nacimiento: fechaDeNacimiento,
-      Edad: Number(edad),
-    }
-    updatePaciente(data);
+  const onUpdate = () => {
+    updatePaciente(formData);
     setUpdate(false);
   };  
 
@@ -83,13 +87,18 @@ export default function ListaPage() {
   //----------------------
   const onCreateRegister = (id) => {
     const info = {
-      departamento_id: Number(data.departament),
       paciente_id: Number(id),
+      receptor_id: Number(4),
+      emisor_id: Number(3),
     }
     createRegister(info);
     setUpdate(false);
   };
 
+  // const onGetEmisor = () => {
+  //   setGetEmisor(true);
+  // }
+  
   //----------------------
   // Renderizar
   //----------------------
@@ -107,22 +116,26 @@ export default function ListaPage() {
           <article className="flex flex-col gap-4">
             <RegistroClinico value={pathName} />
 
-            <InputLogin
-              variant="primary"
-              placeholder="Buscar paciente..."
-              onChange={(e) => searchData(e)}
-            />
+            <div className="flex flex-col gap-4">
+              <p>Busca los pacientes por su cedula</p>
+              <InputLogin
+                variant="primary"
+                placeholder="Buscar paciente..."
+                onChange={(e) => searchData(e)}
+              />
+            </div>
           </article>
         )
       }
 
-      {info.map(info => {
+      {
+      info.length > 0 ? info.map(info => {
         return(
           <div className="mt-6" key={info.id}>
             <List info={info} buttonCreate={onCreateRegister} buttonUpdate={() => {setUpdate(true)}}/>
           </div>
         )
-      })}
+      }) : <NotFound message="No se encontraron resultados" />}
 
       <section>
         { update && 
@@ -133,21 +146,7 @@ export default function ListaPage() {
           gap-4 absolute top-1/2 left-1/2 transform -translate-x-1/2 
           -translate-y-1/2 z-50
         ">
-          <FormularyPacient
-          value="Actualizar"
-          onSubmit={onUpdate}
-          onCancel={() => {setUpdate(false)}}
-        >
-            <InputLogin variant="history" placeholder="Nombre" name="pacienteName" onChange={(e) => { setName(e.target.value)}} />
-        
-            <InputLogin variant="history" placeholder="Apellido" name="pacientLastName" onChange={(e) => { setLastName(e.target.value)}} />
-        
-            <InputLogin variant="history" placeholder="Cedula" name="pacientId" onChange={(e) => { setIdNumber(e.target.value)}} />
-        
-            <InputLogin variant="history" type="datetime-local" placeholder="Fecha de nacimiento" name="dataOfBirth" onChange={(e) => { setFechaDeNacimiento(e.target.value)}} />
-        
-            <InputLogin variant="history" placeholder="Edad" type="number" name="yearsOld" onChange={(e) => { setEdad(e.target.value)}} />
-        </FormularyPacient>
+         <FormList setData={setFormData} onUpdate={onUpdate} onCancel={() => {setUpdate(false)}} />
         </div>
         </>
         }

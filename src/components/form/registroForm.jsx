@@ -28,7 +28,16 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
     step3: false,
   });
 
-  const { data, saveData, clearData } = useFormSession();
+  const { saveData, clearData } = useFormSession();
+  
+  const data = {
+      name: userName,
+      lastName: userLastName,
+      email: userGmail,
+      password: userPassword,
+      cardId: userCardId,
+      departament: userDepartament,
+  };
 
   useEffect(() => {
     clearData();
@@ -37,14 +46,7 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-     const data = {
-      name: userName,
-      lastName: userLastName,
-      email: userGmail,
-      password: userPassword,
-      cardId: userCardId,
-      departament: userDepartament,
-    };
+     
     saveData(data);
     
     if (validateData(data)) {
@@ -62,7 +64,7 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
           </div>
         </article>
 
-    <form onSubmit={handleSubmit} className="flex flex-wrap justify-center p-12 gap-6">
+    <form className="flex flex-wrap justify-center p-12 gap-6">
       <article className="">
         
           
@@ -110,29 +112,34 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
                   placeholder="Contraseña"
                   onChange={(e) => {setUserPassword(e.target.value), passwordValue(e.target.value) }}
                 />
-                
-                
           </article>
         </article>
-
-        <article className="flex flex-col gap-2 w-full justify-center items-center">
-          <Button width="md" type="submit" variant="primary" value="Entrar" />
-          <Button width="md" type="button" variant="secundary" value="Login" onClick={onSelect}/>
-        </article>
-
       </form>
-      <div className="flex gap-x-5 items-center">
-        {
-          !steps.step1 ? (
-            <Button width="full" size="md" type="button" variant="secundary" value="Siguiente" onClick={() => setSteps({ ...steps, step1: true })}/>
-          ) : (
-            <>
-            <Button width="full" size="md" type="button" variant="secundary" value="Anterior" onClick={() => setSteps({ ...steps, step1: false })}/>
-            <Button width="full" size="md" type="button" variant="secundary" value="Siguiente" onClick={() => setSteps({ ...steps, step1: true })}/>
-            </>
-          )
-        }
-      </div>
+      <article className="flex flex-col gap-2 w-full justify-center items-center">
+         <div className="flex gap-x-5 items-center">
+          {
+            !steps.step1 ? (
+              <Button width="full" size="md" type="button" variant="secundary" value="Siguiente" onClick={() => setSteps({ ...steps, step1: true })}/>
+            ) : (
+              <>
+              <Button width="full" size="md" type="button" variant="secundary" value="Anterior" onClick={() => setSteps({ ...steps, step1: false })}/>
+              </>
+            )
+          }
+        </div>
+
+        <div className="flex flex-col gap-2 w-full justify-center items-center">
+          {
+            validateData(data) ? (
+              <Button width="md" type="submit" variant="primary" value="Entrar" onClick={handleSubmit} />
+            ) : (
+              <Button width="md" type="button" variant="disabled" value="Entrar" disabled />
+            )
+          }
+          <Button width="md" type="button" variant="secundary" value="Login" onClick={onSelect}/>
+        </div>
+      </article>
+     
     </section>
   );
 }

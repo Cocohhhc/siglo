@@ -8,7 +8,7 @@ import { TbMedicalCrossFilled } from "react-icons/tb";
 //Components
 import Description from "@/src/components/ui/doctorDescription/description";
 import Target from "@/src/components/ui/target/target";
-import Division from "@/src/components/ui/division/division"
+import NotFound from "@/src/components/ui/notFound/notFound";
 
 export default function Account() {
   const { data } = useFormSession();
@@ -17,10 +17,7 @@ export default function Account() {
     <div className="">
       {
         !data ? (
-          <div className="grid place-items-center-safe text-2xl font-bold text-rose-600">
-            <p>Cargando perfil...</p>
-            <p>Por favor espere un momento...</p>
-          </div>
+          <NotFound message="No se encontraron datos"/>
         ) : (
           <section className="p-4 w-full gap-8 grid items-center">
         {/* Departamento y Cargo del perfil */}
@@ -35,7 +32,7 @@ export default function Account() {
         <section className="">
           <article className="
           flex flex-row items-center justify-around max-md:grid gap-6
-          p-8  card relative     
+          p-8  card relative  
           rounded-[2%] 
           ">
             <div className="grid gap-2">

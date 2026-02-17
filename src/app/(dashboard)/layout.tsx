@@ -17,7 +17,10 @@ export default function DashboardLayout({ children, }: Props) {
                     <AsideHomePage />
                 </section>
 
-                <main className="px-6 min-[1024px]:w-[70%] min-[1024px]:mt-10 min-[1024px]:ml-20 ">
+                <main className="px-6 
+                min-[1024px]:w-[80%] 
+                min-[1024px]:mt-10 
+                min-[1024px]:ml-30 ">
                     {children}
                 </main>
             </div>

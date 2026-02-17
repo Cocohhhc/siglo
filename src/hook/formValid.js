@@ -26,6 +26,13 @@ export const showValue = (value, type) => {
 
     case "departament":
       return value === "1" ? "success" : "error";
+
+    case "date":
+      return /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(value) ? "success" : "error";
+
+    case "idCard":
+      return /^[0-9]{1,11}$/.test(value) ? "success" : "error";
+      
     default:
       return "error";
   }

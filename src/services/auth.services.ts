@@ -29,6 +29,7 @@ async function updatePaciente(data: PacientData): Promise<void> {
 //Creating register
 //----------------------
 async function createRegister(data: RegistroData): Promise<void> {
+    console.log(data);
     const res = await apiRoute("registro/create", {
       method: "POST",
       body: JSON.stringify(data)
@@ -46,7 +47,7 @@ async function getRegistro(id: string): Promise<void> {
 
 //Get
 //-----------------------
-//Getting all pacient
+//Getting all pacient 
 //-----------------------
 async function list() {
     const res = await apiRoute("pacientes/all", {
@@ -57,3 +58,13 @@ async function list() {
 
   return { register, list, updatePaciente, createRegister, getRegistro };
 }
+
+// -----------------------
+//Getting all emisor 
+// -----------------------
+async function listEmisor() {
+    const res = await apiRoute("emisor/all", {
+      method: "GET",
+    });
+    return res;
+};

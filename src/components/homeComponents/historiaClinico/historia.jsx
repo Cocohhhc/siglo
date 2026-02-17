@@ -4,25 +4,29 @@ import { useState, useEffect } from "react";
 
 //Icons
 import { CgProfile } from "react-icons/cg";
-
+import { MdDriveFileRenameOutline } from "react-icons/md";
+import { FaRegAddressCard } from "react-icons/fa";
+import { BsCalendar2Date } from "react-icons/bs";
+import { FaTrash } from "react-icons/fa";
 
 //Componentes
 // import { settingUserSession } from "@/src/api/auth/auth";
 import InputLogin from "@/src/components/ui/inputs/inputs";
 import Button from "@/src/components/ui/button/button";
 import { IoMdCheckmark } from "react-icons/io";
-import { HiOutlineXMark } from "react-icons/hi2";
 
 
-export default function HistoriaClinico({ name, lastName, cardId, birthday, age, onClick }) {
+export default function HistoriaClinico({ data, onClick }) {
 
   const check = <IoMdCheckmark />;
-  const decline = <HiOutlineXMark />;
-
+  const decline = <FaTrash />;
 
   return (
     <section>
-      <h1 className="text-(length:--h1) mb-2">Ficha</h1>
+      <div className="flex flex-col mb-2">
+        <h1 className="text-(length:--h1)">Ficha</h1>
+        <p className="text-[1rem] ">Visualiza la ficha del paciente</p>
+      </div>
       <div
         className=" flex flex-row flex-wrap p-4 text-[1.1rem] font-normal items-center-safe justify-between rounded-lg card 
       max-md:grid place-items-center 
@@ -33,24 +37,29 @@ export default function HistoriaClinico({ name, lastName, cardId, birthday, age,
             <li>
               <CgProfile className="text-6xl" />
             </li>
-            <li>  
-              <h2>{name ? name : "Nombre"}</h2>
+            <li className="flex items-center gap-2"> 
+              <MdDriveFileRenameOutline />
+              <h2>{data.name ? data.name : "Nombre"}</h2>
             </li>
 
-            <li>
-              <h2>{lastName ? lastName : "Apellido"}</h2>
+            <li className="flex items-center gap-2">
+              <MdDriveFileRenameOutline />
+              <h2>{data.lastName ? data.lastName : "Apellido"}</h2>
             </li>
 
-            <li>
-              <h2>{cardId ? cardId : "Cedula"}</h2>
+            <li className="flex items-center gap-2">
+              <FaRegAddressCard />
+              <h2>{data.IdNumber ? data.IdNumber : "Cedula"}</h2>
             </li>
 
-            <li>
-              <h2>{birthday ? birthday : "Fecha de nacimiento"}</h2>
+            <li className="flex items-center gap-2">
+              <BsCalendar2Date />
+              <h2>{data.fechaDeNacimiento ? data.fechaDeNacimiento: "Fecha de nacimiento"}</h2>
             </li>
 
-            <li>
-              <h2>{age ? age : "Edad"}</h2>
+            <li className="flex items-center gap-2">
+              <BsCalendar2Date />
+              <h2>{data.age ? data.age : "Edad"}</h2>
             </li>
           </ul>
         </section>
