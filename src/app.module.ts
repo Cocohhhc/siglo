@@ -5,12 +5,14 @@ import { DepartamentoModule } from './modules/departamento/departamento.module';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { EntregaModule } from './modules/entrega/entrega.module';
+import {UsersModule} from './modules/users/users.module';
 @Module({
   imports: [
     RegistroModule,
     PacientesModule,
     DepartamentoModule,
     EntregaModule,
+    UsersModule,
     ThrottlerModule.forRootAsync({
       useFactory: () => ({
         throttlers: [
