@@ -1,8 +1,8 @@
-import { IsString } from 'class-validator';
+import { IsNumber } from 'class-validator';
 
 export class CreateRegistroDto {
-  @IsString()
+  @IsNumber()
   departamento_id: number;
-  @IsString()
+  @IsNumber()
   paciente_id: number;
 }

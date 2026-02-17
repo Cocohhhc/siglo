@@ -1,55 +1,87 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateRegistroDto } from './dto/create-registro.dto';
 import { PrismaService } from 'src/databases/prisma.service';
-import { registro, departament, pacientes } from '@prisma/client';
+import { CreateRegistroDto } from './dto/create-registro.dto';
+import { registro, departament, pacientes, estado } from '@prisma/client';
+
 @Injectable()
 export class RegistroService {
   constructor(private readonly prisma: PrismaService) {}
+
   //============================================
-  //               CREATE REGISTRO
+  //               CREATE REGISTRO + ENTREGA
   //============================================
   async create(createRegistroDto: CreateRegistroDto): Promise<registro> {
-    const verifyDepartamento = await this.prisma.departament.findUnique({
-      where: {
-        id: createRegistroDto.departamento_id,
-      },
+    const { departamento_id, paciente_id, emisor_id, receptor_id } = createRegistroDto as any;
+
+    // Validar departamento
+    const departamento = await this.prisma.departament.findUnique({
+      where: { id: departamento_id },
     });
-    if (!verifyDepartamento) {
+    if (!departamento) {
       throw new BadRequestException('Departamento no encontrado');
     }
 
-    const verifiUser = await this.prisma.pacientes.findUnique({
-      where: {
-        id: createRegistroDto.paciente_id,
-      },
+    // Validar paciente
+    const paciente = await this.prisma.pacientes.findUnique({
+      where: { id: paciente_id },
     });
-    if (!verifiUser) {
-      throw new Error('Paciente no encontrado');
+    if (!paciente) {
+      throw new BadRequestException('Paciente no encontrado');
     }
 
-    const registro = await this.prisma.registro.create({
-      data: {
-        departamento: {
-          connect: {
-            id: createRegistroDto.departamento_id,
+    // IDs para emisor/receptor: o vienen en el DTO, o fallback a 1/2 (iguala a lo que ya usabas)
+    const EMISOR_ID = typeof emisor_id === 'number' ? emisor_id : 1;
+    const RECEPTOR_ID = typeof receptor_id === 'number' ? receptor_id : 2;
+
+    // Validar existencia de emisor y receptor
+    const emisor = await this.prisma.users.findUnique({ where: { id: EMISOR_ID } });
+    if (!emisor) {
+      throw new BadRequestException(`Emisor (${EMISOR_ID}) no existe`);
+    }
+    const receptor = await this.prisma.users.findUnique({ where: { id: RECEPTOR_ID } });
+    if (!receptor) {
+      throw new BadRequestException(`Receptor (${RECEPTOR_ID}) no existe`);
+    }
+
+    // Transacción interactiva: crear registro y luego entrega (conectar por id del registro creado)
+    const result = await this.prisma.$transaction(async (tx) => {
+      const registro = await tx.registro.create({
+        data: {
+          departamento: {
+            connect: { id: departamento_id },
+          },
+          paciente: {
+            connect: { id: paciente_id },
           },
         },
-        paciente: {
-          connect: {
-            id: createRegistroDto.paciente_id,
+      });
+
+      // Crear la entrega conectando las relaciones correctas.
+      // Asegúrate de que en schema.prisma los nombres relacionales sean estos:
+      // emisor, receptor, pacientes, registro
+      await tx.entrega.create({
+        data: {
+          emisor: {
+            connect: { id: EMISOR_ID },
           },
+          receptor: {
+            connect: { id: RECEPTOR_ID },
+          },
+          pacientes: {
+            connect: { id: paciente_id },
+          },
+          registro: {
+            connect: { id: registro.id },
+          },
+          // si tu modelo exige "estado", puedes asignar uno por defecto:
+          estado: estado.no_recibido,
         },
-      },
+      });
+
+      return registro;
     });
 
-    await this.prisma.entrega.create({
-      data: {
-        emisor_id: 1,
-        receptor_id: 2,
-        registro_id: registro.id,
-      },
-    });
-    return registro;
+    return result;
   }
 
   //============================================
@@ -58,12 +90,10 @@ export class RegistroService {
   async findOne(id: number): Promise<{
     departamento: departament;
     paciente: pacientes;
-    registro: registro[];
+    registros: registro[];
   }> {
     const departamento = await this.prisma.departament.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
     });
 
     if (!departamento) {
@@ -71,27 +101,19 @@ export class RegistroService {
     }
 
     const paciente = await this.prisma.pacientes.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
     });
 
     if (!paciente) {
-      throw new Error('Paciente no encontrado');
+      throw new BadRequestException('Paciente no encontrado');
     }
 
-    const registro = await this.prisma.registro.findMany({
+    const registros = await this.prisma.registro.findMany({
       where: {
-        departamento: {
-          id,
-        },
+        departamento_id: id,
       },
     });
 
-    if (!registro) {
-      throw new BadRequestException('Registro no encontrado');
-    }
-
-    return { departamento, paciente, registro };
+    return { departamento, paciente, registros };
   }
 }

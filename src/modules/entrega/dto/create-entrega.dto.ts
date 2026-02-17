@@ -1,4 +1,6 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsNotEmpty, IsEnum } from 'class-validator';
+import { estado } from '@prisma/client';
+
 export class CreateEntregaDto {
   @IsNumber()
   @IsNotEmpty()
@@ -8,15 +10,14 @@ export class CreateEntregaDto {
   @IsNotEmpty()
   receptor_id: number;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   paciente_id: number;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   registro_id: number;
 
-  @IsString()
-  @IsNotEmpty()
-  estado: string;
+  @IsEnum(estado)
+  estado: estado;
 }
