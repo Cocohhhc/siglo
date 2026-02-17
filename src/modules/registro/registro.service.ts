@@ -11,15 +11,7 @@ export class RegistroService {
   //               CREATE REGISTRO + ENTREGA
   //============================================
   async create(createRegistroDto: CreateRegistroDto): Promise<registro> {
-    const { departamento_id, paciente_id, emisor_id, receptor_id } = createRegistroDto as any;
-
-    // Validar departamento
-    const departamento = await this.prisma.departament.findUnique({
-      where: { id: departamento_id },
-    });
-    if (!departamento) {
-      throw new BadRequestException('Departamento no encontrado');
-    }
+    const { paciente_id, emisor_id, receptor_id } = createRegistroDto;
 
     // Validar paciente
     const paciente = await this.prisma.pacientes.findUnique({
@@ -48,7 +40,7 @@ export class RegistroService {
       const registro = await tx.registro.create({
         data: {
           departamento: {
-            connect: { id: departamento_id },
+            connect: { id: receptor.departamentoId },
           },
           paciente: {
             connect: { id: paciente_id },
