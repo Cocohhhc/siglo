@@ -22,7 +22,7 @@ export class EntregaController {
   findAceptados(@Param('userId') userId: string): Promise<entrega[]> {
     return this.entregaService.findAceptados(+userId);
   }
-
+                                                                                                                               
   //find all entrega rechazadas por el usuario
   @Get('/rechazadas/:userId')
   findRechazados(@Param('userId') userId: string): Promise<entrega[]> {

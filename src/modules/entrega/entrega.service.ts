@@ -53,11 +53,14 @@ export class EntregaService {
       },
       include: {
         pacientes: true,
+        emisor: true,
+        receptor: true,
         registro: {
           include: {
             departamento: true,
           },
         },
+     
       },
     });
   }

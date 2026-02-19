@@ -7,7 +7,11 @@ export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   findAll(): Promise<users[]> {
-   return this.prisma.users.findMany();
+   return this.prisma.users.findMany({
+    include: {
+    departamento:true,
+    }
+   });
   }
 
 }
