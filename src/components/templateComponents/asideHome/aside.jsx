@@ -1,17 +1,8 @@
 'use client';
-//Imports
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-//Icons
-import { FaPersonCirclePlus } from "react-icons/fa6";
-import { FaListCheck } from "react-icons/fa6";
-import { FaPerson } from "react-icons/fa6";
-import { FaTruckMedical } from "react-icons/fa6";
-
-
-//Components
+import { FaPersonCirclePlus, FaListCheck, FaPerson, FaTruckMedical } from "react-icons/fa6";
 import NavHome from "../navHome/nav";
 import Button from "@/src/components/ui/button/button";
 
@@ -23,41 +14,75 @@ export default function AsideHomePage() {
     setMenu(!menu);
   };
 
-  return (
-    <aside className="card max-[1024px]:w-full min-[1024px]:fixed top-0 left-0 min-[1024px]:h-screen">
-      <div className="">
-        <NavHome />
-      </div>
-      <ul className="
-      min-[1024px]:flex min-[1024px]:flex-col min-[1024px]:gap-3 text-[1.3rem] 
-      max-[1024px]:flex flex-row max-[1024px]:justify-between
-      ">
-        <div className={`
-        ${menu ? "max-[1024px]:flex gap-3 max-[1024px]:transition-all max-[1024px]:duration-300" : "max-[1024px]:hidden max-[1024px]:transition-all max-[1024px]:duration-300"}
-        `}>
-          <li className={pathName === "/home" ? "aside__links__active" : "aside__links"}>
-            <FaPersonCirclePlus />
-            <Link href="/home">Paciente</Link>
-          </li>
+  const navLinks = [
+    { href: "/home", icon: <FaPersonCirclePlus />, label: "Paciente" },
+    { href: "/lista", icon: <FaListCheck />, label: "Lista" },
+    { href: "/entrega", icon: <FaTruckMedical />, label: "Entrega" },
+    { href: "/perfil", icon: <FaPerson />, label: "Perfil" },
+  ];
 
-          <li className={pathName === "/lista" ? "aside__links__active"  :  "aside__links" }>
-            <FaListCheck />
-            <Link href="/lista">Lista</Link>
-          </li>
-          <li className={pathName === "/entrega" ? "aside__links__active"  :  "aside__links" }>
-            <FaTruckMedical />
-            <Link href="/entrega">Entrega</Link>
-          </li>
-          <li className={pathName === "/perfil" ? "aside__links__active"  :  "aside__links" }>
-            <FaPerson />
-            <Link href="/perfil">Perfil</Link>
-          </li>
-          
+  return (
+    <aside className="
+      fixed top-0 left-0 z-40
+      w-full lg:w-56 lg:h-screen
+      bg-white shadow-2xl lg:shadow-[4px_0_24px_rgba(0,0,0,0.02)]
+      transition-all duration-300 ease-in-out
+    ">
+      <div className="flex justify-between items-center p-4 lg:p-6 lg:justify-center">
+        <div className="w-32 lg:w-40 transition-all duration-300">
+             <NavHome />
         </div>
-        <li className="min-[1024px]:hidden">
-          <Button onClick={handleMenu} variant="primary" value="Menu" />
-        </li>
-      </ul>    
+        
+        <div className="lg:hidden">
+            <Button 
+              onClick={handleMenu} 
+              variant="primary" 
+              value={menu ? "Cerrar" : "Menú"} 
+              size="sm" 
+            />
+        </div>
+      </div>
+
+      <nav className={`
+        ${menu ? "max-h-[500px] opacity-100 py-4" : "max-h-0 opacity-0 lg:max-h-full lg:opacity-100 lg:py-6"}
+        overflow-hidden transition-all duration-500 ease-in-out
+      `}>
+        <ul className="flex flex-col gap-3 px-6">
+          {navLinks.map((link) => {
+            const isActive = pathName === link.href;
+            return (
+              <li key={link.href}>
+                <Link 
+                  href={link.href}
+                  className={`
+                    relative flex items-center gap-4 px-5 py-3.5 rounded-2xl transition-all duration-300 group overflow-hidden
+                    ${isActive 
+                      ? 'bg-gradient-to-r from-[var(--color-500)] to-[var(--color-600)] text-white shadow-lg shadow-[var(--color-500)]/20 translate-x-2' 
+                      : 'text-[var(--color-800)] hover:bg-[var(--color-50)] hover:text-[var(--color-900)] hover:translate-x-1'
+                    }
+                  `}
+                  onClick={() => setMenu(false)}
+                >
+                  <span className={`text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 ${isActive ? 'text-white' : 'text-[var(--color-500)]'}`}>
+                    {link.icon}
+                  </span>
+                  <span className="font-semibold tracking-wide text-lg">{link.label}</span>
+                  
+                  {/* Hover indicator for non-active items */}
+                  {!isActive && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-[var(--color-500)] rounded-r-full opacity-0 -translate-x-full transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
+                  )}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+      
+      {/* Footer / User info placeholder could go here */}
+      <div className="hidden lg:block absolute bottom-8 left-0 w-full px-6 text-center">
+        <p className="text-xs text-[var(--text-primary)] opacity-60">© 2024 Siglo 21</p>
+      </div>
     </aside>
   );
 }

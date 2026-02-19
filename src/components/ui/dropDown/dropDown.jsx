@@ -1,12 +1,13 @@
 import {useState} from "react"
 
 export default function DropDowm ({
-    setUserDepartament
+    setUserDepartament,
+    options = [],
+    defaultLabel = "Departamento"
 }) {
     const [departament, setDepartament] = useState("")
 
     function setValue(e){
-        // console.log(e.target.value);
         setDepartament(e.target.value);
         setUserDepartament(e.target.value);
     }
@@ -22,8 +23,10 @@ export default function DropDowm ({
         value={departament}
         onChange={setValue}
         >
-            <option className="hover:bg-green-100">Departamento</option>
-            <option value="1">Medico</option>
+            <option value="">{defaultLabel}</option>
+            {options.map(opt => (
+                <option key={opt.id} value={opt.id}>{opt.name}</option>
+            ))}
         </select>   
     </section>
 

@@ -16,9 +16,7 @@ import siglo21Img from "@/public/logo-centro-medico-docente-siglo-21.1d027d8.web
 export default function FormularyFromFormPage({ onSelect, passwordValue }) {
   //States para los inputs
   const [userName, setUserName] = useState("");
-  const [userPassword, setUserPassword] = useState("");
-  const [gettingPasswordValue, lookingForValue] = useState("")
- 
+  const [userPassword, setUserPassword] = useState(""); 
 
   return (
     <div
@@ -42,6 +40,8 @@ export default function FormularyFromFormPage({ onSelect, passwordValue }) {
       <InputLogin
         name="userName"
         type="text"
+        width="md"
+        
         variant={showValue(userName, "string")}
         placeholder="Nombre"
         onChange={(e) => setUserName(e.target.value)}

@@ -10,7 +10,6 @@ import { BsCalendar2Date } from "react-icons/bs";
 import { FaTrash } from "react-icons/fa";
 
 //Componentes
-// import { settingUserSession } from "@/src/api/auth/auth";
 import InputLogin from "@/src/components/ui/inputs/inputs";
 import Button from "@/src/components/ui/button/button";
 import { IoMdCheckmark } from "react-icons/io";
@@ -18,7 +17,6 @@ import { IoMdCheckmark } from "react-icons/io";
 
 export default function HistoriaClinico({ onClick }) {
 
-  const check = <IoMdCheckmark />;
   const decline = <FaTrash />;
 
   const [data, setData] = useState({
@@ -29,54 +27,53 @@ export default function HistoriaClinico({ onClick }) {
     age: "",
   });
 
+  const fields = [
+    { icon: <MdDriveFileRenameOutline />, label: "Nombre" },
+    { icon: <MdDriveFileRenameOutline />, label: "Apellido" },
+    { icon: <FaRegAddressCard />, label: "Cédula" },
+    { icon: <BsCalendar2Date />, label: "Fecha de nacimiento" },
+    { icon: <BsCalendar2Date />, label: "Edad" },
+  ];
+
   return (
     <section>
-      <div className="flex flex-col mb-2">
-        <h1 className="text-(length:--h1)">Ficha</h1>
-        <p className="text-[1rem] ">Visualiza la ficha del paciente</p>
+      <div className="flex flex-col mb-4">
+        <h1 className="text-xl font-bold" style={{ color: 'var(--color-900)' }}>Ficha</h1>
+        <p className="text-sm" style={{ color: 'var(--text-primary)' }}>Visualiza la ficha del paciente</p>
       </div>
-      <div
-        className=" flex flex-row flex-wrap p-4 text-[1.1rem] font-normal items-center-safe justify-between rounded-lg card 
-      max-md:grid place-items-center 
-    "
+
+      <div className="rounded-2xl bg-white p-5"
+        style={{ boxShadow: 'var(--shadow-card)' }}
       >
-        <section className="">
-          <ul className="flex flex-wrap items-center gap-x-10">
-            <li>
-              <CgProfile className="text-6xl" />
-            </li>
-            <li className="flex items-center gap-2"> 
-              <MdDriveFileRenameOutline />
-              <h2>{"Nombre"}</h2>
-            </li>
+        <div className="flex items-center justify-between gap-4 max-md:flex-col">
+          
+          {/* Perfil + campos */}
+          <div className="flex items-center gap-6 flex-wrap">
+            {/* Avatar */}
+            <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0"
+              style={{ background: 'linear-gradient(135deg, var(--color-200), var(--color-300))' }}
+            >
+              <CgProfile className="text-3xl" style={{ color: 'var(--color-700)' }} />
+            </div>
 
-            <li className="flex items-center gap-2">
-              <MdDriveFileRenameOutline />
-              <h2>{"Apellido"}</h2>
-            </li>
-
-            <li className="flex items-center gap-2">
-              <FaRegAddressCard />
-              <h2>{"Cedula"}</h2>
-            </li>
-
-            <li className="flex items-center gap-2">
-              <BsCalendar2Date />
-              <h2>{"Fecha de nacimiento"}</h2>
-            </li>
-
-            <li className="flex items-center gap-2">
-              <BsCalendar2Date />
-              <h2>{"Edad"}</h2>
-            </li>
-          </ul>
-        </section>
-
-        <section className="flex flex-row gap-4 items-center-safe max-md:w-full">
-          <div className="max-md:w-full">
-            <Button width="md" size="lg" variant="decline" value={decline} onClick={() => {onClick()}} />
+            {/* Campos */}
+            <div className="flex flex-wrap items-center gap-3">
+              {fields.map((field, idx) => (
+                <div key={idx} className="flex items-center gap-2 px-3 py-2 rounded-xl"
+                  style={{ background: 'var(--color-50)', color: 'var(--color-800)' }}
+                >
+                  <span className="text-sm" style={{ color: 'var(--color-500)' }}>{field.icon}</span>
+                  <span className="text-sm font-medium">{field.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </section>
+
+          {/* Acción */}
+          <div className="shrink-0 max-md:w-full">
+            <Button width="full" size="sm" variant="decline" value={decline} onClick={() => {onClick()}} />
+          </div>
+        </div>
       </div>
     </section>
   );

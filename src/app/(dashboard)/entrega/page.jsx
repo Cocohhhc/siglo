@@ -14,29 +14,38 @@ import NotFound from "@/src/components/ui/notFound/notFound";
 export default function Entrega() {
     const pathName = usePageName();
 
-    const [info, setInfo] = useState([] || {});
-    const [infoEnviadas, setInfoEnviadas] = useState([] || {}); 
+    const [info, setInfo] = useState([]);
+    const [infoEnviadas, setInfoEnviadas] = useState([]); 
+    const [infoAceptadas, setInfoAceptadas] = useState([]);
+    const [infoRechazadas, setInfoRechazadas] = useState([]);
+
     const [update, setUpdate] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [enviadas, setEnviadas] = useState(false);
 
-    const { entregaList, entregaEnviadas, entregaAceptar, entregaRechazar, entregaById } = entregaServices();
+    // Tab activo: 'recibidas' (no aceptadas) por defecto
+    const [activeTab, setActiveTab] = useState('recibidas');
+
+    const { entregaList, entregaEnviadas, entregaAceptadas, entregaRechazadas, entregaById, entregaAceptar, entregaRechazar } = entregaServices();
     
-    // Trae todas las entregas
+    // Trae todas las entregas al montar y cuando se actualiza
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const result = await entregaList("4");
-                const resultEnviadas = await entregaEnviadas("3");
+                const result = await entregaList("1");
+                const resultEnviadas = await entregaEnviadas("1");
+                const resultAceptadas = await entregaAceptadas("1");
+                const resultRechazadas = await entregaRechazadas("1");
                 setInfo(result);
                 setInfoEnviadas(resultEnviadas);
+                setInfoAceptadas(resultAceptadas);
+                setInfoRechazadas(resultRechazadas);
             } catch (error) {
                 console.error("Error al cargar datos:", error);
             }
         };
 
         fetchData();
-    }, []);
+    }, [update]);
 
     // Aceptar entrega
     const aceptar = async (id) => {
@@ -59,6 +68,25 @@ export default function Entrega() {
         setInfo(result);
         setLoading(false);
     }
+
+    // Obtener los datos según el tab activo
+    const getActiveData = () => {
+        switch (activeTab) {
+            case 'recibidas':
+                return info;
+            case 'enviadas':
+                return infoEnviadas;
+            case 'aceptadas':
+                return infoAceptadas;
+            case 'rechazadas':
+                return infoRechazadas;
+            default:
+                return info;
+        }
+    };
+
+    const activeData = getActiveData();
+
     return (
         <main>
             <section className="">
@@ -80,13 +108,30 @@ export default function Entrega() {
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <Button value="Hacer nueva entrega" variant="primary" size="sm" />
-                                    {
-                                        enviadas ? (
-                                            <Button value="Entregas recibidas" variant="history" size="sm" onClick={() => {setEnviadas(false)}}/>
-                                        ) : (
-                                            <Button value="Entregas enviadas" variant="history" size="sm" onClick={() => {setEnviadas(true)}}/>
-                                        )
-                                    }
+                                    <Button 
+                                        value="Entregas recibidas" 
+                                        variant={activeTab === 'recibidas' ? 'primary' : 'history'} 
+                                        size="sm" 
+                                        onClick={() => setActiveTab('recibidas')}
+                                    />
+                                    <Button 
+                                        value="Entregas enviadas" 
+                                        variant={activeTab === 'enviadas' ? 'primary' : 'history'} 
+                                        size="sm" 
+                                        onClick={() => setActiveTab('enviadas')}
+                                    />
+                                    <Button 
+                                        value="Entregas aceptadas" 
+                                        variant={activeTab === 'aceptadas' ? 'primary' : 'history'} 
+                                        size="sm" 
+                                        onClick={() => setActiveTab('aceptadas')}
+                                    />
+                                    <Button 
+                                        value="Entregas rechazadas" 
+                                        variant={activeTab === 'rechazadas' ? 'primary' : 'history'} 
+                                        size="sm" 
+                                        onClick={() => setActiveTab('rechazadas')}
+                                    />
                                 </div>
                             </article>
 
@@ -100,30 +145,17 @@ export default function Entrega() {
                         </section>
 
                         {
-                            enviadas ? (
-                                <section>
-                                    <article className="grid grid-cols-3 gap-4 mt-4">
-                                        {infoEnviadas.length === 0 ? (
-                                            <div className="col-span-3">
-                                                <NotFound message="Este usuario no tiene entregas enviadas"/>
-                                            </div>
-                                        ) : (
-                                            infoEnviadas.map((item) => (
-                                                <GridEntrega key={item.id} info={item} aceptar={aceptar} rechazar={rechazar}/>
-                                            ))
-                                        )}
-                                    </article>
-                                </section>
-
-                            ) : info.length === 0 ? (
+                            activeData.length === 0 ? (
                               <section className="">
                                     <NotFound message="No se encontraron entregas"/>
                                 </section>
                             ) : (
                             <article className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3">
-                                {info.map((item) => (
-                                    <GridEntrega key={item.id} info={item} aceptar={aceptar} rechazar={rechazar}/>
-                                ))}
+                                {
+                                    activeData.map((item) => (
+                                        <GridEntrega key={item.id} info={item} aceptar={aceptar} rechazar={rechazar}/>
+                                    ))
+                                }
                             </article>
                             )
                         }

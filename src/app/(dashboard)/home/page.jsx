@@ -24,26 +24,31 @@ export default function HomePage() {
   const resetValues = () => {
     setData({});
   };
-  return (
 
-        <section className="flex flex-col">
-          <article className="w-full mb-5">
-            <RegistroClinico value={pageName}/>
-          </article>
-          {/* Muestro los datos dinamicamente al ingresar datos en el input */}
-          <article className="sha p-3 rounded-md w-full h-auto ">
-            <HistoriaClinico
-              onClick={() => resetValues()}
-              data={data}
-            />
-          </article>
-          <hr className="my-12 text-gray-400" />
-          {/* Formulario de registro de paciente */}
-          <article className="">
-           <FormHome 
-            handleSubmit={handleSubmit}
-           />
-          </article>
-        </section>
+  return (
+    <section className="flex flex-col gap-6">
+      {/* Header */}
+      <article>
+        <RegistroClinico value={pageName}/>
+      </article>
+
+      {/* Ficha del paciente */}
+      <article>
+        <HistoriaClinico
+          onClick={() => resetValues()}
+          data={data}
+        />
+      </article>
+
+      {/* Separador */}
+      <div className="h-px w-full" style={{ background: 'linear-gradient(var(--hr-gradient))' }}></div>
+
+      {/* Formulario de registro de paciente */}
+      <article>
+        <FormHome 
+          handleSubmit={handleSubmit}
+        />
+      </article>
+    </section>
   );
 }

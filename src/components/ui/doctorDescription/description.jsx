@@ -1,4 +1,4 @@
-// import { useState } from "react"
+
 
 import Target from "@/src/components/ui/target/target"
 export default function Description({ description, value }) {

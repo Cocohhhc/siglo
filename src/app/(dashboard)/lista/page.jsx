@@ -31,11 +31,12 @@ export default function ListaPage() {
   const { list, updatePaciente, createRegister } = authServices();
   const { userList } = userServices();
   const { data } = useFormSession();  
-  // const [infoRegister, setInfoRegister] = useState({
-  //   paciente_id: Number(),
-  //   receptor_id: Number(receptor_id),
-  //   emisor_id: Number(data.id),
-  // });
+
+  const [infoRegister, setInfoRegister] = useState({
+      emisor_id: Number(1),
+      paciente_id: Number(),
+      receptor_id: Number(),
+    });
   //----------------------
   // Obtener datos
   //----------------------
@@ -88,25 +89,35 @@ export default function ListaPage() {
     const result = originalData.filter(info => info.idNumber.includes(e.target.value));
     return setInfo(result);
   }
-
+ 
   //----------------------
   // Crear registro
   //----------------------
-  const onCreateRegister = (receptor_id) => {
+  const onCreateRegister = () => {
+    if(infoRegister.paciente_id === 0 || infoRegister.receptor_id === 0){
+      return alert("Error al crear el registro");    
+    }
+    console.log("infoRegister", infoRegister);
+    createRegister(infoRegister);
+    setEmisorMenu(false);
+  }
+  const onSelectReceptor = (receptor_id) => {
+    console.log("receptor_id", receptor_id);
+    setInfoRegister(prev => ({
+      ...prev,
+      receptor_id: Number(receptor_id)
+    }));
     
-    // createRegister(info);
-    // setUpdate(false);
   };
 
   const onGetEmisor = (id) => {
     setGetEmisor(true);
     setEmisorMenu(true);
-
-    const info = {
-      emisor_id: data.id,
-      paciente_id: id,
-    };
-    console.log(id)
+    console.log("id", id);
+    setInfoRegister(prev => ({
+      ...prev,
+      paciente_id: Number(id)
+    }));
   }
   
   //----------------------
@@ -167,11 +178,11 @@ export default function ListaPage() {
               <>
               <div onClick={() => {setEmisorMenu(false)}} className="w-full h-screen z-0 top-0 left-0 absolute bg-(--color-900)/50"></div>
               <div className="
-                flex flex-col items-center justify-center w-[50vw] h-[80vh] 
-                gap-4 absolute top-1/2 left-1/2 transform -translate-x-1/2 
-                -translate-y-1/2 z-50 bg-white
+                flex flex-col w-[50vw] h-[80vh] 
+                absolute top-1/2 left-1/2 transform -translate-x-1/2 
+                -translate-y-1/2 z-50 bg-white rounded-2xl overflow-hidden
               ">
-                <UsersMenu users={emisor} onSelect={(id) => onCreateRegister(id)} />
+                <UsersMenu users={emisor} onSelect={(id) => onSelectReceptor(id)} onSubmit={onCreateRegister}/>
               </div>
               </>
             )

@@ -2,9 +2,7 @@
 import { ReactNode } from "react";
 
 //Components
-import NavHome from "@/src/components/templateComponents/navHome/nav";
 import AsideHomePage from "@/src/components/templateComponents/asideHome/aside";
-import { LuLamp } from "react-icons/lu";
 
 type Props = {
     children: ReactNode
@@ -12,15 +10,13 @@ type Props = {
 
 export default function DashboardLayout({ children, }: Props) {
     return (
-            <div className=" w-full min-[1024px]:flex items-center justify-center">
-                <section className="">
-                    <AsideHomePage />
-                </section>
+            <div className="relative w-full min-h-screen bg-(--color-50)">
+                <AsideHomePage />
 
-                <main className="px-6 
-                min-[1024px]:w-[80%] 
-                min-[1024px]:mt-10 
-                min-[1024px]:ml-30 ">
+                <main className="
+                    w-full px-6 pb-10 transition-all duration-300
+                    lg:w-auto lg:ml-56 lg:pt-10 
+                ">
                     {children}
                 </main>
             </div>

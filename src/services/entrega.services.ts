@@ -4,7 +4,7 @@ const url = "entrega";
 
 export const entregaServices = () => {
     //----------------------
-    // Listar entregas
+    // Listar entregas recibidas
     //----------------------
     async function entregaList(userId: string) {
         const res = await apiRoute(`${url}/recibidas/${userId}`, {
@@ -14,10 +14,30 @@ export const entregaServices = () => {
     };
 
     //----------------------
-    // Listar entregas
+    // Listar entregas enviadas
     //----------------------
     async function entregaEnviadas(userId: string) {
         const res = await apiRoute(`${url}/enviadas/${userId}`, {
+            method: "GET"
+        });
+        return res;
+    };
+
+    //----------------------
+    // Listar entregas aceptadas
+    //----------------------
+    async function entregaAceptadas(userId: string) {
+        const res = await apiRoute(`${url}/aceptadas/${userId}`, {
+            method: "GET"
+        });
+        return res;
+    };
+
+    //----------------------
+    // Listar entregas rechazadas
+    //----------------------
+    async function entregaRechazadas(userId: string) {
+        const res = await apiRoute(`${url}/rechazadas/${userId}`, {
             method: "GET"
         });
         return res;
@@ -53,5 +73,5 @@ export const entregaServices = () => {
         return res;
     };
 
-    return { entregaList, entregaEnviadas, entregaById, entregaAceptar, entregaRechazar };
+    return { entregaList, entregaEnviadas, entregaAceptadas, entregaRechazadas, entregaById, entregaAceptar, entregaRechazar };
 }

@@ -22,16 +22,16 @@ export default function InputLogin({
 }: formProps) {
   const styles = {
     primary:
-      "bg-cyan-50 rounded-md px-6 py-3 text-lg text-(--color-900) border border-gray-500  [focus:outline-none focus:ring-2 focus:ring-green-300 ",
+      "w-full bg-white rounded-xl px-4 py-3 text-sm text-(--color-900) border border-(--color-200) outline-none transition-all duration-200 focus:border-(--color-500) focus:ring-2 focus:ring-(--color-200) placeholder:text-(--text-primary)",
 
     error:
-      "bg-red-100 rounded-lg px-10 py-3 text-ls ring-2 ring-pink-600 focus:outline-none focus:ring-1 focus:ring-pink-800 ",
+      "w-full bg-pink-50 rounded-xl px-4 py-3 text-sm border-2 border-pink-400 outline-none transition-all duration-200 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 placeholder:text-pink-300",
 
     success:
-      "bg-green-100 rounded-lg px-10 py-3 text-ls ring-2 ring-green-600 focus:outline-none focus:ring-1 focus:ring-green-800 ",
+      "w-full bg-emerald-50 rounded-xl px-4 py-3 text-sm border-2 border-emerald-400 outline-none transition-all duration-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 placeholder:text-emerald-300",
 
     history:
-      "p-2 text-ls ring-2 ring-zinc-300 focus:outline-none focus:ring-1 focus:ring-black ",
+      "w-full bg-(--color-50) rounded-xl px-4 py-3 text-sm border border-zinc-200 outline-none transition-all duration-200 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-100 placeholder:text-zinc-400",
   };
 
   return (

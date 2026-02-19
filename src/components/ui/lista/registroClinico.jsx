@@ -7,7 +7,6 @@ import { usePageName } from "@/src/hook/usePageName";
 import { RiIdCardFill } from "react-icons/ri";
 import { FaBriefcaseMedical } from "react-icons/fa6";
 import { FaListCheck } from "react-icons/fa6";
-import { IoMail } from "react-icons/io5";
 
 export default function RegistroClinico({value}) {
 
@@ -26,31 +25,30 @@ export default function RegistroClinico({value}) {
   }
 }
 
-
   const router = useRouter()
   const pageName = usePageName()
-  
   
   const logOut = () => {
     router.replace('/')
   }
 
   return (
-    <section className="flex flex-row gap-4 px-4 w-full justify-between items-center-safe text-3xl">
-      <article className="flex items-center gap-5">
-        <div className="">
-          <h1 className="border-b-2 border-(--color-500)">{value}</h1>
+    <section className="flex items-center justify-between w-full py-4 px-1">
+      <article className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-lg"
+          style={{ background: 'linear-gradient(135deg, var(--color-500), var(--color-600))' }}
+        >
+          {renderIcon(pageName)}
         </div>
-        <div className="text-(--color-700)">
-             {renderIcon(pageName)}
-        </div> 
+        <div>
+          <h1 className="text-xl font-bold" style={{ color: 'var(--color-900)' }}>{value}</h1>
+          <div className="w-8 h-0.5 rounded-full mt-1" style={{ background: 'var(--color-500)' }}></div>
+        </div>
       </article>
-    <article>
-      
-    </article>
-      <div className="">
-        <Button width="full" size="md" onClick={logOut} type="button" value="🔄" variant="history" />
-      </div>
+
+      <article>
+        <Button width="full" size="sm" onClick={logOut} type="button" value="🔄" variant="history" />
+      </article>
     </section>
   );
 }

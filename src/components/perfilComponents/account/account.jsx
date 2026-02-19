@@ -2,7 +2,6 @@ import { CgProfile } from "react-icons/cg";
 import { useFormSession } from "@/src/hook/useFormData";
 
 //Icons
-import { RiIdCardFill } from "react-icons/ri";
 import { TbMedicalCrossFilled } from "react-icons/tb";
 
 //Components
@@ -14,55 +13,85 @@ export default function Account() {
   const { data } = useFormSession();
 
   return (
-    <div className="">
+    <div>
       {
         !data ? (
           <NotFound message="No se encontraron datos"/>
         ) : (
-          <section className="p-4 w-full gap-8 grid items-center">
-        {/* Departamento y Cargo del perfil */}
-        <section className="flex gap-4 items-center card">
-          <CgProfile className="w-[6vw] h-auto" />
-          <article className="flex gap-2">
-            <Target size="lg" position="left" variant="primary" value="Doctor" />
-            <Target size="lg" position="left" variant="primary" value="Cliente" />
-          </article>
+          <section className="flex flex-col gap-6 mt-4">
+
+        {/* Perfil header card */}
+        <section className="rounded-2xl bg-white p-5"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <div className="flex items-center gap-5">
+            {/* Avatar grande */}
+            <div className="w-16 h-16 rounded-full flex items-center justify-center shrink-0"
+              style={{ background: 'linear-gradient(135deg, var(--color-400), var(--color-600))' }}
+            >
+              <CgProfile className="text-4xl text-white" />
+            </div>
+
+            {/* Roles */}
+            <div className="flex flex-wrap gap-2">
+              <Target size="md" position="center" variant="primary" value="Doctor" />
+              <Target size="md" position="center" variant="primary" value="Cliente" />
+            </div>
+          </div>
         </section>
+
         {/* Información del perfil */}
-        <section className="">
-          <article className="
-          flex flex-row items-center justify-around max-md:grid gap-6
-          p-8  card relative  
-          rounded-[2%] 
-          ">
-            <div className="grid gap-2">
+        <section className="rounded-2xl bg-white p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <div className="grid grid-cols-3 max-md:grid-cols-1 gap-8">
+
+            {/* Columna 1: Datos personales */}
+            <div className="flex flex-col gap-4">
+              <h3 className="text-xs font-semibold uppercase tracking-wider mb-1"
+                style={{ color: 'var(--text-primary)' }}
+              >
+                Datos personales
+              </h3>
               <Description value={data.name} description="Nombre"/>
               <Description value={data.lastName} description="Apellido"/>
               <Description value={data.cardId} description="Cedula"/>
             </div>
 
-              <div className="flex items-center justify-center bg-linear-(--hr-gradient) rotate-90 h-1 w-[10%] max-md:hidden">
-                <TbMedicalCrossFilled className="text-(--color-600)"/>
-              </div>
+            {/* Separador vertical */}
+            <div className="hidden md:flex items-center justify-center">
+              <div className="w-px h-full" style={{ background: 'linear-gradient(var(--hr-gradient))' }}></div>
+              <TbMedicalCrossFilled className="absolute" style={{ color: 'var(--color-400)' }}/>
+            </div>
 
-            <div className="grid gap-2">
+            {/* Columna 2: Datos de cuenta */}
+            <div className="flex flex-col gap-4">
+              <h3 className="text-xs font-semibold uppercase tracking-wider mb-1"
+                style={{ color: 'var(--text-primary)' }}
+              >
+                Cuenta
+              </h3>
               <Description value={data.password} description="Contraseña"/>
               <Description value={data.email} description="Correo Electronico"/>
               <Description value={data.departament} description="Cargo"/>
             </div>
+          </div>
 
-              
-              <div className="flex items-center justify-center bg-linear-(--hr-gradient)  w-[10%] rotate-90  h-1 max-md:hidden">
-                <TbMedicalCrossFilled className="text-(--color-600)"/>
-              </div>
+          {/* Separador horizontal */}
+          <div className="h-px w-full my-6" style={{ background: 'linear-gradient(var(--hr-gradient))' }}></div>
 
-            <div className="">
-              <div className="flex flex-row gap-4">
-                <Description value="Departamento" description="Departamento"/>
-                <Description value="Departamento" description="Departamento"/>
-              </div>
+          {/* Departamento */}
+          <div>
+            <h3 className="text-xs font-semibold uppercase tracking-wider mb-3"
+              style={{ color: 'var(--text-primary)' }}
+            >
+              Departamentos
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              <Description value="Departamento" description="Departamento"/>
+              <Description value="Departamento" description="Departamento"/>
             </div>
-          </article>
+          </div>
         </section>
       </section>
         )

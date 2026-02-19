@@ -1,6 +1,5 @@
-"use client";
+
 import clsx from "clsx";
-import { useRouter } from "next/navigation";
 import { buttonProps } from "@/src/Type/button/type";
 
 const sizeStyles = {
