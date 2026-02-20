@@ -3,35 +3,30 @@ import { CgProfile } from "react-icons/cg";
 import { MdDriveFileRenameOutline } from "react-icons/md";
 import { FaRegAddressCard } from "react-icons/fa";
 import { BsCalendar2Date } from "react-icons/bs";
-import { FaTrash } from "react-icons/fa";
 
 //Componentes
 import Button from "@/src/components/ui/button/button";
 
-
-export default function HistoriaClinico({ onClick }) {
-
-  const decline = <FaTrash />;
+export default function List({
+    info,
+    buttonUpdate,
+    buttonCreate,
+}) {
 
   const fields = [
-    { icon: <MdDriveFileRenameOutline />, label: "Nombre" },
-    { icon: <MdDriveFileRenameOutline />, label: "Apellido" },
-    { icon: <FaRegAddressCard />, label: "Cédula" },
-    { icon: <BsCalendar2Date />, label: "Fecha de nacimiento" },
-    { icon: <BsCalendar2Date />, label: "Edad" },
+    { icon: <MdDriveFileRenameOutline />, label: "Nombre", value: info.name },
+    { icon: <MdDriveFileRenameOutline />, label: "Apellido", value: info.lastName },
+    { icon: <FaRegAddressCard />, label: "Cédula", value: info.idNumber },
+    { icon: <BsCalendar2Date />, label: "Fecha de nacimiento", value: info.fechaDeNacimiento },
+    { icon: <BsCalendar2Date />, label: "Edad", value: info.edad },
   ];
 
   return (
     <section>
-      <div className="flex flex-col mb-4">
-        <h1 className="text-xl font-bold" style={{ color: 'var(--color-900)' }}>Ficha</h1>
-        <p className="text-sm" style={{ color: 'var(--text-primary)' }}>Visualiza la ficha del paciente</p>
-      </div>
-
       <div className="rounded-2xl bg-white p-5"
         style={{ boxShadow: 'var(--shadow-card)' }}
       >
-        <div className="flex items-center justify-between gap-4 max-md:flex-col">
+        <div className= "flex flex-col gap-4 max-md:flex-col">
           
           {/* Perfil + campos */}
           <div className="flex items-center gap-6 flex-wrap">
@@ -49,15 +44,17 @@ export default function HistoriaClinico({ onClick }) {
                   style={{ background: 'var(--color-50)', color: 'var(--color-800)' }}
                 >
                   <span className="text-sm" style={{ color: 'var(--color-500)' }}>{field.icon}</span>
-                  <span className="text-sm font-medium">{field.label}</span>
+                  <span className="text-sm font-medium">{field.label}:</span>
+                  <span className="text-sm">{field.value}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Acción */}
-          <div className="shrink-0 max-md:w-full">
-            <Button width="full" size="sm" variant="decline" value={decline} onClick={() => {onClick()}} />
+          {/* Acciones */}
+          <div className="flex items-center gap-2 max-md:w-full">
+            <Button width="md" size="sm" variant="primary" value="Actualizar" onClick={buttonUpdate} />
+            <Button width="md" size="sm" variant="primary" value="Crear Registro" onClick={() => buttonCreate(info.id)} />
           </div>
         </div>
       </div>

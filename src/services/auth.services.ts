@@ -1,14 +1,12 @@
 import {apiRoute} from "../routes/route";
 import { PacientData } from "@/src/Type/pacientData/type";
 import { RegistroData } from "@/src/Type/registro/type";
-
-export const authServices = () => {
     
 //-----------------------
 // Registro del Paciente
 //-----------------------
-async function register(data: PacientData): Promise<void> {
-    const res = await apiRoute("pacientes/create", {
+export async function register(data: PacientData): Promise<void> {
+      const res = await apiRoute("pacientes/create", {
       method: "POST",
       body: JSON.stringify(data)
     });
@@ -18,7 +16,7 @@ async function register(data: PacientData): Promise<void> {
 //-----------------------
 //Updating pacient
 //-----------------------
-async function updatePaciente(data: PacientData): Promise<void> {
+export async function updatePaciente(data: PacientData): Promise<void> {
     const res = await apiRoute("pacientes/update", {
       method: "PUT",
       body: JSON.stringify(data)
@@ -28,7 +26,7 @@ async function updatePaciente(data: PacientData): Promise<void> {
 //----------------------
 //Creating register
 //----------------------
-async function createRegister(data: RegistroData): Promise<void> {
+export async function createRegister(data: RegistroData): Promise<void> {
     console.log(data);
     const res = await apiRoute("registro/create", {
       method: "POST",
@@ -37,7 +35,7 @@ async function createRegister(data: RegistroData): Promise<void> {
     return res;
 };
 
-async function getRegistro(id: string): Promise<void> {
+export async function getRegistro(id: string): Promise<void> {
     const res = await apiRoute(`registro/${id}`, {
       method: "GET",
     });
@@ -49,14 +47,12 @@ async function getRegistro(id: string): Promise<void> {
 //-----------------------
 //Getting all pacient 
 //-----------------------
-async function list() {
+export async function list() {
     const res = await apiRoute("pacientes/all", {
       method: "GET",
     });
     return res;
 };
 
-  return { register, list, updatePaciente, createRegister, getRegistro };
-}
 
 

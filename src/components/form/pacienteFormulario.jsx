@@ -1,4 +1,3 @@
-'use client'
 //Import
 import clsx from "clsx"
 

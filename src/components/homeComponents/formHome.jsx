@@ -1,6 +1,6 @@
 "use client";
 // Services
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // Componentes
 import FormularyHomePage from "../form/pacienteFormulario"
 import InputLogin from "../ui/inputs/inputs"
@@ -42,7 +42,7 @@ export default function FormHome({handleSubmit}) {
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="pacientId" className="text-sm font-medium" style={{ color: 'var(--color-800)' }}>Cédula</label>
-              <InputLogin variant={showValue(cardId, "number")} placeholder="Cédula" name="pacientId" value={cardId} onChange={(e) => { setCardId(e.target.value)}} />
+              <InputLogin variant={showValue(cardId, "idCard")} placeholder="Cédula" name="pacientId" value={cardId} onChange={(e) => { setCardId(e.target.value)}} />
             </div>
 
             <div className="flex flex-col gap-1.5">

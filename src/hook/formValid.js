@@ -1,7 +1,9 @@
 const patterns = {
-    string: /^[A-Za-z0-9 ]{3,20}$/,
+    string: /^[A-Za-z0-9 ]{3,20}$/,    
+    number: /^[0-9]{1,11}$/,
     email: /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/,
     password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/,
+    idCard: /^[0-9]{1,11}$/,
 };
 
 
@@ -22,7 +24,7 @@ export const showValue = (value, type) => {
       return patterns.string.test(value) ? "success" : "error";
 
     case "number":
-      return /^[0-9]{1,11}$/.test(value) ? "success" : "error";
+      return patterns.number.test(value) ? "success" : "error";
 
     case "departament":
       return value === "1" ? "success" : "error";
@@ -31,7 +33,7 @@ export const showValue = (value, type) => {
       return /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(value) ? "success" : "error";
 
     case "idCard":
-      return /^[0-9]{1,11}$/.test(value) ? "success" : "error";
+      return patterns.idCard.test(value) ? "success" : "error";
       
     default:
       return "error";
@@ -48,7 +50,7 @@ export const validateData = (data) => {
     showValue(lastName, "string") === "success" &&
     showValue(email, "email") === "success" &&
     showValue(password, "password") === "success" &&
-    showValue(cardId, "number") === "success" &&
+    showValue(cardId, "idCard") === "success" &&
     showValue(departament, "departament") === "success"
   ) {
     return data;
