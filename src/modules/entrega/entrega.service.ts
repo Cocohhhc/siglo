@@ -6,9 +6,9 @@ import { estado, entrega } from '@prisma/client';
 export class EntregaService {
   constructor(private readonly prisma: PrismaService) {}
   //======================================
-  //           traer todas las entregas
+  //      traer todas las entregas pendientes
   //======================================
-  async findAll(userId: number): Promise<entrega[]> {
+  async findAllPendientes(userId: number): Promise<entrega[]> {
     const user = await this.prisma.users.findUnique({
       where: {
         id: userId,
@@ -22,7 +22,10 @@ export class EntregaService {
         id: userId,
       },
       include: {
-        entregas: {
+        entregasReceptor: {
+          where: {
+            estado: estado.pendiente,
+          },
           include: {
             pacientes: true,
             emisor: true,
@@ -33,13 +36,13 @@ export class EntregaService {
               },
             },
           },
-        }
+        },
       },
     });
     if (!entregas) {
       throw new NotFoundException('Entregas no encontradas');
     }
-    return entregas.entregas;
+    return entregas.entregasReceptor;
   }
 
   //=========================================
@@ -60,7 +63,6 @@ export class EntregaService {
             departamento: true,
           },
         },
-     
       },
     });
   }

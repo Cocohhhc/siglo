@@ -26,11 +26,15 @@ export class RegistroService {
     const RECEPTOR_ID = typeof receptor_id === 'number' ? receptor_id : 2;
 
     // Validar existencia de emisor y receptor
-    const emisor = await this.prisma.users.findUnique({ where: { id: EMISOR_ID } });
+    const emisor = await this.prisma.users.findUnique({
+      where: { id: EMISOR_ID },
+    });
     if (!emisor) {
       throw new BadRequestException(`Emisor (${EMISOR_ID}) no existe`);
     }
-    const receptor = await this.prisma.users.findUnique({ where: { id: RECEPTOR_ID } });
+    const receptor = await this.prisma.users.findUnique({
+      where: { id: RECEPTOR_ID },
+    });
     if (!receptor) {
       throw new BadRequestException(`Receptor (${RECEPTOR_ID}) no existe`);
     }
@@ -65,8 +69,6 @@ export class RegistroService {
           registro: {
             connect: { id: registro.id },
           },
-          // si tu modelo exige "estado", puedes asignar uno por defecto:
-          estado: estado.no_recibido,
         },
       });
 

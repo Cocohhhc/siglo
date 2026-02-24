@@ -6,9 +6,9 @@ import { entrega } from '@prisma/client';
 export class EntregaController {
   constructor(private readonly entregaService: EntregaService) {}
   //find all entrega by user id
-  @Get('/recibidas/:userId')
+  @Get('/pendientes/:userId')
   findAll(@Param('userId') userId: string): Promise<entrega[]> {
-    return this.entregaService.findAll(+userId);
+    return this.entregaService.findAllPendientes(+userId);
   }
 
   //find all entrega enviadas por el usuario
@@ -22,7 +22,7 @@ export class EntregaController {
   findAceptados(@Param('userId') userId: string): Promise<entrega[]> {
     return this.entregaService.findAceptados(+userId);
   }
-                                                                                                                               
+
   //find all entrega rechazadas por el usuario
   @Get('/rechazadas/:userId')
   findRechazados(@Param('userId') userId: string): Promise<entrega[]> {
