@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body } from '@nestjs/common';
 import { EntregaService } from './entrega.service';
 import { entrega } from '@prisma/client';
 
@@ -49,8 +49,8 @@ export class EntregaController {
 
 
   //find entrega by idNumber
-  @Get('/find/:idNumber')
-  async findByIdNumber(@Param('idNumber') idNumber: string) {
+  @Post('/find')
+  async findByIdNumber(@Body() idNumber: string) {
     const entrega = await this.entregaService.findByIdNumber(idNumber);
     return entrega;
   }
