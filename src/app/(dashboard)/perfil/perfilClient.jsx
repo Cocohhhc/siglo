@@ -8,21 +8,24 @@ import RegistroClinico from "@/src/components/ui/lista/registroClinico"
 import SelectEntregaPerfil from "@/src/components/entregaComponents/selectEntrega/selectEntregaPerfil"
 import NotFound from "@/src/components/ui/error/notFound"
 import GridEntrega from "@/src/components/entregaComponents/grid/grid"
+import EntregaPieChart from "@/src/components/perfilComponents/charts/EntregaPieChart"
 
-export default function PageList({ entregaEnviadas, entregaAceptadas }) {
+export default function PerfilClient({ entregaEnviadas, entregaAceptadas, entregaRechazadas }) {
     const [activeTab, setActiveTab] = useState('enviadas');
-    
+
     const [data, setData] = useState({
         enviadas: entregaEnviadas || [],
         aceptadas: entregaAceptadas || [],
+        rechazadas: entregaRechazadas || [],
     });
     // Sincronizar cuando cambien props del server
     useEffect(() => {
         setData({
             enviadas: entregaEnviadas || [],
             aceptadas: entregaAceptadas || [],
+            rechazadas: entregaRechazadas || [],
         });
-    }, [entregaEnviadas, entregaAceptadas]);
+    }, [entregaEnviadas, entregaAceptadas, entregaRechazadas]);
 
     // Datos activos según tab
     const activeData = data[activeTab] || [];
@@ -44,8 +47,14 @@ export default function PageList({ entregaEnviadas, entregaAceptadas }) {
 
                 {/* Payment Data - Smaller tile on the right */}
                 <div>
-                    <div className="card h-full bg-white">
-
+                    <div className="card h-full bg-white overflow-hidden">
+                        <EntregaPieChart 
+                            counts={{
+                                enviadas: data.enviadas.length,
+                                aceptadas: data.aceptadas.length,
+                                rechazadas: data.rechazadas.length
+                            }} 
+                        />
                     </div>
                 </div>
 
@@ -74,36 +83,6 @@ export default function PageList({ entregaEnviadas, entregaAceptadas }) {
                                 </div>
                             )}
                         </div>
-                    </div>
-                </div>
-
-                {/* Premium Subscription - Right side tile */}
-                <div>
-                    <div className="card h-full bg-gradient-to-br from-purple-600 to-indigo-700 text-white p-6 flex flex-col justify-between">
-                        <div>
-                            <h3 className="text-lg font-bold mb-4">Premium+</h3>
-                            <ul className="space-y-2 text-sm">
-                                <li className="flex items-start gap-2">
-                                    <span className="text-yellow-300">✓</span>
-                                    <span>1 mes gratis</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-yellow-300">✓</span>
-                                    <span>Acceso ilimitado</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-yellow-300">✓</span>
-                                    <span>Soporte prioritario</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-yellow-300">✓</span>
-                                    <span>Descuentos exclusivos</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <button className="mt-6 w-full bg-white text-purple-600 font-bold py-2 px-4 rounded-lg hover:bg-gray-100 transition-colors">
-                            Suscribirse
-                        </button>
                     </div>
                 </div>
             </div>

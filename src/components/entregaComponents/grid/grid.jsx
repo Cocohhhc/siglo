@@ -106,8 +106,8 @@ export default function GridEntrega({
                     )}
                 </div>
 
-                {/* Footer de acciones (solo si es pendiente o estándar) */}
-                {variant === "standard" && (
+                {/* Footer de acciones (solo si es pendiente y estándar) */}
+                {variant === "standard" && info.estado === 'pendiente' && (
                     <div className="flex gap-3 pt-4 border-t border-gray-50">
                         <Button 
                             onClick={() => aceptar?.(info.id)} 
