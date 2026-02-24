@@ -19,9 +19,7 @@ export class RegistroController {
   //               READ REGISTRO
   //============================================
   @Get(':id')
-  findOne(
-    @Param('id') id: string,
-  ): Promise<{
+  findOne(@Param('id') id: string): Promise<{
     departamento: departament;
     paciente: pacientes;
     registros: registro[];
@@ -33,7 +31,7 @@ export class RegistroController {
   //               Find by IdNumber
   //============================================
 
-  @Get('/find/:idNumber')
+  @Get('/find')
   async findByIdNumber(@Body() idNumber: string) {
     const registro = await this.registroService.findByIdNumber(idNumber);
     return registro;
