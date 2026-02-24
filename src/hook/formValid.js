@@ -1,59 +1,73 @@
 const patterns = {
-    string: /^[A-Za-z0-9 ]{3,20}$/,    
-    number: /^[0-9]{1,11}$/,
-    email: /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/,
-    password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/,
-    idCard: /^[0-9]{1,11}$/,
+  string: /^[A-Za-z0-9 ]{3,20}$/,
+  number: /^[0-9]{1,11}$/,
+  email: /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/,
+  password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/,
+  date: /^(?:19|20)\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])$/,
 };
 
+// =========================
+// Validación real de cédula
+// =========================
+export function validateCedula(cedula) {
+  if (!cedula) return false;
 
-// Validación de formularios
-export const showValue = (value, type) => {
+  cedula = cedula.replace(/-/g, '');
 
-  // Caso vacío
-  if (value === "") return "primary";
-  const choice = () => {
-    switch (type) {
-    case "email":
-      return patterns.email.test(value) ? "success" : "error";
+  if (!/^\d{11}$/.test(cedula)) return false;
 
-    case "password":
-      return patterns.password.test(value) ? "success" : "error";
+  const pesos = [1, 2];
+  let suma = 0;
 
-    case "string":
-      return patterns.string.test(value) ? "success" : "error";
+  for (let i = 0; i < 10; i++) {
+    let num = parseInt(cedula[i], 10);
+    let mult = num * pesos[i % 2];
 
-    case "number":
-      return patterns.number.test(value) ? "success" : "error";
+    if (mult > 9) {
+      mult = Math.floor(mult / 10) + (mult % 10);
+    }
 
-    case "departament":
-      return value === "1" ? "success" : "error";
-
-    case "date":
-      return /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(value) ? "success" : "error";
-
-    case "idCard":
-      return patterns.idCard.test(value) ? "success" : "error";
-      
-    default:
-      return "error";
+    suma += mult;
   }
-};
-  return choice();
-};
 
-export const validateData = (data) => {
-  const { name, lastName, email, password, cardId, departament } = data;
+  const digitoVerificador = (10 - (suma % 10)) % 10;
 
-  if (
-    showValue(name, "string") === "success" &&
-    showValue(lastName, "string") === "success" &&
-    showValue(email, "email") === "success" &&
-    showValue(password, "password") === "success" &&
-    showValue(cardId, "idCard") === "success" &&
-    showValue(departament, "departament") === "success"
-  ) {
-    return data;
-  }
-  return false;
+  return digitoVerificador === parseInt(cedula[10], 10);
 }
+
+// =========================
+// Mapa de validadores
+// =========================
+const validators = {
+  string: (value) => patterns.string.test(value),
+  number: (value) => patterns.number.test(value),
+  email: (value) => patterns.email.test(value),
+  password: (value) => patterns.password.test(value),
+  date: (value) => patterns.date.test(value),
+  idCard: validateCedula,
+  department: (value) => value == "1", // ajustable
+};
+
+// =========================
+// Validar un solo campo
+// =========================
+export const showValue = (value, type) => {
+  if (value === undefined || value === null || value === "")
+    return "primary";
+
+  const validator = validators[type];
+
+  if (!validator) return "error";
+
+  return validator(value) ? "success" : "error";
+};
+
+// =========================
+// Validar formulario dinámico
+// =========================
+export const validateData = (data, schema) => {
+  return Object.entries(schema).every(([field, type]) => {
+    const value = data[field];
+    return showValue(value, type) === "success";
+  });
+};

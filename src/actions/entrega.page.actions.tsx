@@ -2,16 +2,16 @@
 import { entregaById, entregaAceptar, entregaRechazar } from "@/src/services/entrega.services";
 
 export async function entregaByIdAction(id: string) {
-    await entregaById(id);
-    return true;
+    const res = await entregaById(id);
+    return res;
 }
 
 export async function entregaAceptarAction(id: string) {
-    await entregaAceptar(id);
-    return true;
+    const res = await entregaAceptar(id);
+    return res;
 }
 
 export async function entregaRechazarAction(id: string) {
-    await entregaRechazar(id);
-    return true;
+    const res = await entregaRechazar(id);
+    return res;
 }

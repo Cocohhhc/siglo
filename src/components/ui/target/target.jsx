@@ -17,7 +17,7 @@ export default function Target({ value,
         right : "flex items-center justify-end",
     }
     const styles = {
-        primary: `bg-[var(--color-800)] text-[var(--color-50)] rounded-[5%] ${sizeStyles[size]} ${positionStyles[position]}`,
+        primary: `bg-[var(--color-50)]/50 text-[var(--color-900)] shadow-lg rounded-b-[5%] ${sizeStyles[size]} ${positionStyles[position]}`,
         secondary: `bg-[var(--color-500)] text-[var(--color-900)] target ${sizeStyles[size]} ${positionStyles[position]}`,
         success: `bg-[var(--color-600)] rounded-[5%] ${sizeStyles[size]} ${positionStyles[position]}`,
         warning: `bg-[var(--color-700)] rounded-[5%] ${sizeStyles[size]} ${positionStyles[position]}`,

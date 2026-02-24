@@ -1,101 +1,63 @@
 import { CgProfile } from "react-icons/cg";
 import { useFormSession } from "@/src/hook/useFormData";
 
-//Icons
-import { TbMedicalCrossFilled } from "react-icons/tb";
-
 //Components
 import Description from "@/src/components/ui/doctorDescription/description";
 import Target from "@/src/components/ui/target/target";
-import NotFound from "@/src/components/ui/notFound/notFound";
+import NotFound from "@/src/components/ui/error/notFound";
 
 export default function Account() {
   const { data } = useFormSession();
 
+  if (!data) {
+    return <NotFound message="No se encontraron datos" />;
+  }
+
   return (
-    <div>
-      {
-        !data ? (
-          <NotFound message="No se encontraron datos"/>
-        ) : (
-          <section className="flex flex-col gap-6 mt-4">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:max-h-[35vh]">
+      
+      {/* Main Profile Info */}
+      <article className="w-full p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 col-span-1 lg:col-span-2">
+        
+        {/* Avatar with Tailwind gradient */}
+        <div className="w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full bg-linear-to-br from-(--color-400) to-(--color-600) flex items-center justify-center shrink-0 shadow-lg border-4 border-white">
+          <CgProfile className="text-5xl md:text-6xl lg:text-7xl text-white" />
+        </div>
 
-        {/* Perfil header card */}
-        <section className="rounded-2xl bg-white p-5"
-          style={{ boxShadow: 'var(--shadow-card)' }}
-        >
-          <div className="flex items-center gap-5">
-            {/* Avatar grande */}
-            <div className="w-16 h-16 rounded-full flex items-center justify-center shrink-0"
-              style={{ background: 'linear-gradient(135deg, var(--color-400), var(--color-600))' }}
-            >
-              <CgProfile className="text-4xl text-white" />
-            </div>
+        <div className="flex flex-col gap-4 text-center md:text-left flex-1 min-w-0 w-full">
+            <div className="flex flex-col md:flex-row md:items-center gap-2">             
+              <h2 className="text-2xl font-bold text-gray-900 tracking-tight truncate">
+                {data.name} {data.lastName}
+              </h2>
+              <Target size="sm" variant="primary" value="Activo" className="!w-fit mx-auto md:mx-0" />
+            </div>  
 
-            {/* Roles */}
-            <div className="flex flex-wrap gap-2">
-              <Target size="md" position="center" variant="primary" value="Doctor" />
-              <Target size="md" position="center" variant="primary" value="Cliente" />
-            </div>
-          </div>
-        </section>
+            <div className="flex">
+              <div className="w-full flex flex-col gap-2">
+                <div className="">
+                  <Target size="sm" variant="primary" value="Contacto" className="!w-fit" /> 
+                  <Description value={data.email} description="Email" variant="minimal" size="sm" />
+                </div>
+                <div className="">
+                  <Target size="sm" variant="primary" value="Identidad" className="!w-fit" /> 
+                  <Description value={data.cardId} description="Cédula" variant="minimal" size="sm" />
+                </div>
+              </div>
 
-        {/* Información del perfil */}
-        <section className="rounded-2xl bg-white p-6"
-          style={{ boxShadow: 'var(--shadow-card)' }}
-        >
-          <div className="grid grid-cols-3 max-md:grid-cols-1 gap-8">
+              <div className="w-full flex flex-col gap-2">
+                <div className="">
+                  <Target size="sm" variant="primary" value="Departamento" className="!w-fit" />
+                  <Description value={data.departament} description="Departamento" variant="minimal" size="sm" />
+                </div>
+                <div className="">
+                  <Target size="sm" variant="primary" value="Contrasena" className="!w-fit" />
+                  <Description value={data.password} description="Contrasena" variant="minimal" size="sm" />
+                </div>
+              </div>
+            </div>                          
+        </div>
+      </article>
 
-            {/* Columna 1: Datos personales */}
-            <div className="flex flex-col gap-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider mb-1"
-                style={{ color: 'var(--text-primary)' }}
-              >
-                Datos personales
-              </h3>
-              <Description value={data.name} description="Nombre"/>
-              <Description value={data.lastName} description="Apellido"/>
-              <Description value={data.cardId} description="Cedula"/>
-            </div>
-
-            {/* Separador vertical */}
-            <div className="hidden md:flex items-center justify-center">
-              <div className="w-px h-full" style={{ background: 'linear-gradient(var(--hr-gradient))' }}></div>
-              <TbMedicalCrossFilled className="absolute" style={{ color: 'var(--color-400)' }}/>
-            </div>
-
-            {/* Columna 2: Datos de cuenta */}
-            <div className="flex flex-col gap-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider mb-1"
-                style={{ color: 'var(--text-primary)' }}
-              >
-                Cuenta
-              </h3>
-              <Description value={data.password} description="Contraseña"/>
-              <Description value={data.email} description="Correo Electronico"/>
-              <Description value={data.departament} description="Cargo"/>
-            </div>
-          </div>
-
-          {/* Separador horizontal */}
-          <div className="h-px w-full my-6" style={{ background: 'linear-gradient(var(--hr-gradient))' }}></div>
-
-          {/* Departamento */}
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wider mb-3"
-              style={{ color: 'var(--text-primary)' }}
-            >
-              Departamentos
-            </h3>
-            <div className="flex flex-wrap gap-3">
-              <Description value="Departamento" description="Departamento"/>
-              <Description value="Departamento" description="Departamento"/>
-            </div>
-          </div>
-        </section>
-      </section>
-        )
-      }
     </div>
   );
 }

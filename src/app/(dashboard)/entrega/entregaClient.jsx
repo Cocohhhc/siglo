@@ -1,7 +1,7 @@
 'use client';
 
 // Imports
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { usePageName } from "@/src/hook/usePageName";
 import { 
@@ -15,13 +15,13 @@ import RegistroClinico from "@/src/components/ui/lista/registroClinico";
 import GridEntrega from "@/src/components/entregaComponents/grid/grid";
 import SelectEntrega from "@/src/components/entregaComponents/selectEntrega/select";
 import InputLogin from "@/src/components/ui/inputs/inputs";
-import NotFound from "@/src/components/ui/notFound/notFound";
+import NotFound from "@/src/components/ui/error/notFound";
 
 export default function EntregaClient({ 
     entrega, 
-    variableEntregaEnviadas, 
-    variableEntregaAceptadas, 
-    variableEntregaRechazadas 
+    entregaEnviadas, 
+    entregaAceptadas, 
+    entregaRechazadas 
 }) {
 
     const router = useRouter();
@@ -33,22 +33,25 @@ export default function EntregaClient({
     // Estado único con todas las categorías
     const [data, setData] = useState({
         recibidas: entrega || [],
-        enviadas: variableEntregaEnviadas || [],
-        aceptadas: variableEntregaAceptadas || [],
-        rechazadas: variableEntregaRechazadas || [],
+        enviadas: entregaEnviadas || [],
+        aceptadas: entregaAceptadas || [],
+        rechazadas: entregaRechazadas || [],
     });
 
     const [loading, setLoading] = useState(false);
+
+    const [filterText, setFilterText] = useState("");
+
 
     // Sincronizar cuando cambien props del server
     useEffect(() => {
         setData({
             recibidas: entrega || [],
-            enviadas: variableEntregaEnviadas || [],
-            aceptadas: variableEntregaAceptadas || [],
-            rechazadas: variableEntregaRechazadas || [],
+            enviadas: entregaEnviadas || [],
+            aceptadas: entregaAceptadas || [],
+            rechazadas: entregaRechazadas || [],
         });
-    }, [entrega, variableEntregaEnviadas, variableEntregaAceptadas, variableEntregaRechazadas]);
+    }, [entrega, entregaEnviadas, entregaAceptadas, entregaRechazadas]);
 
     // Datos activos según tab
     const activeData = data[activeTab] || [];
@@ -56,8 +59,10 @@ export default function EntregaClient({
     // Aceptar entrega
     const aceptar = async (id) => {
         try {
-            await entregaAceptarAction(id);
-            router.refresh(); // vuelve a traer datos del server
+            const res = await entregaAceptarAction(id);
+            if(res.ok){
+                router.refresh(); // vuelve a traer datos del server
+            }
         } catch (error) {
             console.log(error);
         }
@@ -66,33 +71,21 @@ export default function EntregaClient({
     // Rechazar entrega
     const rechazar = async (id) => {
         try {
-            await entregaRechazarAction(id);
-            router.refresh();
+            const res = await entregaRechazarAction(id);
+            if(res.ok){
+                router.refresh();
+            }
         } catch (error) {
             console.log(error);
         }
     };
 
-    // Buscar entrega por id
-    const onSearch = async (id) => {
-        if (!id) return;
-
-        try {
-            setLoading(true);
-            const result = await entregaByIdAction(id);
-
-            setData((prev) => ({
-                ...prev,
-                recibidas: Array.isArray(result) ? result : [result],
-            }));
-
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
+    // Buscard entregas por cedula del paciente
+    const onSearch = useMemo(() => {
+        if (!filterText) return entrega;
+        return entrega.filter((p) => String(p.pacientes.idNumber ?? "").includes(filterText));
+    }, [entrega, filterText]);
+    
     return (
         <main>
             <section>
@@ -114,31 +107,53 @@ export default function EntregaClient({
                             setActiveTab={setActiveTab} 
                         />
 
-                        <article>
+                        <article className="mt-4">
+                            <p >Busca las entregas por la cedula del paciente</p>
                             <InputLogin 
-                                onChange={(e) => onSearch(e.target.value)} 
-                                type="text" 
-                                placeholder="Buscar"
+                                onChange={(e) => setFilterText(e.target.value)} 
+                                type="text"
+                                value={filterText} 
+                                placeholder="Ingrese la cedula del paciente"
                             />
                         </article>
                     </section>
 
-                    {activeData.length === 0 ? (
-                        <section>
-                            <NotFound message="No se encontraron entregas" />
-                        </section>
-                    ) : (
-                        <article className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3">
-                            {activeData.map((item) => (
-                                <GridEntrega 
-                                    key={item.id} 
-                                    info={item} 
-                                    aceptar={aceptar} 
-                                    rechazar={rechazar}
-                                />
-                            ))}
+                        <article className={
+                            (filterText.length > 0 && onSearch.length > 0) || (filterText.length === 0 && activeData.length > 0)
+                                ? "grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3"
+                                : "mt-4"
+                        }>
+                           { 
+                           filterText.length > 0 ? (
+                               onSearch.length > 0 ? (
+                                   onSearch.map((item) => (
+                                        <GridEntrega 
+                                            key={item.id} 
+                                            info={item} 
+                                            aceptar={aceptar} 
+                                            rechazar={rechazar}
+                                            variant={"standard"}
+                                        />
+                                   ))
+                               ) : (
+                                   <NotFound message="No se encontraron entregas para esta búsqueda" />
+                               )
+                           ) : (
+                               activeData.length > 0 ? (
+                                   activeData.map((item) => (
+                                        <GridEntrega 
+                                            key={item.id} 
+                                            info={item} 
+                                            aceptar={aceptar} 
+                                            rechazar={rechazar}
+                                            variant={"standard"}
+                                        />
+                                   ))
+                               ) : (
+                                   <NotFound message={`No hay entregas ${activeTab} disponibles`} />
+                               )
+                           )}
                         </article>
-                    )}
 
                 </section>
             )}

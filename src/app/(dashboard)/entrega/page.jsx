@@ -9,6 +9,11 @@ export default async function Entrega() {
     const variableEntregaEnviadas = await entregaEnviadas(userId);
     const variableEntregaAceptadas = await entregaAceptadas(userId);
     const variableEntregaRechazadas = await entregaRechazadas(userId);
+    
+    console.log("Viendo todas las entregas pendiente", entrega.data)
+    console.log("Viendo todas las entregas enviadas", variableEntregaEnviadas.data)
+    console.log("Viendo todas las entregas aceptadas", variableEntregaAceptadas.data)
+    console.log("Viendo todas las entregas rechazadas", variableEntregaRechazadas.data)
 
-    return <EntregaClient entrega={entrega} entregaEnviadas={variableEntregaEnviadas} entregaAceptadas={variableEntregaAceptadas} entregaRechazadas={variableEntregaRechazadas} />
+    return <EntregaClient entrega={entrega.data} entregaEnviadas={variableEntregaEnviadas.data} entregaAceptadas={variableEntregaAceptadas.data} entregaRechazadas={variableEntregaRechazadas.data} />
 }

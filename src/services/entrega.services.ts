@@ -6,7 +6,7 @@ const url = "entrega";
 // Listar entregas recibidas
 //----------------------
 export async function entregaList(userId: string) {
-    const res = await apiRoute(`${url}/recibidas/${userId}`, {
+    const res = await apiRoute(`${url}/pendientes/${userId}`, {
         method: "GET"
     });
     return res;

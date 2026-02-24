@@ -9,17 +9,18 @@ import { FaTrash } from "react-icons/fa";
 import Button from "@/src/components/ui/button/button";
 
 
-export default function HistoriaClinico({ onClick }) {
+export default function HistoriaClinico({ onClick, paciente }) {
 
   const decline = <FaTrash />;
-
+  
   const fields = [
-    { icon: <MdDriveFileRenameOutline />, label: "Nombre" },
-    { icon: <MdDriveFileRenameOutline />, label: "Apellido" },
-    { icon: <FaRegAddressCard />, label: "Cédula" },
-    { icon: <BsCalendar2Date />, label: "Fecha de nacimiento" },
-    { icon: <BsCalendar2Date />, label: "Edad" },
+    { icon: <MdDriveFileRenameOutline />, label: paciente.name == "" ? "Nombre" : paciente.name },
+    { icon: <MdDriveFileRenameOutline />, label: paciente.lastName == "" ? "Apellido" : paciente.lastName },
+    { icon: <FaRegAddressCard />, label: paciente.IdNumber == "" ? "Cédula" : paciente.IdNumber },
+    { icon: <BsCalendar2Date />, label: paciente.date_of_birth == "" ? "Fecha de nacimiento" : paciente.date_of_birth },
+    { icon: <BsCalendar2Date />, label: paciente.age == "" ? "Edad" : paciente.age },
   ];
+  
 
   return (
     <section>

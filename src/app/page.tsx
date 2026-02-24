@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useFormSession } from "@/src/hook/useFormData";
 
 //Componentes
 import FormSwitcher from "@/src/components/form/pickForm";
@@ -12,6 +13,11 @@ import doctorClosingEyes from "@/public/doctorClosingEyes.png";
 // Pagina Login y Registro
 export default function  Home() {
   const [passwordValue, setPasswordValue] = useState(false);
+  const { clearData } = useFormSession();
+
+  useEffect(() => {
+    clearData();
+  }, []);
 
   return (
     <div className="">
@@ -21,9 +27,9 @@ export default function  Home() {
             <article className="w-1/2 h-full bg-[var(--color-900)]/88 flex items-center justify-center">
             {
               passwordValue ? (
-                <Image alt="Doctor" src={doctorClosingEyes} style={{ width: "100%", height: "auto" }}/>
+                <Image alt="Doctor" placeholder="blur" src={doctorClosingEyes} style={{ width: "100%", height: "auto" }}/>
               ) : (
-                <Image alt="Doctor" src={doctor} style={{ width: "100%", height: "auto" }}/>
+                <Image alt="Doctor" placeholder="blur" src={doctor} style={{ width: "100%", height: "auto" }}/>
               )
             }
             </article>
@@ -39,8 +45,7 @@ export default function  Home() {
             height={1000}
             alt="Cargando fondo"
             src="/fondoSigloForm.webp"
-            fetchPriority="high"
-            loading="eager"
+            priority
             style={{
               position: "absolute",
               objectFit: "cover",

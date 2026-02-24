@@ -1,21 +1,14 @@
-'use client'
-//Imports
-import { usePageName } from "@/src/hook/usePageName"
-//Icons
-import { RiIdCardFill } from "react-icons/ri";
+import PageList from "./perfilClient";
+import { entregaList, entregaAceptadas } from "@/src/services/entrega.services";
 
+export const dynamic = "force-dynamic"; // opcional: fuerza re-fetch en cada request
 
-import Account from "@/src/components/perfilComponents/account/account"
-import RegistroClinico from "@/src/components/ui/lista/registroClinico"
-
-export default function PageList() {
-    const pageName = usePageName()
-
+export default async function Page() {
+    const userId = "4";
+    const entregaEnviadasData = await entregaList(userId);
+    const entregaAceptadasData = await entregaAceptadas(userId);
+    
     return (
-        <main className="flex flex-col gap-2">
-            <RegistroClinico value={pageName}/> 
-            {/* Muestra la informacion del registro del perfil */}
-            <Account />
-        </main>
+        <PageList entregaEnviadas={entregaEnviadasData.data} entregaAceptadas={entregaAceptadasData.data} />
     )
 }

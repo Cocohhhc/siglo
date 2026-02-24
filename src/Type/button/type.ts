@@ -6,4 +6,5 @@ export interface buttonProps {
   onClick?: () => void;
   size?: "sm" | "md" | "lg";
   width?: "full" | "md" | "lg";
+  children?: React.ReactNode;
 };

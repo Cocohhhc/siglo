@@ -6,11 +6,11 @@ import { userList } from "@/src/services/user.services"; // asumo que ya existe 
 export const dynamic = "force-dynamic"; // opcional: fuerza re-fetch en cada request
 
 export default async function ListaPage() {
-  // fetch en paralelo
+  // fetch en paralelo de la lista de pacientes y usuarios
   const pacientesRes = await list();
   const usuariosRes = await userList();
-  const pacientes = pacientesRes ?? [];
-  const usuarios = usuariosRes ?? [];
-  console.log(usuarios);
+  const pacientes = pacientesRes.data ?? [];
+  const usuarios = usuariosRes.data ?? [];
+
   return <ListaClient pacientes={pacientes} usuarios={usuarios} />;
 }

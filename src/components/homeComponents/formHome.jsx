@@ -1,13 +1,13 @@
 "use client";
 // Services
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // Componentes
 import FormularyHomePage from "../form/pacienteFormulario"
 import InputLogin from "../ui/inputs/inputs"
 // Hook
 import { showValue } from "@/src/hook/formValid";
 
-export default function FormHome({handleSubmit}) {
+export default function FormHome({handleSubmit, paciente, clear}) {
     const [name, setName] = useState("");
     const [lastName, setLastName] = useState("");
     const [cardId, setCardId] = useState("");
@@ -21,10 +21,32 @@ export default function FormHome({handleSubmit}) {
       date_of_birth: birth,
       age: age,
     }
-      
+
+    const schema = {
+      name: "string",
+      lastName: "string",
+      IdNumber: "idCard",
+      date_of_birth: "date",
+      age: "number",
+    }
+
+    useEffect(() => {       
+      paciente(data);
+    }, [name, lastName, cardId, birth, age]);
+
+    useEffect(() => {
+      if(clear){
+        setName("");
+        setLastName("");
+        setCardId("");
+        setBirth("");
+        setAge("");
+      }
+    }, [clear]);
+    
     return (
         <FormularyHomePage 
-          onSubmit={(e) => !data ? alert("Debes llenar todos los campos") : handleSubmit(e, data)} 
+          onSubmit={(e) => !data ? alert("Debes llenar todos los campos") : handleSubmit(e, schema)} 
           value="Guardar" 
           variant="primary" 
           text="Inserte Datos De Paciente" 
@@ -47,7 +69,7 @@ export default function FormHome({handleSubmit}) {
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="dataOfBirth" className="text-sm font-medium" style={{ color: 'var(--color-800)' }}>Fecha de nacimiento</label>
-              <InputLogin variant={showValue(birth, "date")} type="datetime-local" placeholder="Fecha de nacimiento" name="dataOfBirth" value={birth} onChange={(e) => { setBirth(e.target.value)}} />
+              <InputLogin variant={showValue(birth, "date")} type="date" placeholder="Fecha de nacimiento" name="dataOfBirth" value={birth} onChange={(e) => { setBirth(e.target.value)}} />
             </div>
 
             <div className="flex flex-col gap-1.5">

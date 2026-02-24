@@ -11,7 +11,6 @@ export default function UsersMenu({ users, onSelect, onSubmit }) {
     const [selectedUser, setSelectedUser] = useState(null);
     const [selectedDepartamento, setSelectedDepartamento] = useState('todos');
     const [search, setSearch] = useState('');
-
     // Extraer departamentos únicos
     const departamentos = useMemo(() => {
         const depMap = new Map();
@@ -42,22 +41,19 @@ export default function UsersMenu({ users, onSelect, onSubmit }) {
     };
 
     return (
-        <section className="w-full h-full flex flex-col overflow-hidden rounded-2xl"
-            style={{ boxShadow: 'var(--shadow-card)' }}
+        <section className="w-full h-full flex flex-col overflow-hidden rounded-2xl shadow-(--shadow-card)"
         >
             {/* Header */}
-            <div className="px-6 pt-6 pb-4"
-                style={{ background: 'linear-gradient(135deg, var(--color-500), var(--color-700))' }}
+            <div className="px-6 pt-6 pb-4 bg-linear-to-br from-(--color-500) to-(--color-700)"
             >
                 <h2 className="text-xl font-bold text-white mb-1">Seleccionar receptor</h2>
-                <p className="text-sm" style={{ color: 'var(--color-100)' }}>
+                <p className="text-sm text-(--color-100)">
                     Filtra por departamento y selecciona un usuario
                 </p>
             </div>
 
             {/* Filtros */}
-            <div className="px-6 py-4 flex flex-col gap-3 border-b"
-                style={{ borderColor: 'var(--color-200)' }}
+            <div className="px-6 py-4 flex flex-col gap-3 border-b border-(--color-200)"
             >
                 {/* Búsqueda con InputLogin */}
                 <InputLogin
@@ -86,8 +82,7 @@ export default function UsersMenu({ users, onSelect, onSubmit }) {
             />
 
             {/* Footer */}
-            <div className="px-6 py-4 flex gap-3 border-t"
-                style={{ borderColor: 'var(--color-200)' }}
+            <div className="px-6 py-4 flex gap-3 border-t border-(--color-200)"
             >
                 <Button
                     onClick={onSubmit}

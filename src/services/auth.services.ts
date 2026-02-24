@@ -5,7 +5,7 @@ import { RegistroData } from "@/src/Type/registro/type";
 //-----------------------
 // Registro del Paciente
 //-----------------------
-export async function register(data: PacientData): Promise<void> {
+export async function register(data: PacientData) {
       const res = await apiRoute("pacientes/create", {
       method: "POST",
       body: JSON.stringify(data)
@@ -16,7 +16,7 @@ export async function register(data: PacientData): Promise<void> {
 //-----------------------
 //Updating pacient
 //-----------------------
-export async function updatePaciente(data: PacientData): Promise<void> {
+export async function updatePaciente(data: PacientData) {
     const res = await apiRoute("pacientes/update", {
       method: "PUT",
       body: JSON.stringify(data)
@@ -26,8 +26,7 @@ export async function updatePaciente(data: PacientData): Promise<void> {
 //----------------------
 //Creating register
 //----------------------
-export async function createRegister(data: RegistroData): Promise<void> {
-    console.log(data);
+export async function createRegister(data: RegistroData) {
     const res = await apiRoute("registro/create", {
       method: "POST",
       body: JSON.stringify(data)
@@ -35,7 +34,7 @@ export async function createRegister(data: RegistroData): Promise<void> {
     return res;
 };
 
-export async function getRegistro(id: string): Promise<void> {
+export async function getRegistro(id: string) {
     const res = await apiRoute(`registro/${id}`, {
       method: "GET",
     });

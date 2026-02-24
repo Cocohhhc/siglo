@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -28,33 +28,38 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
     step3: false,
   });
 
-  const { saveData, clearData } = useFormSession();
+  const { saveData } = useFormSession();
   
   const data = {
-      name: userName,
-      lastName: userLastName,
-      email: userGmail,
-      password: userPassword,
-      cardId: userCardId,
-      departament: userDepartament,
+    name: userName,
+    lastName: userLastName,
+    email: userGmail,
+    password: userPassword,
+    cardId: userCardId,
+    departament: userDepartament,
   };
 
-  useEffect(() => {
-    clearData();
-  }, []);
+  const schema = {
+    name: "string",
+    lastName: "string",
+    email: "email",
+    password: "password",
+    cardId: "number",
+    departament: "department",
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-     
     saveData(data);
-    
-    if (validateData(data)) {
-      router.replace("/home");
-    }else{
-      alert("Por favor, complete correctamente todos los campos del formulario.");
-    }
+    router.replace("/home");
   };
+
+  const departament = [
+    { id: "1", value: "1", name: "Departamento 1" },
+    { id: "2", value: "2", name: "Departamento 2" },
+    { id: "3", value: "3", name: "Departamento 3" },
+  ];
 
   return (
     <section className="grid place-items-center">        
@@ -85,7 +90,7 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
                 onChange={(e) => setUserLastName(e.target.value)}
               />
               
-              <DropDowm setUserDepartament={setUserDepartament} />
+              <DropDowm defaultLabel="Seleccione un departamento" setUserDepartament={setUserDepartament} options={departament}/>
             </article>
             
               <article className={`flex flex-wrap gap-2 justify-center items-center ${steps.step1 ? "" : "hidden"}`}>
@@ -115,6 +120,7 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
           </article>
         </article>
       </form>
+
       <article className="flex flex-col gap-2 w-full justify-center items-center">
          <div className="flex gap-x-5 items-center">
           {
@@ -130,7 +136,7 @@ export default function RegistraitionForm({ onSelect, passwordValue }) {
 
         <div className="flex flex-col gap-2 w-full justify-center items-center">
           {
-            validateData(data) ? (
+            validateData(data, schema) ? (
               <Button width="md" type="submit" variant="primary" value="Entrar" onClick={handleSubmit} />
             ) : (
               <Button width="md" type="button" variant="disabled" value="Entrar" disabled />

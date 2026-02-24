@@ -22,6 +22,7 @@ export default function Button({
   onClick,
   size = "sm",
   width = "full",
+  children,
 }: buttonProps) {
   const styles = {
     primary:
@@ -45,7 +46,7 @@ export default function Button({
 
   return (
     <button onClick={onClick} className={clsx(styles[variant], className)}>
-      {value}
+      {children || value}
     </button>
   );
 }

@@ -1,49 +1,110 @@
-"use client"
-//Hooks
-import { useState } from "react";
-import { usePageName } from "@/src/hook/usePageName";
+"use client";
 
-//Actions
+import { usePageName } from "@/src/hook/usePageName";
+import { validateData } from "@/src/hook/formValid";
+import { useState, useEffect } from "react";
 import { registerPatient } from "@/src/actions/home.page.actions";
 
-//Components
 import HistoriaClinico from "@/src/components/homeComponents/historiaClinico/historia";
 import RegistroClinico from "@/src/components/ui/lista/registroClinico";
 import FormHome from "@/src/components/homeComponents/formHome";
 import Division from "@/src/components/ui/division/division";
+import ErrorComponent from "@/src/components/ui/error/errorComponent";
 
 export default function HomeClient() {
   const pageName = usePageName();
 
-   // Envia datos del formulario al backend
-  const handleSubmit = async (e, data) => {
+  const [loading, setLoading] = useState(false);
+
+  const [message, setMessage] = useState("");
+  const [type, setType] = useState("success" | "error" | null);
+  const [showMessage, setShowMessage] = useState(false);
+  const [paciente, setPaciente] = useState({
+    name: "",
+    lastName: "",
+    IdNumber: "",
+    date_of_birth: "",
+    age: "",
+  });
+  const [lastPaciente, setLastPaciente] = useState(paciente);
+  const [clear, setClear] = useState(false);
+
+  const handleSubmit = async (e, schema) => {
     e.preventDefault();
-    await registerPatient(data);
+    
+    if (!validateData(paciente, schema)) {
+      setMessage("Debe ingresar todos los campos correctamente");
+      setType("error");
+      setShowMessage(true);
+      hideMessage();
+      return;
+    }
+
+    setLoading(true);
+
+    const res = await registerPatient(paciente);
+
+    setLoading(false);
+
+    if (res.ok) {
+      setMessage(res.data?.message || res.message || "Operación realizada correctamente");
+      setType("success");
+    } else {
+      setMessage(res.message || "Ocurrió un error inesperado");
+      setType("error");
+    }
+
+    setShowMessage(true);
+    hideMessage();
   };
 
+  // 🔥 Oculta mensaje automáticamente
+  const hideMessage = () => {
+    setTimeout(() => {
+      setShowMessage(false);
+      setType(null);
+      setMessage("");
+    }, 3000); // 3 segundos
+  };
+
+  const handleDecline = () => {
+    setPaciente(lastPaciente);
+    setClear(true);
+  }
+
+  useEffect(() => {
+    if(clear){
+      setClear(false);
+    }
+  }, [clear]);
 
   return (
     <section className="flex flex-col gap-6">
-      {/* Header */}
+
       <article>
-        <RegistroClinico value={pageName}/>
+        <RegistroClinico value={pageName} />
       </article>
 
-      {/* Ficha del paciente */}
       <article>
-        <HistoriaClinico
-          onClick={() => resetValues()}
-        />
+        <HistoriaClinico onClick={handleDecline} paciente={paciente} />
       </article>
 
-      {/* Separador */}
       <Division />
 
-      {/* Formulario de registro de paciente */}
       <article>
-        <FormHome 
+        <FormHome
           handleSubmit={handleSubmit}
+          paciente={(paciente) => setPaciente(paciente)}
+          clear={clear}
+          loading={loading}
         />
+
+        {showMessage && (
+          <ErrorComponent
+            message={message}
+            type={type}
+          />
+        )}
       </article>
     </section>
   );

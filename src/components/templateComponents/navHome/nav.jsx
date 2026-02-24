@@ -3,10 +3,11 @@ export default function NavHome() {
   return (
     <div className=" p-4 grid place-items-center">
       <Image
-      alt="Logo del siglo21"
+        alt="Logo del siglo21"
         src="/logo-centro-medico-docente-siglo-21.1d027d8.webp"
         width={120}
         height={100}
+        quality={50}
       />
       {/* <h1 className="text-3xl text-amber-50 font-bold">Siglo 21</h1> */}
     </div>

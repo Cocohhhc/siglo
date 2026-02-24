@@ -6,12 +6,11 @@ import { PacientData } from "@/src/Type/pacientData/type";
 import { RegistroData } from "@/src/Type/registro/type";
 
 export async function updatePacienteAction(data: PacientData) {
-  await updatePacienteService(data);
-  // puedes devolver info si quieres
-  return true;
+  const res = await updatePacienteService(data);
+  return res;
 }
 
 export async function createRegisterAction(data: RegistroData) {
-  await createRegisterService(data);
-  return true;
+  const res = await createRegisterService(data);
+  return res;
 }
