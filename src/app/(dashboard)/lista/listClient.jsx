@@ -13,6 +13,7 @@ import FormList from "@/src/components/listComponents/formList";
 import UsersMenu from "@/src/components/listComponents/userMenu/usersMenu";
 import ErrorComponent from "@/src/components/ui/error/errorComponent";
 import NotFound from "@/src/components/ui/error/notFound";
+import Pagination from "@/src/components/ui/pagination/pagination";
 
 // ── Departamentos simulados ──
 const DEPARTAMENTOS_SIMULADOS = {
@@ -43,7 +44,10 @@ export default function ListaClient({ pacientes = [], usuarios = [] }) {
 
   // UI state local (solo UI: modales, inputs, formularios)
   const [filterText, setFilterText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
   const [updateOpen, setUpdateOpen] = useState(false);
+
   const [emisorMenuOpen, setEmisorMenuOpen] = useState(false);
   const [updateData, setUpdateData] = useState(null);
 
@@ -64,6 +68,17 @@ export default function ListaClient({ pacientes = [], usuarios = [] }) {
     if (!filterText) return pacientes;
     return pacientes.filter((p) => String(p.idNumber ?? "").includes(filterText));
   }, [pacientes, filterText]);
+
+  // Resetear página cuando cambie filtro
+  useMemo(() => {
+    setCurrentPage(1);
+  }, [filterText]);
+
+  // Paginación
+  const paginatedData = filtered.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   // Acciones que llaman Server Actions
   const onUpdate = async (e, data, schema) => {
@@ -140,11 +155,19 @@ export default function ListaClient({ pacientes = [], usuarios = [] }) {
       </div>
 
       {filtered.length > 0 ? (
-        filtered.map((p) => (
-          <div key={p.id} className="mt-6">
-            <List info={p} buttonCreate={onGetEmisor} buttonUpdate={() => {setUpdateOpen(true); setUpdateData(p)}} />
-          </div>
-        ))
+        <>
+            {paginatedData.map((p) => (
+                <div key={p.id} className="mt-6">
+                    <List info={p} buttonCreate={onGetEmisor} buttonUpdate={() => {setUpdateOpen(true); setUpdateData(p)}} />
+                </div>
+            ))}
+            <Pagination 
+                totalItems={filtered.length}
+                itemsPerPage={itemsPerPage}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+            />
+        </>
       ) : (
         <NotFound message="No se encontraron resultados" />
       )}

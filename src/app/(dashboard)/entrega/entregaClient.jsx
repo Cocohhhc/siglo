@@ -15,6 +15,7 @@ import GridEntrega from "@/src/components/ui/grid/grid";
 import SelectEntrega from "@/src/components/entregaComponents/selectEntrega/select";
 import InputLogin from "@/src/components/ui/inputs/inputs";
 import NotFound from "@/src/components/ui/error/notFound";
+import Pagination from "@/src/components/ui/pagination/pagination";
 
 export default function EntregaClient({ 
     entrega, 
@@ -27,6 +28,9 @@ export default function EntregaClient({
 
     // Tab activo
     const [activeTab, setActiveTab] = useState('recibidas');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
+
 
     // Estado único con todas las categorías
     const [data, setData] = useState({
@@ -50,9 +54,20 @@ export default function EntregaClient({
             rechazadas: entregaRechazadas || [],
         });
     }, [entrega, entregaEnviadas, entregaAceptadas, entregaRechazadas]);
+    
+    // Resetear página cuando cambie tab o filtro
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [activeTab, filterText]);
 
     // Datos activos según tab
     const activeData = data[activeTab] || [];
+    
+    // Paginación para datos activos
+    const paginatedActiveData = activeData.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
     // Aceptar entrega
     const aceptar = async (id) => {
@@ -83,6 +98,12 @@ export default function EntregaClient({
         if (!filterText) return entrega;
         return entrega.filter((p) => String(p.pacientes.idNumber ?? "").includes(filterText));
     }, [entrega, filterText]);
+
+    // Paginación para búsqueda
+    const paginatedSearchData = onSearch.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
     
     return (
         <main>
@@ -124,29 +145,53 @@ export default function EntregaClient({
                            { 
                            filterText.length > 0 ? (
                                onSearch.length > 0 ? (
-                                   onSearch.map((item) => (
-                                        <GridEntrega 
-                                            key={item.id} 
-                                            info={item} 
-                                            aceptar={aceptar} 
-                                            rechazar={rechazar}
-                                            variant={"standard"}
-                                        />
-                                   ))
+                                   <>
+                                       <div className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3 col-span-full">
+                                           {paginatedSearchData.map((item) => (
+                                                <GridEntrega 
+                                                    key={item.id} 
+                                                    info={item} 
+                                                    aceptar={aceptar} 
+                                                    rechazar={rechazar}
+                                                    variant={"standard"}
+                                                />
+                                           ))}
+                                       </div>
+                                       <div className="col-span-full">
+                                            <Pagination 
+                                                totalItems={onSearch.length}
+                                                itemsPerPage={itemsPerPage}
+                                                currentPage={currentPage}
+                                                onPageChange={setCurrentPage}
+                                            />
+                                       </div>
+                                   </>
                                ) : (
                                    <NotFound message="No se encontraron entregas para esta búsqueda" />
                                )
                            ) : (
                                activeData.length > 0 ? (
-                                   activeData.map((item) => (
-                                        <GridEntrega 
-                                            key={item.id} 
-                                            info={item} 
-                                            aceptar={aceptar} 
-                                            rechazar={rechazar}
-                                            variant={"standard"}
-                                        />
-                                   ))
+                                   <>
+                                       <div className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3 col-span-full">
+                                           {paginatedActiveData.map((item) => (
+                                                <GridEntrega 
+                                                    key={item.id} 
+                                                    info={item} 
+                                                    aceptar={aceptar} 
+                                                    rechazar={rechazar}
+                                                    variant={"standard"}
+                                                />
+                                           ))}
+                                       </div>
+                                       <div className="col-span-full">
+                                            <Pagination 
+                                                totalItems={activeData.length}
+                                                itemsPerPage={itemsPerPage}
+                                                currentPage={currentPage}
+                                                onPageChange={setCurrentPage}
+                                            />
+                                       </div>
+                                   </>
                                ) : (
                                    <NotFound message={`No hay entregas ${activeTab} disponibles`} />
                                )
