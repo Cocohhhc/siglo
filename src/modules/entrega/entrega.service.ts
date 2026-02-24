@@ -143,6 +143,7 @@ export class EntregaService {
     return this.prisma.entrega.update({
       where: {
         id,
+        estado: estado.pendiente,
       },
       data: {
         estado: estado.no_recibido,
@@ -158,6 +159,7 @@ export class EntregaService {
     return this.prisma.entrega.update({
       where: {
         id,
+        estado: estado.pendiente,
       },
       data: {
         estado: estado.recibido,

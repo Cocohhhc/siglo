@@ -12,7 +12,6 @@ export class RegistroController {
   //============================================
   @Post('/create')
   create(@Body() createRegistroDto: CreateRegistroDto): Promise<registro> {
-    console.log("data",createRegistroDto);
     return this.registroService.create(createRegistroDto);
   }
 
