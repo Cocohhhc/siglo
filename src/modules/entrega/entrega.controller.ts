@@ -34,6 +34,11 @@ export class EntregaController {
   findOne(@Param('id') id: string): Promise<entrega> {
     return this.entregaService.findOne(+id);
   }
+  //find entrega by departamento id
+  @Get('/departamento/:departamentoId')
+  findBydepartamentoId(@Param('departamentoId') departamentoId: string): Promise<entrega[]> {
+    return this.entregaService.findBydepartamentoId(+departamentoId);
+  }
 
   //rechazar entrega
   @Post('/rechazar/:id')

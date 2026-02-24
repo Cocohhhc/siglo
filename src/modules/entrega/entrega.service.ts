@@ -172,7 +172,6 @@ export class EntregaService {
   //=================================================
 
   async findByIdNumber(idNumber: string) {
-
     const paciente = await this.prisma.pacientes.findUnique({
       where: {
         idNumber,
@@ -183,7 +182,7 @@ export class EntregaService {
     }
     const entrega = await this.prisma.entrega.findFirst({
       where: {
-       receptor_id: paciente.id,
+        receptor_id: paciente.id,
       },
       include: {
         pacientes: true,
@@ -198,6 +197,34 @@ export class EntregaService {
     });
     if (!entrega) {
       throw new NotFoundException('Entrega no encontrada');
+    }
+    return entrega;
+  }
+
+  //==================================================
+  //                  find entrega by departamento id
+  //=================================================
+
+  async findBydepartamentoId(departamentoId: number) {
+    const entrega = await this.prisma.entrega.findMany({
+      where: {
+        registro: {
+          departamento_id: departamentoId,
+        },
+      },
+      include: {
+        pacientes: true,
+        registro: {
+          include: {
+            departamento: true,
+          },
+        },
+        emisor: true,
+        receptor: true,
+      },
+    });
+    if (!entrega) {
+      throw new NotFoundException('Sin entregas');
     }
     return entrega;
   }
