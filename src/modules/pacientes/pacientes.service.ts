@@ -9,7 +9,7 @@ export class PacientesService {
   constructor(
     private prisma: PrismaService,
     private validarCedulaService: ValidarCedulaService,
-  ) { }
+  ) {}
   //============================================
   //               CREATE PACIENTE
   //============================================
@@ -99,31 +99,25 @@ export class PacientesService {
   async update(
     updatePacienteDto: UpdatePacienteDto,
   ): Promise<{ message: string; paciente: pacientes }> {
-    try {
-      const { IdNumber, name, lastName, fecha_de_nacimiento, Edad } = updatePacienteDto;
-      const paciente = await this.prisma.pacientes.update({
-        where: {
-          idNumber: IdNumber
-        },
-        data: {
-          name,
-          lastName,
-          fechaDeNacimiento: fecha_de_nacimiento,
-          edad: Edad,
-        },
-      });
-      if (!paciente) {
-        throw new BadRequestException('Paciente no encontrado');
-      }
-      return {
-        message: 'Perfil actualizado exitosamente',
-        paciente,
-      };
-    } catch (error: unknown) {
-      throw new BadRequestException(
-        'Error al actualizar paciente',
-        error instanceof Error ? error.message : String(error),
-      );
+    const { IdNumber, name, lastName, fecha_de_nacimiento, Edad } =
+      updatePacienteDto;
+    const paciente = await this.prisma.pacientes.update({
+      where: {
+        idNumber: IdNumber,
+      },
+      data: {
+        name,
+        lastName,
+        fechaDeNacimiento: fecha_de_nacimiento,
+        edad: Edad,
+      },
+    });
+    if (!paciente) {
+      throw new BadRequestException('Paciente no encontrado');
     }
+    return {
+      message: 'Perfil actualizado exitosamente',
+      paciente,
+    };
   }
 }

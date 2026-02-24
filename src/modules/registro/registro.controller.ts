@@ -28,4 +28,14 @@ export class RegistroController {
   }> {
     return this.registroService.findOne(+id);
   }
+
+  //============================================
+  //               Find by IdNumber
+  //============================================
+
+  @Get('/find/:idNumber')
+  async findByIdNumber(@Body() idNumber: string) {
+    const registro = await this.registroService.findByIdNumber(idNumber);
+    return registro;
+  }
 }

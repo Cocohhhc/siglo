@@ -110,4 +110,26 @@ export class RegistroService {
 
     return { departamento, paciente, registros };
   }
+
+  //============================================
+  //               Find by IdNumber
+  //============================================
+
+  async findByIdNumber(idNumber: string): Promise<registro> {
+    const paciente = await this.prisma.pacientes.findUnique({
+      where: { idNumber },
+    });
+    if (!paciente) {
+      throw new BadRequestException('Paciente no encontrado');
+    }
+    const registro = await this.prisma.registro.findFirst({
+      where: {
+        paciente_id: paciente.id,
+      },
+    });
+    if (!registro) {
+      throw new BadRequestException('Registro no encontrado');
+    }
+    return registro;
+  }
 }
