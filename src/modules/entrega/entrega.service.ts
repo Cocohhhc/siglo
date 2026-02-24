@@ -166,4 +166,39 @@ export class EntregaService {
       },
     });
   }
+
+  //==================================================
+  //                  find entrega by idNumber
+  //=================================================
+
+  async findByIdNumber(idNumber: string) {
+
+    const paciente = await this.prisma.pacientes.findUnique({
+      where: {
+        idNumber,
+      },
+    });
+    if (!paciente) {
+      throw new NotFoundException('Paciente no encontrado');
+    }
+    const entrega = await this.prisma.entrega.findFirst({
+      where: {
+       receptor_id: paciente.id,
+      },
+      include: {
+        pacientes: true,
+        registro: {
+          include: {
+            departamento: true,
+          },
+        },
+        emisor: true,
+        receptor: true,
+      },
+    });
+    if (!entrega) {
+      throw new NotFoundException('Entrega no encontrada');
+    }
+    return entrega;
+  }
 }

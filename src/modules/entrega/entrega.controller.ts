@@ -46,4 +46,12 @@ export class EntregaController {
   aceptar(@Param('id') id: string): Promise<entrega> {
     return this.entregaService.aceptar(+id);
   }
+
+
+  //find entrega by idNumber
+  @Get('/find/:idNumber')
+  async findByIdNumber(@Param('idNumber') idNumber: string) {
+    const entrega = await this.entregaService.findByIdNumber(idNumber);
+    return entrega;
+  }
 }
