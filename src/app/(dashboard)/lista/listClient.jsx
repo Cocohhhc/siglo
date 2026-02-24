@@ -1,6 +1,5 @@
 "use client";
 // Hooks
-import { usePageName } from "@/src/hook/usePageName";
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { validateData } from "@/src/hook/formValid";
@@ -26,7 +25,6 @@ const DEPARTAMENTOS_SIMULADOS = {
 };
 
 export default function ListaClient({ pacientes = [], usuarios = [] }) {
-  const pathName = usePageName();
   // Esto es momentaneo hasta que se arregle ya en la version final //
   // Enriquecer usuarios con departamento simulado
   const usuariosEnriquecidos = useMemo(() => {
@@ -47,6 +45,7 @@ export default function ListaClient({ pacientes = [], usuarios = [] }) {
   const [filterText, setFilterText] = useState("");
   const [updateOpen, setUpdateOpen] = useState(false);
   const [emisorMenuOpen, setEmisorMenuOpen] = useState(false);
+  const [updateData, setUpdateData] = useState(null);
 
   const [message, setMessage] = useState("");
   const [type, setType] = useState("success" | "error" | null);
@@ -128,7 +127,7 @@ export default function ListaClient({ pacientes = [], usuarios = [] }) {
 
   return (
     <section>
-      <RegistroClinico value={pathName} />
+      <RegistroClinico value={"Lista"} />
 
       <div className="flex flex-col gap-4">
         <p>Busca los pacientes por su cedula</p>
@@ -143,7 +142,7 @@ export default function ListaClient({ pacientes = [], usuarios = [] }) {
       {filtered.length > 0 ? (
         filtered.map((p) => (
           <div key={p.id} className="mt-6">
-            <List info={p} buttonCreate={onGetEmisor} buttonUpdate={() => setUpdateOpen(true)} />
+            <List info={p} buttonCreate={onGetEmisor} buttonUpdate={() => {setUpdateOpen(true); setUpdateData(p)}} />
           </div>
         ))
       ) : (
@@ -155,7 +154,7 @@ export default function ListaClient({ pacientes = [], usuarios = [] }) {
         <>
           <div onClick={() => setUpdateOpen(false)} className="fixed inset-0 bg-black/50 z-40" />
           <div className="fixed z-50 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[80vh] flex items-center justify-center">
-            <FormList onUpdate={onUpdate} onCancel={() => setUpdateOpen(false)} />
+            <FormList userData={updateData} onUpdate={onUpdate} onCancel={() => setUpdateOpen(false)} />
           </div>
         </>
       )}

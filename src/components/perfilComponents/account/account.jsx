@@ -17,7 +17,7 @@ export default function Account() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:max-h-[35vh]">
       
       {/* Main Profile Info */}
-      <article className="w-full p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 col-span-1 lg:col-span-2">
+      <article className="p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 col-span-1 lg:col-span-3">
         
         {/* Avatar with Tailwind gradient */}
         <div className="w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full bg-linear-to-br from-(--color-400) to-(--color-600) flex items-center justify-center shrink-0 shadow-lg border-4 border-white">

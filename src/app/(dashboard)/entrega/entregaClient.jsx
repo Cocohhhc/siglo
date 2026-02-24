@@ -3,7 +3,6 @@
 // Imports
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { usePageName } from "@/src/hook/usePageName";
 import { 
     entregaAceptarAction, 
     entregaRechazarAction, 
@@ -25,7 +24,6 @@ export default function EntregaClient({
 }) {
 
     const router = useRouter();
-    const pathName = usePageName();
 
     // Tab activo
     const [activeTab, setActiveTab] = useState('recibidas');
@@ -89,7 +87,7 @@ export default function EntregaClient({
     return (
         <main>
             <section>
-                <RegistroClinico value={pathName} />
+                <RegistroClinico value={"Entrega"} />
             </section>
 
             {loading ? (

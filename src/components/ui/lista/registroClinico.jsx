@@ -1,7 +1,6 @@
 'use client'
 import Button from "@/src/components/ui/button/button";
 import { useRouter } from "next/navigation";
-import { usePageName } from "@/src/hook/usePageName";
 
 //Icons
 import { RiIdCardFill } from "react-icons/ri";
@@ -10,8 +9,8 @@ import { FaListCheck } from "react-icons/fa6";
 
 export default function RegistroClinico({value}) {
 
-  function renderIcon(pageName) {
-  switch (pageName) {
+  function renderIcon(value) {
+  switch (value) {
     case "Home":
       return <FaBriefcaseMedical />
     case "Lista":
@@ -26,7 +25,6 @@ export default function RegistroClinico({value}) {
 }
 
   const router = useRouter()
-  const pageName = usePageName()
   
   const logOut = () => {
     router.replace('/')
@@ -38,7 +36,7 @@ export default function RegistroClinico({value}) {
         <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-lg"
           style={{ background: 'linear-gradient(135deg, var(--color-500), var(--color-600))' }}
         >
-          {renderIcon(pageName)}
+          {renderIcon(value)}
         </div>
         <div>
           <h1 className="text-xl font-bold" style={{ color: 'var(--color-900)' }}>{value}</h1>

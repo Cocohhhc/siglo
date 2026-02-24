@@ -1,6 +1,5 @@
 "use client";
 
-import { usePageName } from "@/src/hook/usePageName";
 import { validateData } from "@/src/hook/formValid";
 import { useState, useEffect } from "react";
 import { registerPatient } from "@/src/actions/home.page.actions";
@@ -12,8 +11,6 @@ import Division from "@/src/components/ui/division/division";
 import ErrorComponent from "@/src/components/ui/error/errorComponent";
 
 export default function HomeClient() {
-  const pageName = usePageName();
-
   const [loading, setLoading] = useState(false);
 
   const [message, setMessage] = useState("");
@@ -82,7 +79,7 @@ export default function HomeClient() {
     <section className="flex flex-col gap-6">
 
       <article>
-        <RegistroClinico value={pageName} />
+        <RegistroClinico value={"Home"} />
       </article>
 
       <article>

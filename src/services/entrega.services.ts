@@ -46,7 +46,7 @@ export async function entregaRechazadas(userId: string) {
 // Obtener entrega por id
 //----------------------
 export async function entregaById(id: string) {
-    const res = await apiRoute(`${url}/findOne/${id}`, {
+    const res = await apiRoute(`${url}/find/${id}`, {
         method: "GET"
     });
     return res;

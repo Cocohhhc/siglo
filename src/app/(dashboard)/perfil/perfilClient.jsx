@@ -1,6 +1,5 @@
 'use client'
 //Imports
-import { usePageName } from "@/src/hook/usePageName"
 import { useState, useEffect } from "react";
 
 //Components
@@ -11,8 +10,6 @@ import NotFound from "@/src/components/ui/error/notFound"
 import GridEntrega from "@/src/components/entregaComponents/grid/grid"
 
 export default function PageList({ entregaEnviadas, entregaAceptadas }) {
-    const pageName = usePageName()
-
     const [activeTab, setActiveTab] = useState('enviadas');
     
     const [data, setData] = useState({
@@ -36,7 +33,7 @@ export default function PageList({ entregaEnviadas, entregaAceptadas }) {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 auto-rows-max">
                 {/* Profile Card - Full width */}                        
                 <div className="col-span-1 lg:col-span-3">
-                    <RegistroClinico value={pageName} />
+                    <RegistroClinico value={"Perfil"} />
                 </div>
 
                 <div className="lg:col-span-2 lg:row-span-2">
@@ -48,6 +45,7 @@ export default function PageList({ entregaEnviadas, entregaAceptadas }) {
                 {/* Payment Data - Smaller tile on the right */}
                 <div>
                     <div className="card h-full bg-white">
+
                     </div>
                 </div>
 
