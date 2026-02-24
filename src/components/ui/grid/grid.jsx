@@ -2,7 +2,7 @@
 import { useState } from "react";
 import clsx from "clsx";
 import Target from "@/src/components/ui/target/target";
-import ModalPacient from "@/src/components/entregaComponents/pacientModal/modal";
+import ModalPacient from "@/src/components/ui/pacientModal/modal";
 import Button from "@/src/components/ui/button/button";
 
 export default function GridEntrega({

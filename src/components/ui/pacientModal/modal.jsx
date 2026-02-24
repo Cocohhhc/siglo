@@ -29,9 +29,9 @@ export default function ModalPacient({ info }) {
                 <div className="flex flex-col gap-4">
                     <Target size="sm" variant="primary" value="Identidad" className="!w-fit !py-0.5 !px-2 opacity-80" />
                     <div className="flex flex-col gap-3">
-                        <Description value={info.pacientes.name} description="Nombre" variant="minimal" size="sm" />
-                        <Description value={info.pacientes.lastName} description="Apellido" variant="minimal" size="sm" />
-                        <Description value={info.pacientes.idNumber} description="Cédula" variant="minimal" size="sm" />
+                        <Description value={info.pacientes.name} description="Nombre" variant="standard" size="sm" />
+                        <Description value={info.pacientes.lastName} description="Apellido" variant="standard" size="sm" />
+                        <Description value={info.pacientes.idNumber} description="Cédula" variant="standard" size="sm" />
                     </div>
                 </div>
 
@@ -42,13 +42,13 @@ export default function ModalPacient({ info }) {
                         <Description 
                             value={info.pacientes.fechaDeNacimiento} 
                             description="Nacimiento" 
-                            variant="minimal" 
+                            variant="standard" 
                             size="sm" 
                         />
                         <Description 
                             value={`${info.pacientes.edad} años`} 
                             description="Edad" 
-                            variant="minimal" 
+                            variant="standard" 
                             size="sm" 
                         />
                     </div>

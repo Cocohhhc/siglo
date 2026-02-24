@@ -11,7 +11,7 @@ import {
 
 // Components
 import RegistroClinico from "@/src/components/ui/lista/registroClinico";
-import GridEntrega from "@/src/components/entregaComponents/grid/grid";
+import GridEntrega from "@/src/components/ui/grid/grid";
 import SelectEntrega from "@/src/components/entregaComponents/selectEntrega/select";
 import InputLogin from "@/src/components/ui/inputs/inputs";
 import NotFound from "@/src/components/ui/error/notFound";

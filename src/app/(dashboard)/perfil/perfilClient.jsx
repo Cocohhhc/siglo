@@ -7,7 +7,7 @@ import Account from "@/src/components/perfilComponents/account/account"
 import RegistroClinico from "@/src/components/ui/lista/registroClinico"
 import SelectEntregaPerfil from "@/src/components/entregaComponents/selectEntrega/selectEntregaPerfil"
 import NotFound from "@/src/components/ui/error/notFound"
-import GridEntrega from "@/src/components/entregaComponents/grid/grid"
+import GridEntrega from "@/src/components/ui/grid/grid"
 import EntregaPieChart from "@/src/components/perfilComponents/charts/EntregaPieChart"
 
 export default function PerfilClient({ entregaEnviadas, entregaAceptadas, entregaRechazadas }) {
