@@ -1,12 +1,11 @@
 'use client';
 
-// Imports
-import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+
 import { 
-    entregaAceptarAction, 
-    entregaRechazarAction, 
-    entregaByIdAction 
+  entregaAceptarAction, 
+  entregaRechazarAction, 
+  entregaByIdNumberAction 
 } from "@/src/actions/entrega.page.actions";
 
 // Components
@@ -18,188 +17,196 @@ import NotFound from "@/src/components/ui/error/notFound";
 import Pagination from "@/src/components/ui/pagination/pagination";
 
 export default function EntregaClient({ 
-    entrega, 
-    entregaEnviadas, 
-    entregaAceptadas, 
-    entregaRechazadas 
+  entrega, 
+  entregaEnviadas, 
+  entregaAceptadas, 
+  entregaRechazadas 
 }) {
 
-    const router = useRouter();
+  const [activeTab, setActiveTab] = useState('recibidas');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
-    // Tab activo
-    const [activeTab, setActiveTab] = useState('recibidas');
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 6;
+  const [dataOfEntrega, setDataOfEntrega] = useState({
+    recibidas: entrega || [],
+    enviadas: entregaEnviadas || [],
+    aceptadas: entregaAceptadas || [],
+    rechazadas: entregaRechazadas || [],
+  });
 
+  const [filterText, setFilterText] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
 
-    // Estado único con todas las categorías
-    const [data, setData] = useState({
-        recibidas: entrega || [],
-        enviadas: entregaEnviadas || [],
-        aceptadas: entregaAceptadas || [],
-        rechazadas: entregaRechazadas || [],
+  // 🔄 Sincronizar props del server
+  useEffect(() => {
+    setDataOfEntrega({
+      recibidas: entrega || [],
+      enviadas: entregaEnviadas || [],
+      aceptadas: entregaAceptadas || [],
+      rechazadas: entregaRechazadas || [],
+    });
+  }, [entrega, entregaEnviadas, entregaAceptadas, entregaRechazadas]);
+
+  // 🔄 Reset page
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, filterText]);
+
+  // 🔎 Búsqueda con debounce optimizado
+  useEffect(() => {
+    if (!filterText.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const res = await entregaByIdNumberAction(filterText);
+        if (res?.ok && res?.data) {
+          const searchData = res.data;
+          setSearchResults(Array.isArray(searchData) ? searchData : [searchData]);
+        } else {
+          setSearchResults([]);
+        }
+      } catch (error) {
+        console.error(error);
+        setSearchResults([]);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [filterText]);
+
+  // 📊 Datos activos memorizados
+  const activeData = useMemo(() => {
+    return dataOfEntrega[activeTab] || [];
+  }, [dataOfEntrega, activeTab]);
+
+  const displayData = useMemo(() => {
+    return filterText.trim() ? searchResults : activeData;
+  }, [filterText, searchResults, activeData]);
+
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return displayData.slice(start, start + itemsPerPage);
+  }, [displayData, currentPage]);
+
+  // ✅ OPTIMISTIC UPDATE - ACEPTAR
+  const aceptar = useCallback(async (id) => {
+    const previous = dataOfEntrega;
+
+    setDataOfEntrega(prev => {
+      const item = prev.recibidas.find(i => i.id === id);
+      if (!item) return prev;
+
+      return {
+        ...prev,
+        recibidas: prev.recibidas.filter(i => i.id !== id),
+        aceptadas: [item, ...prev.aceptadas],
+      };
     });
 
-    const [loading, setLoading] = useState(false);
+    try {
+      const res = await entregaAceptarAction(id);
+      if (!res?.ok) setDataOfEntrega(previous);
+    } catch {
+      setDataOfEntrega(previous);
+    }
+  }, [dataOfEntrega]);
 
-    const [filterText, setFilterText] = useState("");
+  // ✅ OPTIMISTIC UPDATE - RECHAZAR
+  const rechazar = useCallback(async (id) => {
+    const previous = dataOfEntrega;
 
+    setDataOfEntrega(prev => {
+      const item = prev.recibidas.find(i => i.id === id);
+      if (!item) return prev;
 
-    // Sincronizar cuando cambien props del server
-    useEffect(() => {
-        setData({
-            recibidas: entrega || [],
-            enviadas: entregaEnviadas || [],
-            aceptadas: entregaAceptadas || [],
-            rechazadas: entregaRechazadas || [],
-        });
-    }, [entrega, entregaEnviadas, entregaAceptadas, entregaRechazadas]);
-    
-    // Resetear página cuando cambie tab o filtro
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [activeTab, filterText]);
+      return {
+        ...prev,
+        recibidas: prev.recibidas.filter(i => i.id !== id),
+        rechazadas: [item, ...prev.rechazadas],
+      };
+    });
 
-    // Datos activos según tab
-    const activeData = data[activeTab] || [];
-    
-    // Paginación para datos activos
-    const paginatedActiveData = activeData.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
+    try {
+      const res = await entregaRechazarAction(id);
+      if (!res?.ok) setDataOfEntrega(previous);
+    } catch {
+      setDataOfEntrega(previous);
+    }
+  }, [dataOfEntrega]);
 
-    // Aceptar entrega
-    const aceptar = async (id) => {
-        try {
-            const res = await entregaAceptarAction(id);
-            if(res.ok){
-                router.refresh(); // vuelve a traer datos del server
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
+  return (
+    <main>
+      <section>
+        <RegistroClinico value="Entrega" />
+      </section>
 
-    // Rechazar entrega
-    const rechazar = async (id) => {
-        try {
-            const res = await entregaRechazarAction(id);
-            if(res.ok){
-                router.refresh();
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
+      <section>
 
-    // Buscard entregas por cedula del paciente
-    const onSearch = useMemo(() => {
-        if (!filterText) return entrega;
-        return entrega.filter((p) => String(p.pacientes.idNumber ?? "").includes(filterText));
-    }, [entrega, filterText]);
+        <SelectEntrega 
+          activeTab={activeTab} 
+          setActiveTab={setActiveTab} 
+        />
 
-    // Paginación para búsqueda
-    const paginatedSearchData = onSearch.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
-    
-    return (
-        <main>
-            <section>
-                <RegistroClinico value={"Entrega"} />
-            </section>
-
-            {loading ? (
-                <section>
-                    <p className="text-center text-2xl font-bold text-zinc-600">
-                        Cargando...
-                    </p>
-                </section>
-            ) : (
-                <section>
-
-                    <section>
-                        <SelectEntrega 
-                            activeTab={activeTab} 
-                            setActiveTab={setActiveTab} 
-                        />
-
-                        <article className="mt-4">
-                            <p >Busca las entregas por la cedula del paciente</p>
-                            <InputLogin 
-                                onChange={(e) => setFilterText(e.target.value)} 
-                                type="text"
-                                value={filterText} 
-                                placeholder="Ingrese la cedula del paciente"
-                            />
-                        </article>
-                    </section>
-
-                        <article className={
-                            (filterText.length > 0 && onSearch.length > 0) || (filterText.length === 0 && activeData.length > 0)
-                                ? "grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3"
-                                : "mt-4"
-                        }>
-                           { 
-                           filterText.length > 0 ? (
-                               onSearch.length > 0 ? (
-                                   <>
-                                       <div className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3 col-span-full">
-                                           {paginatedSearchData.map((item) => (
-                                                <GridEntrega 
-                                                    key={item.id} 
-                                                    info={item} 
-                                                    aceptar={aceptar} 
-                                                    rechazar={rechazar}
-                                                    variant={"standard"}
-                                                />
-                                           ))}
-                                       </div>
-                                       <div className="col-span-full">
-                                            <Pagination 
-                                                totalItems={onSearch.length}
-                                                itemsPerPage={itemsPerPage}
-                                                currentPage={currentPage}
-                                                onPageChange={setCurrentPage}
-                                            />
-                                       </div>
-                                   </>
-                               ) : (
-                                   <NotFound message="No se encontraron entregas para esta búsqueda" />
-                               )
-                           ) : (
-                               activeData.length > 0 ? (
-                                   <>
-                                       <div className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3 col-span-full">
-                                           {paginatedActiveData.map((item) => (
-                                                <GridEntrega 
-                                                    key={item.id} 
-                                                    info={item} 
-                                                    aceptar={aceptar} 
-                                                    rechazar={rechazar}
-                                                    variant={"standard"}
-                                                />
-                                           ))}
-                                       </div>
-                                       <div className="col-span-full">
-                                            <Pagination 
-                                                totalItems={activeData.length}
-                                                itemsPerPage={itemsPerPage}
-                                                currentPage={currentPage}
-                                                onPageChange={setCurrentPage}
-                                            />
-                                       </div>
-                                   </>
-                               ) : (
-                                   <NotFound message={`No hay entregas ${activeTab} disponibles`} />
-                               )
-                           )}
-                        </article>
-
-                </section>
+        <article className="mt-4">
+          <p>Busca las entregas por la cédula del paciente</p>
+          <div className="relative">
+            <InputLogin 
+              onChange={(e) => setFilterText(e.target.value)} 
+              type="text"
+              value={filterText} 
+              placeholder="Ingrese la cédula del paciente"
+            />
+            {isSearching && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                <div className="animate-spin h-5 w-5 border-2 border-zinc-500 border-t-transparent rounded-full"></div>
+              </div>
             )}
-        </main>
-    );
+          </div>
+        </article>
+
+        <article className="mt-4">
+
+          {displayData.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {paginatedData.map((item) => (
+                  <GridEntrega 
+                    key={item.id} 
+                    info={item} 
+                    aceptar={aceptar} 
+                    rechazar={rechazar}
+                    variant="standard"
+                  />
+                ))}
+              </div>
+
+              <Pagination 
+                totalItems={displayData.length}
+                itemsPerPage={itemsPerPage}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+              />
+            </>
+          ) : (
+            <NotFound 
+              message={
+                filterText.trim()
+                  ? "No se encontraron entregas para esta búsqueda"
+                  : `No hay entregas ${activeTab} disponibles`
+              } 
+            />
+          )}
+
+        </article>
+
+      </section>
+    </main>
+  );
 }

@@ -1,11 +1,9 @@
 "use client";
-// Hooks
-import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { validateData } from "@/src/hook/formValid";
-// Actions
 import { updatePacienteAction, createRegisterAction } from "@/src/actions/list.page.actions";
-// Components
+
 import InputLogin from "@/src/components/ui/inputs/inputs";
 import RegistroClinico from "@/src/components/ui/lista/registroClinico";
 import List from "@/src/components/listComponents/list/list";
@@ -15,7 +13,6 @@ import ErrorComponent from "@/src/components/ui/error/errorComponent";
 import NotFound from "@/src/components/ui/error/notFound";
 import Pagination from "@/src/components/ui/pagination/pagination";
 
-// ── Departamentos simulados ──
 const DEPARTAMENTOS_SIMULADOS = {
   1: "Emergencias",
   2: "Cardiología",
@@ -26,15 +23,16 @@ const DEPARTAMENTOS_SIMULADOS = {
 };
 
 export default function ListaClient({ pacientes = [], usuarios = [] }) {
-  // Esto es momentaneo hasta que se arregle ya en la version final //
-  // Enriquecer usuarios con departamento simulado
+
+  const [localPacientes, setLocalPacientes] = useState(pacientes);
+
   const usuariosEnriquecidos = useMemo(() => {
     return usuarios.map(u => {
-      // Si ya tiene objeto departamento, respetarlo
       if (u.departamento && typeof u.departamento === 'object') return u;
-      // Mapear departamentoId a nombre simulado
+
       const depId = u.departamentoId ?? u.departamento_id ?? u.departamento;
       const depName = DEPARTAMENTOS_SIMULADOS[depId] || `Departamento ${depId || '?'}`;
+
       return {
         ...u,
         departamento: { id: depId, name: depName },
@@ -42,17 +40,16 @@ export default function ListaClient({ pacientes = [], usuarios = [] }) {
     });
   }, [usuarios]);
 
-  // UI state local (solo UI: modales, inputs, formularios)
   const [filterText, setFilterText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-  const [updateOpen, setUpdateOpen] = useState(false);
 
+  const [updateOpen, setUpdateOpen] = useState(false);
   const [emisorMenuOpen, setEmisorMenuOpen] = useState(false);
   const [updateData, setUpdateData] = useState(null);
 
   const [message, setMessage] = useState("");
-  const [type, setType] = useState("success" | "error" | null);
+  const [type, setType] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
 
   const [infoRegister, setInfoRegister] = useState({
@@ -61,88 +58,123 @@ export default function ListaClient({ pacientes = [], usuarios = [] }) {
     receptor_id: undefined,
   });
 
-  const router = useRouter();
+  // 🔄 Sync props iniciales
+  useEffect(() => {
+    setLocalPacientes(pacientes);
+  }, [pacientes]);
 
-  // filtered list (no usamos useState para mantener la lista - usamos la prop original)
+  // 🔎 Filtro optimizado
   const filtered = useMemo(() => {
-    if (!filterText) return pacientes;
-    return pacientes.filter((p) => String(p.idNumber ?? "").includes(filterText));
-  }, [pacientes, filterText]);
+    if (!filterText) return localPacientes;
+    return localPacientes.filter(p =>
+      String(p.idNumber ?? "").includes(filterText)
+    );
+  }, [localPacientes, filterText]);
 
-  // Resetear página cuando cambie filtro
-  useMemo(() => {
+  // 🔄 Reset page correctamente
+  useEffect(() => {
     setCurrentPage(1);
   }, [filterText]);
 
-  // Paginación
-  const paginatedData = filtered.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filtered.slice(start, start + itemsPerPage);
+  }, [filtered, currentPage]);
 
-  // Acciones que llaman Server Actions
-  const onUpdate = async (e, data, schema) => {
+  // 🔥 AUTO HIDE MESSAGE
+  useEffect(() => {
+    if (!showMessage) return;
+    const timer = setTimeout(() => {
+      setShowMessage(false);
+      setMessage("");
+      setType(null);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [showMessage]);
+
+  // ✅ OPTIMISTIC UPDATE
+  const onUpdate = useCallback(async (e, data, schema) => {
     e.preventDefault();
 
     if (!validateData(data, schema)) {
       setMessage("Debe ingresar todos los campos correctamente");
       setType("error");
       setShowMessage(true);
-      hideMessage();
       return;
     }
-    
-    const res = await updatePacienteAction(data);
-    
-    if (res.ok) {
-      setMessage(res.data?.message || res.message || "Operación realizada correctamente");
-      setType("success");
-    } else {
-      setMessage(res.message || "Ocurrió un error inesperado");
+
+    const previous = localPacientes;
+
+    setLocalPacientes(prev =>
+      prev.map(p => p.id === data.id ? { ...p, ...data } : p)
+    );
+
+    try {
+      const res = await updatePacienteAction(data);
+
+      if (!res?.ok) {
+        setLocalPacientes(previous);
+        setMessage(res.message || "Error al actualizar");
+        setType("error");
+      } else {
+        setMessage("Actualizado correctamente");
+        setType("success");
+      }
+
+    } catch {
+      setLocalPacientes(previous);
+      setMessage("Error inesperado");
       setType("error");
     }
-    
+
     setShowMessage(true);
     setUpdateOpen(false);
-    hideMessage();
-  };
 
-  // 🔥 Oculta mensaje automáticamente
-  const hideMessage = () => {
-    setTimeout(() => {
-      setShowMessage(false);
-      setType(null);
-      setMessage("");
-      router.refresh();
-    }, 3000);      
-  };
+  }, [localPacientes]);
 
-  const onCreateRegister = async () => {
+  const onCreateRegister = useCallback(async () => {
+
     if (!infoRegister.paciente_id || !infoRegister.receptor_id) {
-      return alert("Información incompleta para crear registro");
+      setMessage("Información incompleta");
+      setType("error");
+      setShowMessage(true);
+      return;
     }
+
     try {
-      await createRegisterAction(infoRegister);
+      const res = await createRegisterAction(infoRegister);
+
+      if (!res?.ok) {
+        setMessage("Error al crear registro");
+        setType("error");
+      } else {
+        setMessage("Registro creado correctamente");
+        setType("success");
+      }
+
+      setShowMessage(true);
       setEmisorMenuOpen(false);
-      router.refresh();
-    } catch (err) {
-      console.error(err);
-      alert("Error al crear registro");
+
+    } catch {
+      setMessage("Error inesperado");
+      setType("error");
+      setShowMessage(true);
     }
-  };
 
-  const onGetEmisor = (id) => {
-    setInfoRegister((s) => ({ ...s, paciente_id: Number(id) }));
+  }, [infoRegister]);
+
+  const onGetEmisor = useCallback((id) => {
+    setInfoRegister(s => ({ ...s, paciente_id: Number(id) }));
     setEmisorMenuOpen(true);
-  };
+  }, []);
 
-  const onSelectReceptor = (receptor_id) => {
-    setInfoRegister((s) => ({ ...s, receptor_id: Number(receptor_id) }));
-  };
+  const onSelectReceptor = useCallback((receptor_id) => {
+    setInfoRegister(s => ({ ...s, receptor_id: Number(receptor_id) }));
+  }, []);
 
   return (
     <section>
-      <RegistroClinico value={"Lista"} />
+      <RegistroClinico value="Lista" />
 
       <div className="flex flex-col gap-4">
         <p>Busca los pacientes por su cedula</p>
@@ -156,38 +188,52 @@ export default function ListaClient({ pacientes = [], usuarios = [] }) {
 
       {filtered.length > 0 ? (
         <>
-            {paginatedData.map((p) => (
-                <div key={p.id} className="mt-6">
-                    <List info={p} buttonCreate={onGetEmisor} buttonUpdate={() => {setUpdateOpen(true); setUpdateData(p)}} />
-                </div>
-            ))}
-            <Pagination 
-                totalItems={filtered.length}
-                itemsPerPage={itemsPerPage}
-                currentPage={currentPage}
-                onPageChange={setCurrentPage}
-            />
+          {paginatedData.map((p) => (
+            <div key={p.id} className="mt-6">
+              <List
+                info={p}
+                buttonCreate={onGetEmisor}
+                buttonUpdate={() => {
+                  setUpdateOpen(true);
+                  setUpdateData(p);
+                }}
+              />
+            </div>
+          ))}
+
+          <Pagination
+            totalItems={filtered.length}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
         </>
       ) : (
         <NotFound message="No se encontraron resultados" />
       )}
 
-      {/* Update Modal */}
       {updateOpen && (
         <>
           <div onClick={() => setUpdateOpen(false)} className="fixed inset-0 bg-black/50 z-40" />
           <div className="fixed z-50 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[80vh] flex items-center justify-center">
-            <FormList userData={updateData} onUpdate={onUpdate} onCancel={() => setUpdateOpen(false)} />
+            <FormList
+              userData={updateData}
+              onUpdate={onUpdate}
+              onCancel={() => setUpdateOpen(false)}
+            />
           </div>
         </>
       )}
 
-      {/* Emisor / Users Modal */}
       {emisorMenuOpen && (
         <>
           <div onClick={() => setEmisorMenuOpen(false)} className="fixed inset-0 bg-black/50 z-40" />
           <div className="fixed z-50 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[80vh] bg-white rounded-2xl overflow-hidden">
-            <UsersMenu users={usuariosEnriquecidos} onSelect={(id) => onSelectReceptor(id)} onSubmit={onCreateRegister} />
+            <UsersMenu
+              users={usuariosEnriquecidos}
+              onSelect={onSelectReceptor}
+              onSubmit={onCreateRegister}
+            />
           </div>
         </>
       )}

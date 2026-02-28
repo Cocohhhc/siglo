@@ -30,7 +30,7 @@ export default function GridEntrega({
         auto: "w-auto",
         full: "w-full",
     };
-
+    
     return (
         <section className={clsx(
             "relative flex flex-col rounded-3xl transition-all duration-300",

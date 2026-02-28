@@ -37,18 +37,19 @@ const defaultStatusMessages: Record<number, string> = {
   409: "Conflicto en la solicitud",
   500: "Error interno del servidor",
 };
-const API_URL = "100.93.115.32:3002";
 export async function apiRoute<T>(
   route: string,
   options?: RequestInit
 ) {
+  const API_URL = process.env.API_URL || "http://localhost:3001";
   try {
-    const response = await fetch(`http://${API_URL}/${route}`, {
+    const response = await fetch(`${API_URL}/${route}`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
       credentials: "include",
+      cache: "no-store",
       ...options,
     });
 

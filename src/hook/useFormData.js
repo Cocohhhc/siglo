@@ -1,24 +1,20 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export function useFormSession() {
-  const [data, setData] = useState(null);
-
-  // Al cargar la app, lee la sesión
-  useEffect(() => {
-    const saved = sessionStorage.getItem("formData");
-    if (saved) {
-      setData(JSON.parse(saved));
+  const [data, setData] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = sessionStorage.getItem("formData");
+      return saved ? JSON.parse(saved) : null;
     }
-  }, []);
+    return null;
+  });
 
-  // Guardar datos (form → sesión)
   const saveData = (newData) => {
     setData(newData);
     sessionStorage.setItem("formData", JSON.stringify(newData));
   };
 
-  // Borrar datos (cuando vuelves al form)
   const clearData = () => {
     setData(null);
     sessionStorage.removeItem("formData");
